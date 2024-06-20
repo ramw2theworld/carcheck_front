@@ -4,7 +4,7 @@ const auth = useAuthStore();
 </script>
 
 <template>
-  <nav class="border-gray-150 bg-gray-50 dark:bg-gray-900 dark:border-gray-700 shadow">
+  <nav class="border-gray-150 dark:bg-gray-900 dark:border-gray-700 shadow">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
       <AppLogo />
 

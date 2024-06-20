@@ -13,6 +13,6 @@
         <p>This is the content {{ auth.user }}</p>
       </div>
 
-      <button class="btn btn-primary" @click="counter.increment"> Count {{ counter.count }} Double Count {{ counter.doubleCount }}</button>
+      <button class="btn btn-primary" @click="auth.fetchUserRolesAndPermissions"> Fetch user</button>
     </div>
 </template>

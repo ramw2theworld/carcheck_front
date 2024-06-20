@@ -1,3 +1,7 @@
+import ApiService from '../services/apiService';
+
+const apiService = new ApiService();
+
 export const useAuthStore = defineStore('auth', {
     state: () => ({ user: {} }),
     getters: {
@@ -12,14 +16,10 @@ export const useAuthStore = defineStore('auth', {
         },
         async makeLogin(form) {
             try {
-                const { payload } = await $fetch('http://localhost:8000/api/login', {
-                    method: 'POST',
-                    body: {
-                        ...form,
-                    },
-                });
-
-                this.setCommonSetter(payload);
+                const response = await apiService.post('login', form);
+                if(response.payload){
+                    this.setCommonSetter(response.payload);
+                }
             } catch (error) {
                 throw error;
             }
@@ -27,14 +27,10 @@ export const useAuthStore = defineStore('auth', {
 
         async createNewUser(form) {
             try {
-                const { payload } = await $fetch('http://localhost:8000/api/create-new-user', {
-                    method: 'POST',
-                    body: {
-                        ...form,
-                    },
-                });
-
-                this.setCommonSetter(payload);
+                const response = await apiService.post('create-new-user', form);
+                if(response.payload){
+                    this.setCommonSetter(response.payload);
+                }
             } catch (error) {
                 throw error;
             }
@@ -42,21 +38,24 @@ export const useAuthStore = defineStore('auth', {
 
         async logout() {
             const tokenStore = useTokenStore();
-            console.log("token: ", tokenStore.token)
-
             try {
-                await $fetch('http://localhost:8000/api/logout', {
-                    method: 'POST',
-                    headers: {
-                        Accept: "application/json",
-                        Authorization: `Bearer ${tokenStore.token}`,
-                    }
-                });
-
+                await apiService.post('logout', null, tokenStore.token);
+                
                 this.removeUser();
                 tokenStore.removeToken();
 
                 navigateTo('/auth/login');
+            } catch (error) {
+                throw error;
+            }
+        },
+
+        async fetchUserRolesAndPermissions() {
+            const tokenStore = useTokenStore();
+            try {
+                let response = await apiService.get('user/fetch-users-role-and-permissions', tokenStore.token);
+                console.log("res: ", response);
+                // navigateTo('/auth/login');
             } catch (error) {
                 throw error;
             }
