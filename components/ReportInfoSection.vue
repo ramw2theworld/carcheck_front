@@ -33,13 +33,15 @@
             <div class="flex flex-row items-center justify-center">
               <h3 class="text-lg font-bold text-gray-800 w-52 text-end">Ownership list</h3>
               <img src="assets/svg/owner-list.svg" alt="Line" class="w-24"/>
+              <img src="assets/svg/line-info-3.svg" alt="Line" class="w-32 absolute md:-mr-96 md:block hidden"/>
             </div>
           </div>
           <img src="assets/svg/report-car.svg" alt="Report Info" class="w-3/5 md:block hidden"/>
-          <div class="flex flex-col items-center justify-between lg:-mr-36 md:-20">
+          <div class="flex flex-col items-center justify-between">
             <div class="flex flex-row items-center justify-center">
               <img src="assets/svg/import-export.svg" alt="Line" class="w-24"/>
               <h3 class="text-lg font-bold text-gray-800 w-52 text-start">Import/Export History</h3>
+
             </div>
             <div class="flex flex-row items-center justify-center">
               <img src="assets/svg/technical-data.svg" alt="Line" class="w-24"/>
