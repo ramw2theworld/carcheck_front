@@ -1,57 +1,80 @@
 <template>
-    <footer class="bg-white dark:bg-gray-900 shadow">
-        <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
-            <div class="md:flex md:justify-between">
-                <div class="mb-6 md:mb-0">
-                    <a href="https://flowbite.com/" class="flex items-center">
-                        <img src="https://flowbite.com/docs/images/logo.svg" class="h-8 me-3" alt="FlowBite Logo" />
-                        <span
-                            class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
-                    </a>
+    <footer class="bg-[#D9D9D9] px-12 md:px-32">
+        <div class="mx-auto w-full max-w-screen-xl py-6 lg:py-8">
+                <div class="grid grid-cols-2  sm:grid-cols-3 md:grid-cols-5">
+                    <div>
+                        <h2 class="mb-6 text-sm font-semibold text-[#0F1829] uppercase dark:text-white">How it works</h2>
+                        <ul class="text-gray-500 dark:text-gray-400 font-medium">
+                            <li class="mb-2">
+                                <a href="#" class="hover:underline text-[#0F1829] text-sm font-thin">What’s included</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#" class="hover:underline text-[#0F1829] text-sm font-thin">Steps to check</a>
+                            </li>
+                          <li class="mb-2">
+                            <a href="#" class="hover:underline text-[#0F1829] text-sm font-thin">Another Page</a>
+                          </li>
+                          <li class="mb-2">
+                            <a href="#" class="hover:underline text-[#0F1829] text-sm font-thin">Last Page</a>
+                          </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h2 class="mb-6 text-sm font-semibold text-[#0F1829] uppercase dark:text-white">About us</h2>
+                        <ul class="text-gray-500 dark:text-gray-400 font-medium">
+                            <li class="mb-2">
+                                <a href="#" class="hover:underline text-[#0F1829] text-sm font-thin ">How we wre</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#" class="hover:underline text-[#0F1829] text-sm font-thin">Our resources</a>
+                            </li>
+                          <li class="mb-2">
+                            <a href="#" class="hover:underline text-[#0F1829] text-sm font-thin">Contact US</a>
+                          </li>
+                        </ul>
+                    </div>
+                  <div>
+                    <h2 class="mb-6 text-sm font-semibold text-[#0F1829] uppercase dark:text-white">Pricing</h2>
+                    <ul class="text-gray-500 dark:text-gray-400 font-medium">
+                      <li class="mb-2">
+                        <a href="#" class="hover:underline text-[#0F1829] text-sm font-thin">Best offers</a>
+                      </li>
+                      <li class="mb-2">
+                        <a href="#" class="hover:underline text-[#0F1829] text-sm font-thin">Best prices</a>
+                      </li>
+                      <li class="mb-2">
+                        <a href="#" class="hover:underline text-[#0F1829] text-sm font-thin">Find your plans</a>
+                      </li>
+                    </ul>
+                  </div>
+                    <div>
+                        <h2 class="mb-6 text-sm font-semibold text-[#0F1829] uppercase dark:text-white">Reports</h2>
+                        <ul class="text-gray-500 dark:text-gray-400 font-medium">
+                            <li class="mb-2">
+                                <a href="#" class="hover:underline text-[#0F1829] text-sm font-thin">Sample Report</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#" class="hover:underline text-[#0F1829] text-sm font-thin">What's in there</a>
+                            </li>
+                        </ul>
+                    </div>
+                  <div>
+                    <h2 class="mb-6 text-sm font-semibold text-[#0F1829] uppercase dark:text-white">Newsletter</h2>
+                    <div class="flex items-center">
+                      <input type="email" class="w-full py-2 px-4 text-[#0F1829] bg-white border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your email" />
+                      <button class="bg-orange-500 hover:bg-blue-600 text-white px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 -ml-2">
+                        <img src="assets/svg/arrow-right.svg" alt="Arrow Right" class="w-4" />
+                      </button>
+                    </div>
+                    <p class="mt-2 text-sm font-thin">Subscribe to our newsletter to get our latest news.</p>
+                    <button class="rounded bg-orange-500 text-white px-4 py-2 mt-4">Start Checking</button>
+                  </div>
                 </div>
-                <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
-                    <div>
-                        <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Resources</h2>
-                        <ul class="text-gray-500 dark:text-gray-400 font-medium">
-                            <li class="mb-4">
-                                <a href="https://flowbite.com/" class="hover:underline">Flowbite</a>
-                            </li>
-                            <li>
-                                <a href="https://tailwindcss.com/" class="hover:underline">Tailwind CSS</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Follow us</h2>
-                        <ul class="text-gray-500 dark:text-gray-400 font-medium">
-                            <li class="mb-4">
-                                <a href="https://github.com/themesberg/flowbite" class="hover:underline ">Github</a>
-                            </li>
-                            <li>
-                                <a href="https://discord.gg/4eeurUVvTy" class="hover:underline">Discord</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Legal</h2>
-                        <ul class="text-gray-500 dark:text-gray-400 font-medium">
-                            <li class="mb-4">
-                                <a href="#" class="hover:underline">Privacy Policy</a>
-                            </li>
-                            <li>
-                                <a href="#" class="hover:underline">Terms &amp; Conditions</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
             <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
             <div class="sm:flex sm:items-center sm:justify-between">
-                <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a
-                        href="https://flowbite.com/" class="hover:underline">Flowbite™</a>. All Rights Reserved.
-                </span>
+               <app-logo />
                 <div class="flex mt-4 sm:justify-center sm:mt-0">
-                    <a href="#" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
+                    <a href="#" class="text-gray-500 hover:text-[#0F1829] dark:hover:text-white">
                         <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                             viewBox="0 0 8 19">
                             <path fill-rule="evenodd"
@@ -60,7 +83,7 @@
                         </svg>
                         <span class="sr-only">Facebook page</span>
                     </a>
-                    <a href="#" class="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5">
+                    <a href="#" class="text-gray-500 hover:text-[#0F1829] dark:hover:text-white ms-5">
                         <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                             viewBox="0 0 21 16">
                             <path
@@ -68,7 +91,7 @@
                         </svg>
                         <span class="sr-only">Discord community</span>
                     </a>
-                    <a href="#" class="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5">
+                    <a href="#" class="text-gray-500 hover:text-[#0F1829] dark:hover:text-white ms-5">
                         <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                             viewBox="0 0 20 17">
                             <path fill-rule="evenodd"
@@ -77,7 +100,7 @@
                         </svg>
                         <span class="sr-only">Twitter page</span>
                     </a>
-                    <a href="#" class="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5">
+                    <a href="#" class="text-gray-500 hover:text-[#0F1829] dark:hover:text-white ms-5">
                         <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                             viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
@@ -86,7 +109,7 @@
                         </svg>
                         <span class="sr-only">GitHub account</span>
                     </a>
-                    <a href="#" class="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5">
+                    <a href="#" class="text-gray-500 hover:text-[#0F1829] dark:hover:text-white ms-5">
                         <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                             viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
@@ -100,3 +123,5 @@
         </div>
     </footer>
 </template>
+<script setup lang="ts">
+</script>
