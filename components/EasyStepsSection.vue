@@ -39,8 +39,14 @@
         </div>
       </div>
     </div>
-    <div class="md:px-32 px-10">
-      <img src="assets/svg/young-woman-car.svg" class="w-full" alt="why you need car check">
+    <div class="md:px-32 px-10 md:mt-24 mt-5">
+      <div class="">
+        <div class="flex flex-col items-center justify-center">
+          <h1 class="xl:text-6xl lg:text-4xl md:text-3xl sm:text-2xl text-lg font-bold text-[#000000] z-10">Why do y<span class="lg:text-white">o<span class="text-white">u nee</span></span>d a car check?</h1>
+          <img src="assets/svg/pretty-woman.svg" class="w-full xl:-mt-40 md:-mt-20 -mt-10" alt="h">
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
