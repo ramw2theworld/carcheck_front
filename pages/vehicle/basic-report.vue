@@ -19,15 +19,21 @@
 
         </div>
         <!-- general information -->
-    <VehicleGeneralInformation /> 
+        <VehicleGeneralInformation />
 
-    <!-- Engine and fule information -->
-    <VehicleEngineAndFuel /> 
+        <!-- Engine and fule information -->
+        <VehicleEngineAndFuel />
 
-    <!-- Damage History -->
-    <VehicleDamageHistory />
+        <!-- Damage History -->
+        <VehicleDamageHistory />
 
-    <!-- Damage History -->
-    <VehiclePlateChanged />
+        <!-- Damage History -->
+        <VehiclePlateChanged />
+
+        <!-- Vehicle valuation -->
+        <VehicleValuation />
+
+        <!-- Owner History -->
+        <VehicleOwnerHistory />
     </div>
 </template>

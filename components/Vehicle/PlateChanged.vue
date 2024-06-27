@@ -8,7 +8,9 @@
         <img src="~/assets/png/car-icon.png" alt="Plate Image" class="plate-image">
       </div>
       <div class="md:w-3/5 w-full p-2">
-        <h5 class="text-xl font-semibold mb-4">Plate changes</h5>
+        <h5 class="mb-4 text-base font-semibold text-white-900 md:text-xl dark:text-white">
+          Plate changes
+        </h5>
         <p class="mb-4">
           See in this check if this MERCEDES-BENZ had different number plates.
         </p>
