@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-col items-center justify-center w-full bg-[#D9D9D9] report-bg-section relative">
-    <img src="assets/svg/report-car.svg" alt="Report Info" class="md:block hidden mt-52 absolute"/>
+    <img src="assets/svg/report-car.svg" alt="Report Info" class="md:block hidden mt-56 absolute -mr-20"/>
     <div class="container mx-auto px-4 py-8 ">
-      <div class="flex flex-col items-center justify-center text-4xl">
+      <div class="flex flex-col items-center justify-center text-4xl pb-24 pt-10">
         <h2 class="text-gray-800">What’s included</h2>
         <p class="text-gray-800 mt-2"><span class="border-b-orange-500 border-b-4">in</span> <span class="font-bold">your report</span></p>
       </div>
