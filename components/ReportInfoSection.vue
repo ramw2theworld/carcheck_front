@@ -1,12 +1,13 @@
 <template>
-  <div class="flex flex-col items-center justify-center w-full bg-[#D9D9D9] report-bg-section">
+  <div class="flex flex-col items-center justify-center w-full bg-[#D9D9D9] report-bg-section relative">
+    <img src="assets/svg/report-car.svg" alt="Report Info" class="md:block hidden mt-56 absolute -mr-20"/>
     <div class="container mx-auto px-4 py-8 ">
-      <div class="flex flex-col items-center justify-center text-4xl">
+      <div class="flex flex-col items-center justify-center text-4xl pb-24 pt-10">
         <h2 class="text-gray-800">What’s included</h2>
         <p class="text-gray-800 mt-2"><span class="border-b-orange-500 border-b-4">in</span> <span class="font-bold">your report</span></p>
       </div>
-      <div class="lg:-mt-60 mt-16">
-        <div class="flex flex-row items-center justify-center">
+      <div class="">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
           <div class="flex flex-col items-center justify-between lg:-mr-36 md:-20">
             <div class="flex flex-row items-center justify-center">
               <h3 class="text-lg font-bold text-gray-800 w-52 text-end">Outstanding Finances</h3>
@@ -36,7 +37,8 @@
               <img src="assets/svg/line-info-3.svg" alt="Line" class="w-32 absolute md:-mr-96 md:block hidden"/>
             </div>
           </div>
-          <img src="assets/svg/report-car.svg" alt="Report Info" class="w-3/5 md:block hidden"/>
+          <div class="hidden md:block">
+          </div>
           <div class="flex flex-col items-center justify-between">
             <div class="flex flex-row items-center justify-center">
               <img src="assets/svg/import-export.svg" alt="Line" class="w-24"/>
@@ -44,10 +46,12 @@
 
             </div>
             <div class="flex flex-row items-center justify-center">
+              <img src="assets/svg/line-info-5.svg" alt="Line" class="w-32 absolute -ml-96 md:-mt-16 md:block hidden"/>
               <img src="assets/svg/technical-data.svg" alt="Line" class="w-24"/>
               <h3 class="text-lg font-bold text-gray-800 w-52 text-start">Technical Data</h3>
             </div>
             <div class="flex flex-row items-center justify-center">
+              <img src="assets/svg/line-info-6.svg" alt="Line" class="w-32 absolute -ml-96 md:-mt-16 md:block hidden"/>
               <img src="assets/svg/mileage-history-1.svg" alt="Line" class="w-24"/>
               <h3 class="text-lg font-bold text-gray-800 w-52 text-start">Mileage History</h3>
             </div>
