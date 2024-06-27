@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[#D9D9D9] py-20">
+  <div class="bg-[#EEEEEE] py-20">
     <div class="flex flex-row items-center justify-between md:px-40 px-10">
       <div>
         <h3 class="text-2xl text-gray-800 w-52 text-start">We have the best</h3>
