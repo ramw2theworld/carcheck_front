@@ -20,5 +20,8 @@
         </div>
         <!-- general information -->
     <VehicleGeneralInformation /> 
+
+    <!-- Engine and fule information -->
+    <VehicleEngineAndFuel /> 
     </div>
 </template>
