@@ -12,8 +12,8 @@ const auth = useAuthStore();
 </script>
 
 <template>
-  <nav>
-    <div class="flex flex-wrap items-center justify-between mx-auto py-8 md:px-24 px-8 bg-[#EEEEEE]">
+  <nav >
+    <div class="border-b-2 flex flex-wrap items-center justify-between mx-auto py-8 md:px-24 px-8 bg-[#EEEEEE]">
       <AppLogo />
       <button data-collapse-toggle="navbar-cta" type="button"
               class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
