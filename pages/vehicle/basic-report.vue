@@ -7,7 +7,7 @@
                 <SearchBar />
                 <p class="mt-6 text-xs"><span class="font-bold">Report Date</span> 27-06-2024</p>
                 <p class="font-bold my-5 text-lg">BMW Model 2016</p>
-                <img src="../../assets/png/car-icon.png" class="w-26" />
+                <img src="~/assets/png/car-icon.png" class="w-26" />
             </div>
             <div>
                 <div class="flex flex-col justify-center items-center">
@@ -26,5 +26,8 @@
 
     <!-- Damage History -->
     <VehicleDamageHistory />
+
+    <!-- Damage History -->
+    <VehiclePlateChanged />
     </div>
 </template>
