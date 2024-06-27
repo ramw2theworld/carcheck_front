@@ -23,5 +23,8 @@
 
     <!-- Engine and fule information -->
     <VehicleEngineAndFuel /> 
+
+    <!-- Damage History -->
+    <VehicleDamageHistory />
     </div>
 </template>
