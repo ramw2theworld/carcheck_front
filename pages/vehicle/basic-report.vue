@@ -33,7 +33,25 @@
         <!-- Vehicle valuation -->
         <VehicleValuation />
 
+        <!-- Vehicle valuation -->
+        <VehicleRiskAssessments />
+
         <!-- Owner History -->
         <VehicleOwnerHistory />
+
+        <!-- Registrations -->
+        <VehicleRegistrations />
+
+        <!-- Vehicle Tax History -->
+        <VehicleTaxCalculation />
+
+        <!-- Vehicle Tax History -->
+        <VehicleFinanceCheck />
+
+        <!-- Vehicle Tax History -->
+        <VehicleWriteOff />
+
+        <!-- Vehicle Tax History -->
+        <VehicleMotHistory />
     </div>
 </template>
