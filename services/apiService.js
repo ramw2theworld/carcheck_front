@@ -1,7 +1,7 @@
 // apiService.js
 export default class ApiService {
     constructor(baseURL) {
-      this.baseURL = baseURL || 'http://localhost:8000/api';
+      this.baseURL = baseURL || 'http://localhost/api';
     }
   
     async request(endpoint, method, data = null, token = null) {

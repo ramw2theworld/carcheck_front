@@ -2,6 +2,7 @@
 const auth = useAuthStore();
 
 definePageMeta({
+    title: 'Register',
   middleware: ['guest'],
 });
 

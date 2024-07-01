@@ -3,7 +3,8 @@ const auth = useAuthStore();
 const token = useTokenStore();
 
 definePageMeta({
-  middleware: ['guest'],
+    title: 'Login',
+    middleware: ['guest'],
 });
 
 const form = reactive({
@@ -15,6 +16,7 @@ const errors = ref([]);
 const handleLoginSubmit = async () => {
     try {
         await auth.makeLogin(form);
+        
     } catch (error) {
         console.log("login error: ", error);
         errors.value = error.data.errors

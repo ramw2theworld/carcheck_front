@@ -44,7 +44,7 @@ export const useAuthStore = defineStore('auth', {
                 this.removeUser();
                 tokenStore.removeToken();
 
-                navigateTo('/auth/login');
+                // navigateTo('/auth/login');
             } catch (error) {
                 throw error;
             }

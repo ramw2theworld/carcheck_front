@@ -3,12 +3,24 @@ import SearchBar from "~/components/SearchBar.vue";
 import { ref } from 'vue';
 
 const isMenuOpen = ref(false);
+const errors = ref([]);
 
 function toggleMenu() {
   isMenuOpen.value = !isMenuOpen.value;
 }
 const token = useTokenStore();
 const auth = useAuthStore();
+// console.log("auth.user", auth.getCurrentUser.name)
+
+const makeLogout = async () => {
+    try {
+        await auth.logout();
+        navigateTo('/')
+    } catch (error) {
+        console.log("login error: ", error);
+        error.value = error.data.errors
+    }
+}
 </script>
 
 <template>
@@ -45,6 +57,16 @@ const auth = useAuthStore();
           </li>
           <li>
             <SearchBar />
+          </li>
+          <li>
+            <NuxtLink to="/dashboard" v-if="auth.getCurrentUser.length" @click.prevent="makeLogout"
+                      class="block py-2 px-3 md:p-0 rounded md:bg-transparent md:hover:text-orange-500 active:text-orange-500"
+                      aria-current="page">Logout {{ auth.getCurrentUser }}</NuxtLink>
+
+            <NuxtLink to="/auth/login" v-else
+                      class="block py-2 px-3 md:p-0 rounded md:bg-transparent md:hover:text-orange-500 active:text-orange-500"
+                      aria-current="page">Login</NuxtLink>
+
           </li>
         </ul>
       </div>
