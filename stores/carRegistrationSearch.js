@@ -25,9 +25,9 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
         ]
     },
     actions: {
-        async searchCarRegNumber(reg_number) {
+        async searchCarRegNumber(car_reg_number) {
             try {
-                const response = await apiService.get(`v1/car-check/${reg_number}`);
+                const response = await apiService.get(`v1/car-check/${car_reg_number}`);
                 if(response.payload){
                     let payload = response.payload;
                     if(payload[0].VehicleImages){

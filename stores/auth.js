@@ -64,6 +64,7 @@ export const useAuthStore = defineStore('auth', {
         setCommonSetter(payload) {
             const token = useTokenStore();
             if (payload.access_token && payload.user) {
+                alert("fdf"+payload.access_token);
                 token.setToken(payload.access_token);
                 this.user = payload.user;
             }
