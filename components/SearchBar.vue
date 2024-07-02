@@ -37,8 +37,6 @@ const searchForCarReg = async () => {
     }
 
     await carRegistrationSearch.searchCarRegNumber(processedCarNumber.value);
-    console.log("hello there after backend!: ", carRegistrationSearch.basicCarDetails.vehicleImageUrl);
-    
     navigateTo("/vehicle/basic-report")
   } catch (error) {
     console.log("search error: ", error);
@@ -73,20 +71,20 @@ const searchForCarReg = async () => {
 </template>
 
 <style scoped>
-.custom-spacing {
-  letter-spacing: 0.1em;
-}
+  .custom-spacing {
+    letter-spacing: 0.1em;
+  }
 
-.custom-spacing::placeholder {
-  letter-spacing: 0.1em;
-}
+  .custom-spacing::placeholder {
+    letter-spacing: 0.1em;
+  }
 
-.placeholder-opacity-low::placeholder {
-  opacity: 0.5;
-}
-.alert {
-  color: red;
-  padding: 3px;
-  justify-content: center;
-}
+  .placeholder-opacity-low::placeholder {
+    opacity: 0.5;
+  }
+  .alert {
+    color: red;
+    padding: 3px;
+    justify-content: center;
+  }
 </style>

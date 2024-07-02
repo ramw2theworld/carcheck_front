@@ -38,7 +38,6 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     }
                 }
 
-                console.log("hello there: ", response);
             } catch (error) {
                 throw error;
             }

@@ -12,7 +12,7 @@
             <div>
                 <div class="flex flex-col justify-center items-center">
                     <h1 class="text-2xl font-bold">YOUR <span class="text-orange-500">CAR REPORT</span> IS READY!</h1>
-                    <NuxtLink to="/payments/plans" class="rounded bg-orange-500 text-white text-lg px-20 py-2 mt-6">Download Report</NuxtLink>
+                    <NuxtLink to="/payment/plans" class="rounded bg-orange-500 text-white text-lg px-20 py-2 mt-6">Download Report</NuxtLink>
                 </div>
                 <Features></Features>
             </div>
