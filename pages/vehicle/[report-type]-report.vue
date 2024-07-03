@@ -1,5 +1,19 @@
 <script setup>
+const tokenStore = useTokenStore();
+const subscriptionStore = useSubscriptionStore();
+
+const downloadReport = () =>{
+    if(tokenStore.getToken && tokenStore.getStatus){
+        if(subscriptionStore.getCurrentSubscription){
+            alert("hello there for the testss");
+        }
+        navigateTo('/payment/checkout');
+    }else{
+        navigateTo('/auth/login');
+    }
+}
 </script>
+
 <template>
     <div>
         <div class="flex flex-row justify-center gap-28 py-10 border-2">
@@ -12,7 +26,7 @@
             <div>
                 <div class="flex flex-col justify-center items-center">
                     <h1 class="text-2xl font-bold">YOUR <span class="text-orange-500">CAR REPORT</span> IS READY!</h1>
-                    <NuxtLink to="/payment/plans" class="rounded bg-orange-500 text-white text-lg px-20 py-2 mt-6">Download Report</NuxtLink>
+                     <button @click.prevent="downloadReport" class="rounded bg-orange-500 text-white text-lg px-20 py-2 mt-6">Download Report</button>
                 </div>
                 <Features></Features>
             </div>

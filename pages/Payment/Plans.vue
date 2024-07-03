@@ -1,6 +1,9 @@
 <script setup>
 import { ref, reactive } from 'vue';
-import featureData from '@/features.json'; 
+import featureData from '@/features.json';
+import { usePlanStore } from '@/stores/plan';
+
+const planStore = usePlanStore();
 const basic_features = reactive(featureData.features.basic_features);
 const standerd_features = reactive(featureData.features.standerd_features);
 const premium_features = reactive(featureData.features.premium_features);
@@ -9,25 +12,26 @@ const isMonthlyActive = ref(true);
 const selectedPlan = ref("standard_plan");
 
 const toggleBilling = (type) => {
-  isMonthlyActive.value = (type === 'monthly');
+    isMonthlyActive.value = (type === 'monthly');
 };
 
 const startChecking = (plan) => {
-  navigateTo("/payment/checkout");
+    planStore.setSelectedPlan(plan);
+    navigateTo("/payment/checkout");
 };
 
 const selectPlan = (plan) => {
-  selectedPlan.value = plan.code;
+    selectedPlan.value = plan.code;
 };
 
 const getFeatureIcon = (iconName) => {
-  return `/assets/svg/${iconName}`;
+    return `/assets/svg/${iconName}`;
 };
 
 const plans = ref([
-  { name: 'Basic Plan', code: 'basic_plan', price: 5, reports: 7 },
-  { name: 'Standard Plan', code: 'standard_plan', price: 15, reports: 10 },
-  { name: 'Premium Plan', code: 'premium_plan', price: 25, reports: 15 },
+    { name: 'Basic Plan', code: 'basic_plan', price: 39.90, trial_price: '5.95', reports: 7 },
+    { name: 'Standard Plan', code: 'standard_plan', price: 39.90, trial_price: '1.95', reports: 10 },
+    { name: 'Premium Plan', code: 'premium_plan', price: 19.95, trial_price: '5.95', reports: 15 },
 ]);
 </script>
 
@@ -45,27 +49,29 @@ const plans = ref([
                     class="px-4 py-2" @click="toggleBilling('yearly')">Yearly billing</button>
             </div>
         </div>
-    
+
         <div class="flex md:flex-row flex-col items-center justify-center mt-10 gap-4 md:gap-8 px-32">
-            <div v-for="plan in plans" :key="plan.code" @click="selectPlan(plan)" 
-                 :class="{
-                     'bg-[#0F1829] text-white': selectedPlan === plan.code,
-                     'border-2 border-[#0F1829] text-[#0F1829]': selectedPlan !== plan.code
-                 }" class="rounded-xl px-8 py-6 cursor-pointer transition duration-300 ease-in-out">
-                 <div class="flex flex-row items-center justify-between">
+            <div v-for="plan in plans" :key="plan.code" @click="selectPlan(plan)" :class="{
+                    'bg-[#0F1829] text-white': selectedPlan === plan.code,
+                    'border-2 border-[#0F1829] text-[#0F1829]': selectedPlan !== plan.code
+                }" class="rounded-xl px-8 py-6 cursor-pointer transition duration-300 ease-in-out">
+                <div class="flex flex-row items-center justify-between">
                     <h1 class="text-lg font-bold px-2">{{ plan.name }}</h1>
-                    <span class="text-[#0F1829] text-xs rounded bg-[#FF7400] px-2 py-0.5" v-if="plan.code === 'standard_plan'">Most Popular</span>
+                    <span class="text-[#0F1829] text-xs rounded bg-[#FF7400] px-2 py-0.5"
+                        v-if="plan.code === 'standard_plan'">Most Popular</span>
                 </div>
-                
+
                 <div class="flex flex-row items-center justify-start mt-6">
-                    <h3 class="text-4xl">${{ plan.price }}</h3>
+                    <h3 class="text-4xl">£{{ plan.price }}</h3>
                     <div class="flex flex-col items-center justify-center ml-4">
                         <span class="text-sm font-thin -ml-2">Per User</span>
                         <span class="text-sm font-thin">Per Month</span>
                     </div>
                 </div>
-                <h1 class="text-sm font-thin mt-8">Generate up to <span class="font-bold">{{ plan.reports }} reports</span></h1>
-                <button @click.stop="startChecking(plan)" class="bg-[#ffac1c] text-lg text-white px-4 py-2 rounded mt-2 block w-64">Start Checking</button>
+                <h1 class="text-sm font-thin mt-8">Generate up to <span class="font-bold">{{ basic_features.length }}
+                        reports</span></h1>
+                <button @click.stop="startChecking(plan)"
+                    class="bg-[#ffac1c] text-lg text-white px-4 py-2 rounded mt-2 block w-64">Start Checking</button>
                 <button class="text-lg px-4 py-2 rounded dark:bg-gray-800 dark:text-gray-400 mt-2 border border-gray-200 
                 block w-64 focus:outline-none">Read More</button>
                 <h2 class="text-xl mt-8">Included</h2>
@@ -73,37 +79,37 @@ const plans = ref([
 
                 <!-- basic features -->
                 <div class="flex flex-col items-start justify-start mt-2 gap-2" v-if="plan.code == 'basic_plan'">
-                    <div v-for="b_feature in basic_features" :key="b_feature.id" class="flex flex-row items-center justify-start">
+                    <div v-for="b_feature in basic_features" :key="b_feature.id"
+                        class="flex flex-row items-center justify-start">
                         <img :src="getFeatureIcon(b_feature.icon)" :alt="b_feature.title" class="w-6 orange-filter" />
                         <h3 :class="{
-                     'text-white': selectedPlan === plan.code,
-                     'text-[#0F1829]': selectedPlan !== plan.code
-                 }"
-                  class="text-[#0F1829] text-sm ml-2">{{ b_feature.title }}</h3>
+                    'text-white': selectedPlan === plan.code,
+                    'text-[#0F1829]': selectedPlan !== plan.code
+                }" class="text-[#0F1829] text-sm ml-2">{{ b_feature.title }}</h3>
                     </div>
                 </div>
 
                 <!-- standerd plans  -->
                 <div class="flex flex-col items-start justify-start mt-2 gap-2" v-if="plan.code == 'standard_plan'">
-                    <div v-for="b_feature in standerd_features" :key="b_feature.id" class="flex flex-row items-center justify-start">
+                    <div v-for="b_feature in standerd_features" :key="b_feature.id"
+                        class="flex flex-row items-center justify-start">
                         <img :src="getFeatureIcon(b_feature.icon)" :alt="b_feature.title" class="w-6 orange-filter" />
                         <h3 :class="{
-                     'text-white': selectedPlan === plan.code,
-                     'text-[#0F1829]': selectedPlan !== plan.code
-                 }"
-                  class="text-[#0F1829] text-sm ml-2">{{ b_feature.title }}</h3>
+                    'text-white': selectedPlan === plan.code,
+                    'text-[#0F1829]': selectedPlan !== plan.code
+                }" class="text-[#0F1829] text-sm ml-2">{{ b_feature.title }}</h3>
                     </div>
                 </div>
 
                 <!-- premium plans  -->
                 <div class="flex flex-col items-start justify-start mt-2 gap-2" v-if="plan.code == 'premium_plan'">
-                    <div v-for="b_feature in premium_features" :key="b_feature.id" class="flex flex-row items-center justify-start">
+                    <div v-for="b_feature in premium_features" :key="b_feature.id"
+                        class="flex flex-row items-center justify-start">
                         <img :src="getFeatureIcon(b_feature.icon)" :alt="b_feature.title" class="w-6 orange-filter" />
                         <h3 :class="{
-                     'text-white': selectedPlan === plan.code,
-                     'text-[#0F1829]': selectedPlan !== plan.code
-                 }"
-                  class="text-[#0F1829] text-sm ml-2">{{ b_feature.title }}</h3>
+                    'text-white': selectedPlan === plan.code,
+                    'text-[#0F1829]': selectedPlan !== plan.code
+                }" class="text-[#0F1829] text-sm ml-2">{{ b_feature.title }}</h3>
                     </div>
                 </div>
 
@@ -112,10 +118,10 @@ const plans = ref([
         <img src="~/assets/svg/plan-end-track.svg" alt="Plan End Track" class="w-full mt-20" />
     </div>
 </template>
-    
+
 <style scoped>
 .orange-filter {
-  filter: brightness(0) saturate(100%) invert(69%) sepia(85%) saturate(3478%) hue-rotate(1deg) brightness(103%) contrast(101%);
+    filter: brightness(0) saturate(100%) invert(69%) sepia(85%) saturate(3478%) hue-rotate(1deg) brightness(103%) contrast(101%);
 }
 </style>
 
