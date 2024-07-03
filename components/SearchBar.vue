@@ -13,6 +13,8 @@ const vehicle_number = ref('EJ59YOA');
 const errors = ref([]);
 const MIN_LENGTH = 5;
 const MAX_LENGTH = 10;
+const validReportTypes = ['basic', 'export', 'single-offer'];
+
 
 const processedCarNumber = computed({
   get() {
@@ -39,9 +41,14 @@ const searchForCarReg = async () => {
 
     await carRegistrationSearch.searchCarRegNumber(processedCarNumber.value);
 
-    // const reportType = "basic";
-    // const reportType = "export";
     const reportType = "single-offer";
+
+    if (validReportTypes.includes(reportType)) {
+      router.push(`/${reportType}-report`);
+    } else {
+      router.push('/not-found');
+    }
+
     router.push(`/vehicle/${reportType}-report`);
   } catch (error) {
     console.log("search error: ", error);
