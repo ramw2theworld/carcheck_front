@@ -5,7 +5,7 @@ const subscriptionStore = useSubscriptionStore();
 const downloadReport = () =>{
     if(tokenStore.getToken && tokenStore.getStatus){
         if(subscriptionStore.getCurrentSubscription){
-            alert("hello there for the testss");
+            console.log("hello there for the stests sldfjlsdjflkflsjdfl");
         }
         navigateTo('/payment/checkout');
     }else{
