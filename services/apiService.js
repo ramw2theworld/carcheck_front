@@ -1,10 +1,15 @@
 // apiService.js
+import { useTokenStore } from "../stores/token";
+
 export default class ApiService {
     constructor(baseURL) {
-      this.baseURL = baseURL || 'http://localhost:8000/api';
+      this.baseURL = baseURL || 'http://localhost/api';
     }
   
-    async request(endpoint, method, data = null, token = null) {
+    async request(endpoint, method, data = null) {
+      const tokenStore = useTokenStore();
+      const token = tokenStore.getToken;
+      console.log("Token: ", token)
       const headers = {
         Accept: 'application/json',
         'Content-Type': 'application/json',

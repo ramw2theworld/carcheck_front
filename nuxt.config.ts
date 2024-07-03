@@ -7,6 +7,7 @@ export default defineNuxtConfig({
   css: [
     '~/assets/css/fonts.css',
     '~/assets/css/input.css',
+    '@fortawesome/fontawesome-svg-core/styles.css',
   ],
 
   modules: [
@@ -21,6 +22,10 @@ export default defineNuxtConfig({
   pinia: {
     storesDirs: ['./stores/**', './custom-folder/stores/**'],
   },
+
+  plugins: [
+    '~/plugins/fontawesome.js'
+  ],
 
   build:{
     postcss: {

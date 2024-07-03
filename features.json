@@ -1,0 +1,88 @@
+{"features": {
+    "items": [
+        {
+            "id": 1, "title": "Damage Check", "icon": "damage-check.svg"
+        },
+        {
+            "id": 2, "title": "Owners History", "icon": "owner-history.svg"
+        },
+        {
+            "id": 3, "title": "Mileage History", "icon": "milage-history.svg"
+        },
+        {
+            "id": 4, "title": "Car Features", "icon": "car-features.svg"
+        },
+        {
+            "id": 5, "title": "Theft Check", "icon": "theft-check.svg"
+        },
+        {
+            "id": 6, "title": "MOT History", "icon": "warning.svg"
+        },
+        {
+            "id": 7, "title": "Finance History", "icon": "outstanding-finances.svg"
+        },
+        {
+            "id": 8, "title": "Tax Records", "icon": "tax-record-icon.svg"
+        },
+        {
+            "id": 9, "title": "Technical data", "icon": "technical-data.svg"
+        }
+    ],
+    "basic_features":[
+        {
+            "id": 1, "title": "Damage Check", "icon": "damage-check.svg"
+        },
+        {
+            "id": 2, "title": "Owners History", "icon": "owner-history.svg"
+        },
+        {
+            "id": 3, "title": "Mileage History", "icon": "milage-history.svg"
+        },
+        {
+            "id": 4, "title": "Stolen Check", "icon": "theft-check.svg"
+        },
+        {
+            "id": 5, "title": "MOT Check", "icon": "warning.svg"
+        }
+    ],
+    "standerd_features":[
+        {
+            "id": 1, "title": "Theft Check", "icon": "theft-check.svg"
+        },
+        {
+            "id": 2, "title": "MOT History", "icon": "warning.svg"
+        },
+        {
+            "id": 3, "title": "Finance History", "icon": "outstanding-finances.svg"
+        },
+        {
+            "id": 4, "title": "Tax Records", "icon": "tax-record-icon.svg"
+        },
+        {
+            "id": 5, "title": "Technical data", "icon": "technical-data.svg"
+        }
+    ],
+    "premium_features":[
+        {
+            "id": 2, "title": "Owners History", "icon": "owner-history.svg"
+        },
+        {
+            "id": 3, "title": "Mileage History", "icon": "milage-history.svg"
+        },
+        {
+            "id": 4, "title": "Car Features", "icon": "car-features.svg"
+        },
+        {
+            "id": 5, "title": "Theft Check", "icon": "theft-check.svg"
+        },
+        {
+            "id": 6, "title": "MOT History", "icon": "warning.svg"
+        },
+        {
+            "id": 7, "title": "Finance History", "icon": "outstanding-finances.svg"
+        },
+        {
+            "id": 8, "title": "Tax Records", "icon": "tax-record-icon.svg"
+        }
+    ]
+}}
