@@ -36,5 +36,11 @@ export default defineNuxtConfig({
         },
       },
     },
-  }
+  },
+
+  runtimeConfig: {
+    public: {
+      githubToken: process.env.API_SECRET,
+    },
+  },
 })

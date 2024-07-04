@@ -15,6 +15,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "@heroicons/vue": "^1.0.6",
     "@pinia/nuxt": "^0.5.1",
+    "@stripe/stripe-js": "^4.1.0",
     "flowbite": "^2.3.0",
     "nuxt": "^3.10.3",
     "pinia": "^2.1.7",

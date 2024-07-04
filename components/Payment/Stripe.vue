@@ -1,0 +1,281 @@
+<script setup lang="ts">
+import type { StripeCardCvcElement, StripeCardExpiryElement, StripeCardNumberElement, StripeElements } from '@stripe/stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import ApiService from '~/services/apiService';
+const apiService = new ApiService();
+const config = useRuntimeConfig();
+const stripePromise = loadStripe("pk_test_51NnNKLIZ7GRzcjItjwQGvG8cBmTuW4FPCgPxiQDHo9nBfSqj0KjHgcgjdbwSchQWW5rvPbuUK3IsdjwOUGYWSZJV008sWndQue" as string);
+const loading = ref(false);
+const termsAccepted = ref(false);
+const cardholderName = ref('');
+let elements: StripeElements;
+let cardNumberElement: StripeCardNumberElement;
+let cardExpiryElement: StripeCardExpiryElement;
+let cardCvcElement: StripeCardCvcElement;
+const errorMessage = ref<string | null>(null);
+const formValidationMessage = ref<string | null>(null);
+const customerId = ref('');
+const paymentMethodId = ref('');
+const style = {
+    base: {
+        color: '#32325D',
+        fontSize: '16px',
+        '::placeholder': {
+            color: '#AAB7C4',
+        }
+    },
+    invalid: {
+        color: '#FA755A',
+        iconColor: '#FA755A',
+    },
+};
+onMounted(async () => {
+    const stripe = await stripePromise;
+    if (stripe) {
+        elements = stripe.elements();
+        cardNumberElement = elements.create('cardNumber', { style });
+        cardNumberElement.mount('#card-number-element');
+        cardExpiryElement = elements.create('cardExpiry', { style });
+        cardExpiryElement.mount('#card-expiry-element');
+        cardCvcElement = elements.create('cardCvc', { style });
+        cardCvcElement.mount('#card-cvc-element');
+    }
+});
+async function handleCheckoutClick() {
+    try {
+        resetError();
+        // Validate form inputs
+        if (!cardholderName.value) {
+            formValidationMessage.value = "Cardholder's name is required.";
+            return;
+        }
+        if (!termsAccepted.value) {
+            formValidationMessage.value = "You must accept the terms and conditions.";
+            return;
+        }
+        loading.value = true;
+        const stripe = await stripePromise;
+        if (!stripe || !elements) {
+            console.error('Stripe.js has not yet loaded.');
+            return;
+        }
+        const { error, paymentMethod } = await stripe.createPaymentMethod({
+            type: 'card',
+            card: cardNumberElement,
+            billing_details: {
+                name: cardholderName.value,
+            },
+        });
+        if (error) {
+            console.error(error);
+            (errorMessage.value as any) = error.message;
+            return;
+        }
+        const response = await apiService.post('payment/token/create', {
+            payment_method_id: paymentMethod.id,
+            billing_details: { name: cardholderName.value },
+        });
+
+        if ((response as any).paymentStatus !== 'succeeded') {
+            const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment((response as any).clientSecret, {
+                payment_method: paymentMethod.id,
+            });
+            if (confirmError) {
+                (errorMessage.value as any) = confirmError.message;
+                return;
+            }
+        }
+        const { customerId: cid } = response as any;
+        customerId.value = cid;
+        paymentMethodId.value = paymentMethod.id;
+        await createSubscription();
+    } catch (error) {
+        console.error({ error });
+    } finally {
+        loading.value = false;
+    }
+}
+async function createSubscription() {
+    try {
+        const response: any = await apiService.post("payment/process", {
+            customer_id: customerId.value,
+            payment_method_id: paymentMethodId.value,
+        });
+        if (response.success || response.status === 403) {
+            //   await useAuthStore().updateActiveStatus(true);
+            //   const actionCookie = useCookie('actionCookie');
+            //   if (useActivityStore().getUserAction || actionCookie.value) {
+            //     navigateTo('/loading');
+            //   } else {
+            //     navigateTo('/dashboard');
+            //   }
+            if (response.status === 403) {
+                errorMessage.value = "You are already an active subscriber.";
+            }
+        } else {
+            errorMessage.value = `Payment failed: ${response.message}`;
+        }
+    } catch (error) {
+        console.error({ error });
+        errorMessage.value = "An unexpected error occurred.";
+    }
+}
+
+function resetError() {
+    errorMessage.value = null;
+    formValidationMessage.value = null;
+}
+
+watch(errorMessage, (newErrorMessage) => {
+    if (newErrorMessage) {
+        setTimeout(() => {
+            errorMessage.value = null;
+        }, 5000);
+    }
+});
+
+const s = useRuntimeConfig();
+</script>
+<template>
+    <section class="bg-gray-50 dark:bg-gray-900">
+        <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 grid lg:grid-cols-2 gap-8 lg:gap-16">
+            <div class="flex flex-col justify-center">
+                <h1
+                    class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+                    We invest in the world’s potential</h1>
+                <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">Here at Flowbite we
+                    focus on markets where technology, innovation, and capital can unlock long-term value and drive
+                    economic growth.</p>
+                <a href="#"
+                    class="text-blue-600 dark:text-blue-500 hover:underline font-medium text-lg inline-flex items-center">Read
+                    more about our app {{ s.githubToken }}
+                    <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="none" viewBox="0 0 14 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M1 5h12m0 0L9 1m4 4L9 9" />
+                    </svg>
+                </a>
+            </div>
+            <div>
+                <div class="w-full lg:max-w-xl p-6 space-y-8 sm:p-8 bg-white rounded-lg shadow-xl dark:bg-gray-800">
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+                        Make Payment
+                    </h2>
+                    <form @submit.prevent="handleCheckoutClick">
+                        <div class="mb-4 w-full">
+                            <label for="cardholder-name" class="block mb-2 text-sm font-bold">Cardholder's Name</label>
+                            <div class="flex items-center py-1 border-2 border-[#4A2EB6] w-full overflow-hidden ">
+                                <div class="px-2">
+                                    <img src="/assets/svg/cardName.svg" alt="" />
+                                </div>
+                                <input v-model="cardholderName" type="text" id="cardholder-name"
+                                    placeholder="Erica Strawzen"
+                                    class="w-full px-3 py-2 uppercase focus:border-none focus:outline-none bg-transparent" />
+                            </div>
+                        </div>
+                        <div class="mb-4 w-full">
+                            <label for="card-number-element" class="block mb-2 text-sm font-bold">Card Number</label>
+                            <div class="flex items-center py-1 border-2 border-[#4A2EB6] overflow-hidden ">
+                                <div class="px-2">
+                                    <img src="/assets/svg/cardNumber.svg" alt="" />
+                                </div>
+                                <div id="card-number-element" class="px-3 py-2 border-none w-full">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex mb-4 space-x-3 w-full">
+                            <div class="w-1/2">
+                                <label for="card-expiry-element" class="block mb-2 text-sm font-bold">Expiry</label>
+                                <div class="flex items-center py-1 border-2 border-[#4A2EB6] overflow-hidden ">
+                                    <div class="px-2">
+                                        <img src="/assets/svg/cardExpiry.svg" alt="" />
+                                    </div>
+                                    <div id="card-expiry-element" class="px-3 py-2 border-none w-full">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="w-1/2">
+                                <label for="card-cvc-element" class="block mb-2 text-sm font-bold">CVV</label>
+                                <div class="flex items-center py-1 border-2 border-[#4A2EB6] overflow-hidden ">
+                                    <div class="px-2">
+                                        <img src="/assets/svg/cardCvv.svg" alt="" />
+
+                                    </div>
+                                    <div id="card-cvc-element" class="px-3 py-2 border-none w-full">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-center w-full space-x-2">
+                            <input type="checkbox" v-model="termsAccepted" id="agree-terms" class="mr-2 w-5 h-5"
+                                style="border: solid #4A2EB6 !important;" />
+                            <label for="agree-terms" class="flex-1">I agree to the
+                                <a href="/terms" target="_blank" class="text-primary-yellow"> terms & conditions</a> of
+                                service.
+                            </label>
+                        </div>
+                        <div class="flex items-centder justify-dcenter h-12 mt-5">
+                            <button type="button"
+                                class="px-3 py-2 text-sm font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                <span class="p-4">PROCESS</span>
+                            </button>
+
+
+                        </div>
+                        <div v-if="formValidationMessage" class="text-red-500 mt-2">
+                            {{ formValidationMessage }}
+                        </div>
+                        <div v-show="errorMessage"
+                            class="absolute w-[25.5rem] h-[30.5rem] top-80 bg-white z-10 flex items-center justify-center p-5">
+                            <p class="text-red-500 ">{{ errorMessage }}</p>
+                            <span
+                                class="absolute top-5 right-5 rounded-full  bg-red-500 h-7 w-7 flex items-center justify-center cursor-pointer hover:bg-red-600"
+                                @click="resetError">
+                                <!-- <font-awesome-icon :icon="faTimes" class="text-white" /> -->
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+</template>
+<style scoped>
+/* Add your styles here */
+#card-number-element>div,
+#card-expiry-element div,
+#card-cvc-element>div {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    width: 100% !important;
+    padding: 0 10px;
+    color: #000 !important;
+}
+
+input {
+    background: none;
+    border: none;
+    outline: none;
+}
+
+input:focus {
+    outline: none;
+    border: none;
+}
+
+/* Optional: you might want to keep some minimal styling */
+/* input {
+  padding: 8px;
+  width: 100%;
+} */
+
+/* Hide images inside the input containers */
+/* img {
+  display: none;
+} */
+</style>
