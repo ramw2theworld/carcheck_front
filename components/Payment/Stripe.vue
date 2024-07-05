@@ -2,12 +2,22 @@
 import type { StripeCardCvcElement, StripeCardExpiryElement, StripeCardNumberElement, StripeElements } from '@stripe/stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import ApiService from '~/services/apiService';
+const auth = useAuthStore();
+
+interface BillingDetails {
+    name: string;
+}
+
+const envConfig = useRuntimeConfig();
+
+
 const apiService = new ApiService();
-const config = useRuntimeConfig();
-const stripePromise = loadStripe("pk_test_51NnNKLIZ7GRzcjItjwQGvG8cBmTuW4FPCgPxiQDHo9nBfSqj0KjHgcgjdbwSchQWW5rvPbuUK3IsdjwOUGYWSZJV008sWndQue" as string);
+const stripePromise = loadStripe(envConfig.public.stripe_public_key as string);
 const loading = ref(false);
+const cardComplete = ref(false);
 const termsAccepted = ref(false);
 const cardholderName = ref('');
+
 let elements: StripeElements;
 let cardNumberElement: StripeCardNumberElement;
 let cardExpiryElement: StripeCardExpiryElement;
@@ -16,6 +26,12 @@ const errorMessage = ref<string | null>(null);
 const formValidationMessage = ref<string | null>(null);
 const customerId = ref('');
 const paymentMethodId = ref('');
+
+const isFormValid = computed(() => {
+    return termsAccepted.value && cardholderName.value && cardComplete.value;
+});
+
+
 const style = {
     base: {
         color: '#32325D',
@@ -31,14 +47,17 @@ const style = {
 };
 onMounted(async () => {
     const stripe = await stripePromise;
+    if (!stripe) return;
+
     if (stripe) {
         elements = stripe.elements();
-        cardNumberElement = elements.create('cardNumber', { style });
+        cardNumberElement = elements.create('cardNumber', { style: { base: { color: '#32325D', fontSize: '16px' } } });
         cardNumberElement.mount('#card-number-element');
         cardExpiryElement = elements.create('cardExpiry', { style });
         cardExpiryElement.mount('#card-expiry-element');
         cardCvcElement = elements.create('cardCvc', { style });
         cardCvcElement.mount('#card-cvc-element');
+
     }
 });
 async function handleCheckoutClick() {
@@ -66,6 +85,7 @@ async function handleCheckoutClick() {
                 name: cardholderName.value,
             },
         });
+
         if (error) {
             console.error(error);
             (errorMessage.value as any) = error.message;
@@ -76,8 +96,8 @@ async function handleCheckoutClick() {
             billing_details: { name: cardholderName.value },
         });
 
-        if ((response as any).paymentStatus !== 'succeeded') {
-            const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment((response as any).clientSecret, {
+        if ((response as any).payload.paymentStatus !== 'succeeded') {
+            const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment((response as any).payload.clientSecret, {
                 payment_method: paymentMethod.id,
             });
             if (confirmError) {
@@ -85,9 +105,15 @@ async function handleCheckoutClick() {
                 return;
             }
         }
-        const { customerId: cid } = response as any;
-        customerId.value = cid;
+
+        const customer_id = (response as any).payload.customerId;
+        customerId.value = customer_id;
+        console.log("cus: ", customerId.value);
+
         paymentMethodId.value = paymentMethod.id;
+        console.log("pm: ", paymentMethodId.value)
+
+        // const billing_details = { name: cardholderName.value }
         await createSubscription();
     } catch (error) {
         console.error({ error });
@@ -96,11 +122,19 @@ async function handleCheckoutClick() {
     }
 }
 async function createSubscription() {
+    const user = auth.getCurrentUser;
+    console.log("c: ", customerId.value)
+    console.log("cddd: ", paymentMethodId.value)
     try {
         const response: any = await apiService.post("payment/process", {
             customer_id: customerId.value,
             payment_method_id: paymentMethodId.value,
+            email: user.email,
+            billing_details: {
+                name: cardholderName.value,
+            },
         });
+
         if (response.success || response.status === 403) {
             //   await useAuthStore().updateActiveStatus(true);
             //   const actionCookie = useCookie('actionCookie');
@@ -134,7 +168,6 @@ watch(errorMessage, (newErrorMessage) => {
     }
 });
 
-const s = useRuntimeConfig();
 </script>
 <template>
     <section class="bg-gray-50 dark:bg-gray-900">
@@ -148,7 +181,7 @@ const s = useRuntimeConfig();
                     economic growth.</p>
                 <a href="#"
                     class="text-blue-600 dark:text-blue-500 hover:underline font-medium text-lg inline-flex items-center">Read
-                    more about our app {{ s.githubToken }}
+                    more about our app
                     <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                         fill="none" viewBox="0 0 14 10">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -194,7 +227,7 @@ const s = useRuntimeConfig();
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="w-1/2">
                                 <label for="card-cvc-element" class="block mb-2 text-sm font-bold">CVV</label>
                                 <div class="flex items-center py-1 border-2 border-[#4A2EB6] overflow-hidden ">
@@ -215,17 +248,22 @@ const s = useRuntimeConfig();
                                 service.
                             </label>
                         </div>
+
+                        <div v-if="formValidationMessage" class="text-red-500 mt-2">
+                            {{ formValidationMessage }}
+                        </div>
+
                         <div class="flex items-centder justify-dcenter h-12 mt-5">
-                            <button type="button"
-                                class="px-3 py-2 text-sm font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                <span class="p-4">PROCESS</span>
+                            <button
+                                type="submit"
+                                class="px-3 py-2 text-sm font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 
+                                focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                PROCESS
                             </button>
 
 
                         </div>
-                        <div v-if="formValidationMessage" class="text-red-500 mt-2">
-                            {{ formValidationMessage }}
-                        </div>
+                        
                         <div v-show="errorMessage"
                             class="absolute w-[25.5rem] h-[30.5rem] top-80 bg-white z-10 flex items-center justify-center p-5">
                             <p class="text-red-500 ">{{ errorMessage }}</p>

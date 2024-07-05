@@ -40,7 +40,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      githubToken: process.env.API_SECRET,
+      stripe_public_key: process.env.STRIPE_PUBLIC_KEY,
     },
   },
 })
