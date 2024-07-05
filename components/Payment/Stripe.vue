@@ -45,6 +45,7 @@ const style = {
         iconColor: '#FA755A',
     },
 };
+
 onMounted(async () => {
     const stripe = await stripePromise;
     if (!stripe) return;
