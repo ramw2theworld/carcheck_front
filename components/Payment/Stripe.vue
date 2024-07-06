@@ -3,6 +3,7 @@ import type { StripeCardCvcElement, StripeCardExpiryElement, StripeCardNumberEle
 import { loadStripe } from '@stripe/stripe-js';
 import ApiService from '~/services/apiService';
 const auth = useAuthStore();
+const plan = usePlanStore();
 
 interface BillingDetails {
     name: string;
@@ -173,28 +174,19 @@ watch(errorMessage, (newErrorMessage) => {
 <template>
     <section class="bg-gray-50 dark:bg-gray-900">
         <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 grid lg:grid-cols-2 gap-8 lg:gap-16">
-            <div class="flex flex-col justify-center">
-                <h1
-                    class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-                    We invest in the world’s potential</h1>
-                <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">Here at Flowbite we
-                    focus on markets where technology, innovation, and capital can unlock long-term value and drive
-                    economic growth.</p>
-                <a href="#"
-                    class="text-blue-600 dark:text-blue-500 hover:underline font-medium text-lg inline-flex items-center">Read
-                    more about our app
-                    <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                        fill="none" viewBox="0 0 14 10">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M1 5h12m0 0L9 1m4 4L9 9" />
-                    </svg>
-                </a>
-            </div>
+            <OrderSummary />
+
             <div>
                 <div class="w-full lg:max-w-xl p-6 space-y-8 sm:p-8 bg-white rounded-lg shadow-xl dark:bg-gray-800">
-                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+                    <!-- <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
                         Make Payment
-                    </h2>
+                    </h2> -->
+                    <div class="flex flex-row items-center justify-between ">
+                        <h1 class="text-lg font-bold px-2">Make Payment</h1>
+                        <span class="text-[#0F1829] text-xs rounded bg-[#FF7400] px-2 py-0.5"
+                            >£{{ plan?.selectedPlan?.trial_price }}</span>
+                    </div>
+
                     <form @submit.prevent="handleCheckoutClick">
                         <div class="mb-4 w-full">
                             <label for="cardholder-name" class="block mb-2 text-sm font-bold">Cardholder's Name</label>
@@ -255,8 +247,7 @@ watch(errorMessage, (newErrorMessage) => {
                         </div>
 
                         <div class="flex items-centder justify-dcenter h-12 mt-5">
-                            <button
-                                type="submit"
+                            <button type="submit"
                                 class="px-3 py-2 text-sm font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 
                                 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                 PROCESS
@@ -264,7 +255,7 @@ watch(errorMessage, (newErrorMessage) => {
 
 
                         </div>
-                        
+
                         <div v-show="errorMessage"
                             class="absolute w-[25.5rem] h-[30.5rem] top-80 bg-white z-10 flex items-center justify-center p-5">
                             <p class="text-red-500 ">{{ errorMessage }}</p>

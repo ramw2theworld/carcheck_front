@@ -29,15 +29,14 @@ export default class ApiService {
     }
 
     try {
-      // const response = await $fetch(`${this.baseURL}/${endpoint}`, options);
-      // return response;
-
       const response = await fetch(`${this.baseURL}/${endpoint}`, options);
+      const responseData = await response.json();
+
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "API Error");
+        throw { status: response.status, data: responseData };
       }
-      return await response.json();
+      return responseData;
+
     } catch (error) {
       console.error(`${method} ${endpoint} error:`, error);
       throw error;

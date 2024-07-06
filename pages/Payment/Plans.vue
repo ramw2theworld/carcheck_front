@@ -4,12 +4,16 @@ import featureData from '@/features.json';
 import { usePlanStore } from '@/stores/plan';
 
 const planStore = usePlanStore();
+
 const basic_features = reactive(featureData.features.basic_features);
 const standerd_features = reactive(featureData.features.standerd_features);
 const premium_features = reactive(featureData.features.premium_features);
 
 const isMonthlyActive = ref(true);
-const selectedPlan = ref("standard_plan");
+const selectedPlan = ref("48h-export-subscription");
+const plansFetched = ref(null);
+const plans = ref([]);
+
 
 const toggleBilling = (type) => {
     isMonthlyActive.value = (type === 'monthly');
@@ -21,18 +25,25 @@ const startChecking = (plan) => {
 };
 
 const selectPlan = (plan) => {
-    selectedPlan.value = plan.code;
+    selectedPlan.value = plan.plan_code;
 };
 
 const getFeatureIcon = (iconName) => {
     return `/assets/svg/${iconName}`;
 };
 
-const plans = ref([
-    { name: 'Basic Plan', code: 'basic_plan', price: 39.90, trial_price: '5.95', reports: 7 },
-    { name: 'Standard Plan', code: 'standard_plan', price: 39.90, trial_price: '1.95', reports: 10 },
-    { name: 'Premium Plan', code: 'premium_plan', price: 19.95, trial_price: '5.95', reports: 15 },
-]);
+onMounted(async () => {
+    await planStore.fetchPlans();  
+    console.log("res: ", planStore.plans)
+    plans.value = planStore.plans.map((item)=>{
+        return {
+            ...item,
+            price: (parseFloat(item.amount_premium) / 100).toFixed(2)
+        }
+    });
+    console.log("fodld: ", plans.value)
+    console.log("selected: ", selectedPlan)
+});
 </script>
 
 <template>
@@ -41,6 +52,7 @@ const plans = ref([
             <div>
                 <h3 class="text-2xl text-gray-800 w-52 text-start">We have the best</h3>
                 <h3 class="text-2xl font-bold text-gray-800 w-52 text-start">Plans around</h3>
+                {{ plansFetched }}
             </div>
             <div class="border-2 rounded p-0.5 border-[#0F1829]">
                 <button :class="{ 'bg-[#0F1829] text-white': isMonthlyActive, 'text-[#0F1829]': !isMonthlyActive }"
@@ -51,18 +63,18 @@ const plans = ref([
         </div>
 
         <div class="flex md:flex-row flex-col items-center justify-center mt-10 gap-4 md:gap-8 px-32">
-            <div v-for="plan in plans" :key="plan.code" @click="selectPlan(plan)" :class="{
-                    'bg-[#0F1829] text-white': selectedPlan === plan.code,
-                    'border-2 border-[#0F1829] text-[#0F1829]': selectedPlan !== plan.code
+            <div v-for="plan in plans" :key="plan.plan_code" @click="selectPlan(plan)" :class="{
+                    'bg-[#0F1829] text-white': selectedPlan === plan.plan_code,
+                    'border-2 border-[#0F1829] text-[#0F1829]': selectedPlan !== plan.plan_code
                 }" class="rounded-xl px-8 py-6 cursor-pointer transition duration-300 ease-in-out">
                 <div class="flex flex-row items-center justify-between">
                     <h1 class="text-lg font-bold px-2">{{ plan.name }}</h1>
                     <span class="text-[#0F1829] text-xs rounded bg-[#FF7400] px-2 py-0.5"
-                        v-if="plan.code === 'standard_plan'">Most Popular</span>
+                        v-if="plan.plan_code === '48h-export-subscription'">Most Popular</span>
                 </div>
 
                 <div class="flex flex-row items-center justify-start mt-6">
-                    <h3 class="text-4xl">£{{ plan.price }}</h3>
+                    <h3 class="text-4xl">£{{ plan.plan_code==="single-offer"?plan.amount_premium:plan.amount_trial }}</h3>
                     <div class="flex flex-col items-center justify-center ml-4">
                         <span class="text-sm font-thin -ml-2">Per User</span>
                         <span class="text-sm font-thin">Per Month</span>
@@ -77,38 +89,38 @@ const plans = ref([
                 <h2 class="text-xl mt-8">Included</h2>
                 <p class="text-sm font-thin">What’s included with our plan</p>
 
-                <!-- basic features -->
-                <div class="flex flex-col items-start justify-start mt-2 gap-2" v-if="plan.code == 'basic_plan'">
+                <!-- basic feature -->
+                <div class="flex flex-col items-start justify-start mt-2 gap-2" v-if="plan.plan_code == '48h-basic-subscription'">
                     <div v-for="b_feature in basic_features" :key="b_feature.id"
                         class="flex flex-row items-center justify-start">
                         <img :src="getFeatureIcon(b_feature.icon)" :alt="b_feature.title" class="w-6 orange-filter" />
                         <h3 :class="{
-                    'text-white': selectedPlan === plan.code,
-                    'text-[#0F1829]': selectedPlan !== plan.code
+                    'text-white': selectedPlan === plan.plan_code,
+                    'text-[#0F1829]': selectedPlan !== plan.plan_code
                 }" class="text-[#0F1829] text-sm ml-2">{{ b_feature.title }}</h3>
                     </div>
                 </div>
 
-                <!-- standerd plans  -->
-                <div class="flex flex-col items-start justify-start mt-2 gap-2" v-if="plan.code == 'standard_plan'">
+                <!-- standerd plan  -->
+                <div class="flex flex-col items-start justify-start mt-2 gap-2" v-if="plan.plan_code == '48h-export-subscription'">
                     <div v-for="b_feature in standerd_features" :key="b_feature.id"
                         class="flex flex-row items-center justify-start">
                         <img :src="getFeatureIcon(b_feature.icon)" :alt="b_feature.title" class="w-6 orange-filter" />
                         <h3 :class="{
-                    'text-white': selectedPlan === plan.code,
-                    'text-[#0F1829]': selectedPlan !== plan.code
+                    'text-white': selectedPlan === plan.plan_code,
+                    'text-[#0F1829]': selectedPlan !== plan.plan_code
                 }" class="text-[#0F1829] text-sm ml-2">{{ b_feature.title }}</h3>
                     </div>
                 </div>
 
-                <!-- premium plans  -->
-                <div class="flex flex-col items-start justify-start mt-2 gap-2" v-if="plan.code == 'premium_plan'">
+                <!-- premium plan  -->
+                <div class="flex flex-col items-start justify-start mt-2 gap-2" v-if="plan.plan_code == 'single-offer'">
                     <div v-for="b_feature in premium_features" :key="b_feature.id"
                         class="flex flex-row items-center justify-start">
                         <img :src="getFeatureIcon(b_feature.icon)" :alt="b_feature.title" class="w-6 orange-filter" />
                         <h3 :class="{
-                    'text-white': selectedPlan === plan.code,
-                    'text-[#0F1829]': selectedPlan !== plan.code
+                    'text-white': selectedPlan === plan.plan_code,
+                    'text-[#0F1829]': selectedPlan !== plan.plan_code
                 }" class="text-[#0F1829] text-sm ml-2">{{ b_feature.title }}</h3>
                     </div>
                 </div>

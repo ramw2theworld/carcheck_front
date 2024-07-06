@@ -8,10 +8,11 @@ definePageMeta({
 });
 
 const form = reactive({
-    email: "test@example.com",
-    password: "password"
+    email: "admin@admin.com",
+    password: "password01"
 });
 const errors = ref([]);
+const errorMessage = ref(null);
 
 const handleLoginSubmit = async () => {
     try {
@@ -19,7 +20,10 @@ const handleLoginSubmit = async () => {
         
     } catch (error) {
         console.log("login error: ", error);
-        errors.value = error.data.errors
+        if(error.data.errors)
+            errors.value = error.data?.errors
+        else
+            errorMessage.value = error.data.message;
     }
 }
 const removeToken = async () => {
@@ -45,11 +49,14 @@ const removeToken = async () => {
                                 type="password" />
 
                             <span class="text-red-500" v-if="errors.password">{{ errors.password[0] }}</span>
+
+                            <p><span class="text-red-500" v-if="errorMessage">{{ errorMessage }}</span></p>
                         </div>
+                        
+
                         <ButtonPrimary>Submit</ButtonPrimary>
-                        <ButtonPrimary @click.prevent="removeToken"> Remove token</ButtonPrimary>
                     </form>
-                    <SocialLogin></SocialLogin>
+                    <!-- <SocialLogin></SocialLogin> -->
                 </div>
             </div>
 

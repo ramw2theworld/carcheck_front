@@ -1,0 +1,57 @@
+{"features": {
+    
+    "basic_extra_features":[
+        {
+            "id": 1, "title": "Download 5 reports per month", "icon": "damage-check.svg"
+        },
+        {
+            "id": 2, "title": "£1.95/48h then £39.90/month", "icon": "damage-check.svg"
+        },
+        {
+            "id": 3, "title": "Get a quote for your vehicle", "icon": "damage-check.svg"
+        },
+        {
+            "id": 4, "title": "Consult our car Guides", "icon": "damage-check.svg"
+        },
+        {
+            "id": 5, "title": "Secured and Verified datas", "icon": "damage-check.svg"
+        },
+        {
+            "id": 6, "title": "Professional customer service", "icon": "damage-check.svg"
+        }
+    ],
+    "export_extra_features":[
+        {
+            "id": 1, "title": "Download 5 reports per month", "icon": "damage-check.svg"
+        },
+        {
+            "id": 2, "title": "£5.95/48h then £39.90/month", "icon": "damage-check.svg"
+        },
+        {
+            "id": 3, "title": "Get a quote for your vehicle", "icon": "damage-check.svg"
+        },
+        {
+            "id": 4, "title": "Consult our car Guides", "icon": "damage-check.svg"
+        },
+        {
+            "id": 5, "title": "Secured and Verified datas", "icon": "damage-check.svg"
+        },
+        {
+            "id": 5, "title": "Professional customer service", "icon": "damage-check.svg"
+        }
+    ],
+    "single_offer_extra_features":[
+        {
+            "id": 1, "title": "Download your Report for £19.95", "icon": "damage-check.svg"
+        },
+        {
+            "id": 2, "title": "Secured and Verified Informations", "icon": "damage-check.svg"
+        },
+        {
+            "id": 3, "title": "Professionnal Customer Support", "icon": "damage-check.svg"
+        },
+        {
+            "id": 4, "title": "Report Available to download now", "icon": "damage-check.svg"
+        }
+    ]
+}}
