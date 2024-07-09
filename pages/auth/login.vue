@@ -1,17 +1,21 @@
 <script setup>
 const auth = useAuthStore();
 const token = useTokenStore();
-
 definePageMeta({
-    title: 'Login',
-    middleware: ['guest'],
+  title: 'Login',
+  meta: [
+    { hid: 'Login for fetching Registration number details', name: 'Login for fetching Registration number details', content: 'Login for fetching Registration number details' }
+
+  ],
+  middleware: ['guest'],
 });
 
 const form = reactive({
-    email: "test@example.com",
-    password: "password"
+    email: "admin@admin.com",
+    password: "password01"
 });
 const errors = ref([]);
+const errorMessage = ref(null);
 
 const handleLoginSubmit = async () => {
     try {
@@ -19,7 +23,10 @@ const handleLoginSubmit = async () => {
         
     } catch (error) {
         console.log("login error: ", error);
-        errors.value = error.data.errors
+        if(error.data.errors)
+            errors.value = error.data?.errors
+        else
+            errorMessage.value = error.data.message;
     }
 }
 const removeToken = async () => {
@@ -31,7 +38,8 @@ const removeToken = async () => {
     <div>
         <div class="min-h-screen flex items-center">
             <div class="w-full">
-                <div class="card bg-white p-8 rounded-lg shadow-xl md:w-3/4 mx-auto lg:w-1/3">
+                <div class="card bg-white p-8 rounded-lg shadow-xl border-2 border-dark-500 border-solid py-4 md:w-3/4 mx-auto lg:w-1/3">
+
                     <h3 class="text-center text-2xl font-semibold"> User Login</h3>
                     <form @submit.prevent="handleLoginSubmit">
                         <div class="mb-6">
@@ -45,11 +53,22 @@ const removeToken = async () => {
                                 type="password" />
 
                             <span class="text-red-500" v-if="errors.password">{{ errors.password[0] }}</span>
+
+                            <p><span class="text-red-500" v-if="errorMessage">{{ errorMessage }}</span></p>
                         </div>
-                        <ButtonPrimary>Submit</ButtonPrimary>
-                        <ButtonPrimary @click.prevent="removeToken"> Remove token</ButtonPrimary>
+                        <div class="flex justify-between items-center">
+                            <ButtonPrimary>Submit</ButtonPrimary>
+                            <span @click="navigateToRegister">
+                                <i class="fa fa-user"></i> Create new user
+                            </span>
+                        </div>
+                        <div class="flex justify-center items-center mt-4">
+                            <span @click="navigateToForgotPassword" class="text-blue-500 hover:text-blue-700 cursor-pointer">
+                                Forget Password
+                            </span>
+                        </div>
                     </form>
-                    <SocialLogin></SocialLogin>
+                    <!-- <SocialLogin></SocialLogin> -->
                 </div>
             </div>
 

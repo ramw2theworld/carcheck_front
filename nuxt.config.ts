@@ -1,13 +1,13 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: false },
+  devtools: { enabled: true },
   buildModules:[
     '@nuxt/postcss8',
   ],
   css: [
     '~/assets/css/fonts.css',
     '~/assets/css/input.css',
-    '@fortawesome/fontawesome-svg-core/styles.css',
+    '@fortawesome/fontawesome-svg-core/styles.css'
   ],
 
   modules: [
@@ -24,7 +24,7 @@ export default defineNuxtConfig({
   },
 
   plugins: [
-    '~/plugins/fontawesome.js'
+    '~/plugins/fontawesome.js',
   ],
 
   build:{
@@ -36,5 +36,11 @@ export default defineNuxtConfig({
         },
       },
     },
-  }
+  },
+
+  runtimeConfig: {
+    public: {
+      stripe_public_key: process.env.STRIPE_PUBLIC_KEY,
+    },
+  },
 })

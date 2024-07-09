@@ -6,6 +6,11 @@ const auth = useAuthStore();
 const carRegistrationSearch = useCarRegistrationSearchStore();
 
 definePageMeta({
+  title: 'SearchBar',
+  meta: [
+  { hid: 'Search Car Registration number', name: 'Search Car Registration number', content: 'Search Car Registration number' }
+
+  ]
   // middleware: ['guest'],
 });
 
@@ -38,14 +43,13 @@ const searchForCarReg = async () => {
       errors.value.push(`Vehicle number is not valid.`);
       return;
     }
-
     await carRegistrationSearch.searchCarRegNumber(processedCarNumber.value);
-
+    
     const reportType = "single-offer";
-
     if (validReportTypes.includes(reportType)) {
-      router.push(`/${reportType}-report`);
-    } else {
+      router.push(`/vehicle/${reportType}-report`);
+    } 
+    else {
       router.push('/not-found');
     }
 
