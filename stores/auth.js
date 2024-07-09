@@ -27,7 +27,7 @@ export const useAuthStore = defineStore('auth', {
 
         async createNewUser(form) {
             try {
-                const response = await apiService.post('create-new-user', form);
+                const response = await apiService.post('users', form);
                 if(response.payload){
                     this.setCommonSetter(response.payload);
                 }
@@ -64,7 +64,6 @@ export const useAuthStore = defineStore('auth', {
         setCommonSetter(payload) {
             const token = useTokenStore();
             if (payload.access_token && payload.user) {
-                alert("fdf"+payload.access_token);
                 token.setToken(payload.access_token);
                 this.user = payload.user;
             }

@@ -1,10 +1,13 @@
 <script setup>
 const auth = useAuthStore();
 const token = useTokenStore();
-
 definePageMeta({
-    title: 'Login',
-    middleware: ['guest'],
+  title: 'Login',
+  meta: [
+    { hid: 'Login for fetching Registration number details', name: 'Login for fetching Registration number details', content: 'Login for fetching Registration number details' }
+
+  ],
+  middleware: ['guest'],
 });
 
 const form = reactive({
@@ -35,7 +38,8 @@ const removeToken = async () => {
     <div>
         <div class="min-h-screen flex items-center">
             <div class="w-full">
-                <div class="card bg-white p-8 rounded-lg shadow-xl md:w-3/4 mx-auto lg:w-1/3">
+                <div class="card bg-white p-8 rounded-lg shadow-xl border-2 border-dark-500 border-solid py-4 md:w-3/4 mx-auto lg:w-1/3">
+
                     <h3 class="text-center text-2xl font-semibold"> User Login</h3>
                     <form @submit.prevent="handleLoginSubmit">
                         <div class="mb-6">
@@ -52,9 +56,17 @@ const removeToken = async () => {
 
                             <p><span class="text-red-500" v-if="errorMessage">{{ errorMessage }}</span></p>
                         </div>
-                        
-
-                        <ButtonPrimary>Submit</ButtonPrimary>
+                        <div class="flex justify-between items-center">
+                            <ButtonPrimary>Submit</ButtonPrimary>
+                            <span @click="navigateToRegister">
+                                <i class="fa fa-user"></i> Create new user
+                            </span>
+                        </div>
+                        <div class="flex justify-center items-center mt-4">
+                            <span @click="navigateToForgotPassword" class="text-blue-500 hover:text-blue-700 cursor-pointer">
+                                Forget Password
+                            </span>
+                        </div>
                     </form>
                     <!-- <SocialLogin></SocialLogin> -->
                 </div>

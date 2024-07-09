@@ -38,6 +38,7 @@ export default class ApiService {
       return responseData;
 
     } catch (error) {
+      console.log("error: ", error);
       console.error(`${method} ${endpoint} error:`, error);
       throw error;
     }

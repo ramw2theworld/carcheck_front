@@ -17,6 +17,7 @@
     "@pinia/nuxt": "^0.5.1",
     "@stripe/stripe-js": "^4.1.0",
     "flowbite": "^2.3.0",
+    "js-cookie": "^3.0.5",
     "nuxt": "^3.10.3",
     "pinia": "^2.1.7",
     "vue": "^3.4.21",

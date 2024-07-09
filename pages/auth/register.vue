@@ -2,24 +2,40 @@
 const auth = useAuthStore();
 
 definePageMeta({
-    title: 'Register',
+  title: 'Register',
+  meta: [
+    { hid: 'Register for fetching Registration number details', name: 'Register for fetching Registration number details', content: 'Register for fetching Registration number details' }
+
+  ],
   middleware: ['guest'],
 });
 
 
 const form = reactive({
-    name: null,
+    first_name: null,
+    last_name: null,
     email: null,
-    password: null
+    password: null,
+    password_confirmation: null,
 });
 const errors = ref([]);
+const errorMessage = ref();
+const successMessage = ref('');
 
 const handleRegisterSubmit = async () => {
     try {
-        await auth.createNewUser(form);
+        const response = await auth.createNewUser(form);
+        successMessage.value = response.message;
+        debugger
+        setTimeout(() => {
+            successMessage.value = "";
+            navigateTo("/auth/login")
+        }, 3000);
     } catch (error) {
-        console.log("Register error: ", error);
-        errors.value = error.data.errors
+        debugger
+        errorMessage.value = error.data?.message
+        errors.value = error.data.errors;
+        console.log("Register error: ", errors.value);
     }
 }
 
@@ -27,16 +43,24 @@ const handleRegisterSubmit = async () => {
 
 <template>
     <div>
-        <div class="min-h-screen flex items-center">
+        <div class="min-h-screen flex items-center py-4">
             <div class="w-full">
-                <div class="card bg-white p-8 rounded-lg shadow-xl md:w-3/4 mx-auto lg:w-1/3">
+                <div class="card bg-white p-8 rounded-lg shadow-xl border-2 border-dark-500 border-solid py-4 md:w-3/4 mx-auto lg:w-1/3">
                     <h3 class="text-center text-2xl font-semibold"> User Registration</h3>
 
                     <form @submit.prevent="handleRegisterSubmit">
+                        <div v-if="successMessage" class="p-3 bg-green-200 text-green-800 rounded">
+                            {{ successMessage }}
+                        </div>
                         <div class="mb-6">
-                            <FormLabel for="fullname">Fullname</FormLabel>
-                            <FormInputText id="fullname" v-model="form.name" placeholder="Enter full name" type="text" required/>
-                            <span class="text-red-500" v-if="errors.name">{{ errors.name[0] }}</span>
+                            <FormLabel for="first_name">First name    </FormLabel>
+                            <FormInputText id="first_name" v-model="form.first_name" placeholder="Enter first name" type="text" required/>
+                            <span class="text-red-500" v-if="errors.first_name">{{ errors.first_name[0] }}</span>
+                        </div>
+                        <div class="mb-6">
+                            <FormLabel for="last_name">Last name</FormLabel>
+                            <FormInputText id="last_name" v-model="form.last_name" placeholder="Enter last name" type="text" required/>
+                            <span class="text-red-500" v-if="errors.last_name">{{ errors.last_name[0] }}</span>
                         </div>
                         <div class="mb-6">
                             <FormLabel for="email">Email</FormLabel>
@@ -46,6 +70,13 @@ const handleRegisterSubmit = async () => {
                         <div class="mb-6">
                             <FormLabel for="password">Password</FormLabel>
                             <FormInputText id="password" v-model="form.password" placeholder="password"
+                                type="password" required/>
+
+                            <span class="text-red-500" v-if="errors.password">{{ errors.password[0] }}</span>
+                        </div>
+                        <div class="mb-6">
+                            <FormLabel for="password_confirmation">Confirm Password</FormLabel>
+                            <FormInputText id="password_confirmation" v-model="form.password_confirmation" placeholder="Confirm password"
                                 type="password" required/>
 
                             <span class="text-red-500" v-if="errors.password">{{ errors.password[0] }}</span>
@@ -60,10 +91,15 @@ const handleRegisterSubmit = async () => {
                             </div>
                             <FormLabel for="remember" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                 Remember me</FormLabel>
+
                         </div>
+                        <div class="flex items-start mb-6" v-if="(errorMessage && errors.length==0)">
+                            <p class="text-danger text-red">{{ errorMessage }}</p>
+                        </div>
+
                         <ButtonPrimary>Submit</ButtonPrimary>
                     </form>
-                    <SocialLogin></SocialLogin>
+                    <!-- <SocialLogin></SocialLogin> -->
 
                 </div>
             </div>

@@ -1,4 +1,12 @@
 <script setup>
+
+import { computed } from 'vue';
+import { useCarRegistrationSearchStore } from '@/stores/carRegistrationSearch';
+
+const store = useCarRegistrationSearchStore();
+const general = computed(() => store.general);
+
+
 </script>
 
 <template>
