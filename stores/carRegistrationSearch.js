@@ -2,6 +2,8 @@ import ApiService from '../services/apiService';
 const apiService = new ApiService();
 import { defineStore } from 'pinia';
 import Cookie from 'js-cookie';
+import { decryptData } from '~/composables/useCrypto';
+
 
 
 export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch', {
@@ -25,6 +27,17 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
     getters: {
         getCarDetail(state){
             return state.basicCarDetails;
+        },
+        async fetchAndDecryptMOTHistory() {
+            const encryptedData = localStorage.getItem('MOThistory');
+            if (encryptedData) {
+                try {
+                    const decrypted = await decryptData('motHistorySecret', JSON.parse(encryptedData));
+                    this.decryptedMOTHistory = JSON.parse(decrypted);
+                } catch (error) {
+                    console.error("Failed to decrypt MOT history:", error);
+                }
+            }
         }
     },
     persist: {
@@ -118,13 +131,20 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
         setSmmtDetail(combinedPayload){
             Cookie.set('smmtDetail', JSON.stringify(combinedPayload.SmmtDetails), { expires: 7, path: '' });
         },
-        setMOTHistory(combinedPayload){
+        async setMOTHistory(combinedPayload){
             if (combinedPayload.MotHistory && Array.isArray(combinedPayload.MotHistory.RecordList)) {
-                localStorage.setItem('MOThistory', JSON.stringify(combinedPayload.MotHistory.RecordList));
+                // Specify your passphrase (consider a more secure way to handle this in production)
+                const passphrase = 'motHistorySecret';
+
+                // Convert the record list to a JSON string and encrypt it
+                const data = JSON.stringify(combinedPayload.MotHistory.RecordList);
+                const encryptedData = await encryptData(passphrase, data);
+
+                // Store the encrypted data as a JSON string
+                localStorage.setItem('MOThistory', JSON.stringify(encryptedData));
             }
-            debugger
+            debugger;
             console.log("orange: ", combinedPayload.MotHistory.RecordList);
-            // Cookie.set('MOThistory', JSON.stringify(combinedPayload.MotHistory.RecordList[0]), { expires: 7 });
         },
     },
 })
