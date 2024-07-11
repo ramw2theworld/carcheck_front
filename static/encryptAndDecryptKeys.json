@@ -1,0 +1,21 @@
+{"attributes": [
+    {
+        "id": 1, "title": "VehicleImageUrl", "key":"WJV", "passphrase": "veh-WJV-01"
+    },
+    {
+        "id": 2, "title": "MOTHistory", "key":"NPUH", "passphrase": "mot-NPUH-02"
+    },
+    {
+        "id": 3, "title": "VehicleDetails", "key":"WE", "passphrase": "veh-WE-03"
+    },
+    {
+        "id": 4, "title": "VehicleStatus", "key":"WT", "passphrase": "veh-WT-04"
+    },
+    {
+        "id": 5, "title": "VehicleTechnicalDetails", "key":"WUE", "passphrase": "veh-WUE-05"
+    },
+    {
+        "id": 6, "title": "VehicleLogo", "key":"WM", "passphrase": "veh-WM-06"
+    }
+   
+]}

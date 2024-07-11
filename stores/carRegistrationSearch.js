@@ -2,7 +2,8 @@ import ApiService from '../services/apiService';
 const apiService = new ApiService();
 import { defineStore } from 'pinia';
 import Cookie from 'js-cookie';
-import { decryptData } from '~/composables/useCrypto';
+import { decryptData, encryptData } from '~/composables/useCrypto';
+import { attributes } from '~/static/encryptAndDecryptKeys.json';
 
 
 
@@ -10,6 +11,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
     state: () => {
         return {
             reg_number: "",
+            vehicleLogo: null,
             vehicleImageUrl: null,
             vehicleStatus: null,
             vehicleDetails: null,
@@ -28,6 +30,29 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
         getCarDetail(state){
             return state.basicCarDetails;
         },
+        async fetchVehicleImageUrl() {
+            const encryptedData = localStorage.getItem('WJV');
+            if (encryptedData) {
+                try {
+                    const decrypted = await decryptData('veh-WJV-01', JSON.parse(encryptedData));
+                    this.vehicleImageUrl = JSON.parse(decrypted);
+                } catch (error) {
+                    console.error("Failed to decrypt vehicle image url:", error);
+                }
+            }
+        },
+        async fetchVehicleLogo() {
+            const encryptedData = localStorage.getItem('WM');
+            if (encryptedData) {
+                try {
+                    const decrypted = await decryptData('veh-WM-06', JSON.parse(encryptedData));
+                    this.vbrand_logo = JSON.parse(decrypted);
+                    console.log("logo: ", this.vbrand_logo);
+                } catch (error) {
+                    console.error("Failed to decrypt Vehicle logo: ", error);
+                }
+            }
+        },
         async fetchAndDecryptMOTHistory() {
             const encryptedData = localStorage.getItem('MOThistory');
             if (encryptedData) {
@@ -38,11 +63,13 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     console.error("Failed to decrypt MOT history:", error);
                 }
             }
-        }
+        },
+        
     },
     persist: {
         paths: [
             "reg_number",
+            "vehicleLogo",
             "vehicleImageUrl",
             "vehicleStatus",
             "vehicleDetails",
@@ -67,22 +94,23 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                         return {...acc, ...item};
                     }, {});
                     this.setVehicleImageUrl(combinedPayload);
+                    this.setVehicleLogo(combinedPayload);
                     // this.setVehicleStatus(combinedPayload);
-                    this.setVehicleDetails(combinedPayload);
+                    // this.setVehicleDetails(combinedPayload);
 
                     // this.setTechnicalDetails(combinedPayload);
 
                     // this.setClassificationDetails(combinedPayload);
 
-                    this.setVehicleDimension(combinedPayload);
-                    this.setVehicleGeneralInfo(combinedPayload);
-                    this.setVehicleRegistration(combinedPayload);
+                    // this.setVehicleDimension(combinedPayload);
+                    // this.setVehicleGeneralInfo(combinedPayload);
+                    // this.setVehicleRegistration(combinedPayload);
                     // this.setVehicleHistory(combinedPayload);
 
-                    this.setMOTHistory(combinedPayload);
+                    // this.setMOTHistory(combinedPayload);
 
-                    this.setMotVed(combinedPayload);
-                    this.setSmmtDetail(combinedPayload);
+                    // this.setMotVed(combinedPayload);
+                    // this.setSmmtDetail(combinedPayload);
                 }
 
             } catch (error) {
@@ -91,10 +119,22 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
             }
         },
 
-        setVehicleImageUrl(combinedPayload){
-            if(combinedPayload.VehicleImages.ImageDetailsCount > 0){
-                this.vehicleImageUrl = combinedPayload.VehicleImages.ImageDetailsList[0].ImageUrl;
+        async setVehicleImageUrl(combinedPayload){
+            if (combinedPayload.VehicleImages.ImageDetailsCount > 0) {
+                const passphrase = 'veh-WJV-01';
+                const data = JSON.stringify(combinedPayload.VehicleImages.ImageDetailsList[0].ImageUrl);
+                const encryptedData = await encryptData(passphrase, data);
+
+                localStorage.setItem('WJV', JSON.stringify(encryptedData));
             }
+        },
+        async setVehicleLogo(combinedPayload){
+           if(combinedPayload.vbrand_logo){
+                const passphrase = 'veh-WM-06';
+                const data = JSON.stringify(combinedPayload.vbrand_logo);
+                const encryptedData = await encryptData(passphrase, data);
+                localStorage.setItem('WM', JSON.stringify(encryptedData));
+           }
         },
         setVehicleStatus(combinedPayload){
             console.log("Setting vehicle status with:", combinedPayload.VehicleStatus);
@@ -143,8 +183,6 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                 // Store the encrypted data as a JSON string
                 localStorage.setItem('MOThistory', JSON.stringify(encryptedData));
             }
-            debugger;
-            console.log("orange: ", combinedPayload.MotHistory.RecordList);
         },
     },
 })

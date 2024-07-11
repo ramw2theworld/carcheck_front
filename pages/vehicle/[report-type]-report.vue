@@ -1,4 +1,9 @@
 <script setup>
+import { computed } from 'vue';
+import { useCarRegistrationSearchStore } from '@/stores/carRegistrationSearch';
+const carRegistrationSearchStore = useCarRegistrationSearchStore();
+const vbrand_logo = computed(() => carRegistrationSearchStore.vbrand_logo);
+
 const tokenStore = useTokenStore();
 const subscriptionStore = useSubscriptionStore();
 
@@ -21,7 +26,8 @@ const downloadReport = () =>{
                 <SearchBar />
                 <p class="mt-6 text-xs"><span class="font-bold">Report Date</span> 27-06-2024</p>
                 <p class="font-bold my-5 text-lg">BMW Model 2016</p>
-                <img src="~/assets/png/car-icon.png" class="w-26" />
+                <!-- <img src="~/assets/png/car-icon.png" class="w-26" /> -->
+                <img :src="vbrand_logo" class="w-26" alt="">
             </div>
             <div>
                 <div class="flex flex-col justify-center items-center">
