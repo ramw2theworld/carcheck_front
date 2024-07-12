@@ -23,7 +23,8 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
             general: null,
             vehicleRegistration: null,
             motVed: null,
-            smmtDetail: null,
+            smmtDetails: null,
+            performance: null,
         }
       },
     getters: {
@@ -53,14 +54,102 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                 }
             }
         },
-        async fetchAndDecryptMOTHistory() {
-            const encryptedData = localStorage.getItem('MOThistory');
+        async fetchSmmtDetails() {
+            const encryptedData = localStorage.getItem('TNNUE');
             if (encryptedData) {
                 try {
-                    const decrypted = await decryptData('motHistorySecret', JSON.parse(encryptedData));
-                    this.decryptedMOTHistory = JSON.parse(decrypted);
+                    const decrypted = await decryptData('veh-TNNUE-07', JSON.parse(encryptedData));
+                    this.smmtDetails = JSON.parse(decrypted);
                 } catch (error) {
-                    console.error("Failed to decrypt MOT history:", error);
+                    console.error("Failed to decrypt SmmtDetails:", error);
+                }
+            }
+        },
+        async fetchVehicleDimension() {
+            const encryptedData = localStorage.getItem('WUD');
+            if (encryptedData) {
+                try {
+                    const decrypted = await decryptData('veh-WUD-08', JSON.parse(encryptedData));
+                    this.dimensions = JSON.parse(decrypted);
+                } catch (error) {
+                    console.error("Failed to decrypt Vehicle Dimensions:", error);
+                }
+            }
+        },
+        async fetchVehicleRegistration() {
+            const encryptedData = localStorage.getItem('WSD');
+            if (encryptedData) {
+                try {
+                    const decrypted = await decryptData('veh-WSD-09', JSON.parse(encryptedData));
+                    this.vehicleRegistration = JSON.parse(decrypted);
+                } catch (error) {
+                    console.error("Failed to decrypt Vehicle Registration:", error);
+                }
+            }
+        },
+        async fetchVehicleMotVed() {  
+            const encryptedData = localStorage.getItem('WNU');
+            if (encryptedData) {
+                try {
+                    const decrypted = await decryptData('veh-WNU-10', JSON.parse(encryptedData));
+                    this.motVed = JSON.parse(decrypted);
+                } catch (error) {
+                    console.error("Failed to decrypt Vehicle MotVed: ", error);
+                }
+            }
+        },
+        async fetchVehicleGeneralInfo() {  
+            const encryptedData = localStorage.getItem('WHJ');
+            if (encryptedData) {
+                try {
+                    const decrypted = await decryptData('veh-WHJ-11', JSON.parse(encryptedData));
+                    this.general = JSON.parse(decrypted);
+                } catch (error) {
+                    console.error("Failed to decrypt Vehicle General Information: ", error);
+                }
+            }
+        },
+        async fetchPerformance() {  
+            const encryptedData = localStorage.getItem('PRFNC');
+            if (encryptedData) {
+                try {
+                    const decrypted = await decryptData('veh-PRFNC-12', JSON.parse(encryptedData));
+                    this.performance = JSON.parse(decrypted);
+                } catch (error) {
+                    console.error("Failed to decrypt Vehicle General Information: ", error);
+                }
+            }
+        },
+        async fetchClassificationDetails() {  
+            const encryptedData = localStorage.getItem('WDE');
+            if (encryptedData) {
+                try {
+                    const decrypted = await decryptData('veh-WDE-12', JSON.parse(encryptedData));
+                    this.classificationDetails = JSON.parse(decrypted);
+                } catch (error) {
+                    console.error("Failed to decrypt Vehicle Classification Information: ", error);
+                }
+            }
+        },
+        async fetchVehicleHistory() {  
+            const encryptedData = localStorage.getItem('WJY');
+            if (encryptedData) {
+                try {
+                    const decrypted = await decryptData('veh-WJY-14', JSON.parse(encryptedData));
+                    this.vehicleHistory = JSON.parse(decrypted);
+                } catch (error) {
+                    console.error("Failed to decrypt Vehicle History: ", error);
+                }
+            }
+        },
+        async fetchMOTHistory() {  
+            const encryptedData = localStorage.getItem('NPUH');
+            if (encryptedData) {
+                try {
+                    const decrypted = await decryptData('veh-NPUH-02', JSON.parse(encryptedData));
+                    this.vehicleHistory = JSON.parse(decrypted);
+                } catch (error) {
+                    console.error("Failed to decrypt Vehicle MOT History: ", error);
                 }
             }
         },
@@ -81,7 +170,8 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
             "vehicleHistory",
             "vehicleRegistration",
             "motVed",
-            "smmtDetail",
+            "smmtDetails",
+            'performance',
         ]
     },
     actions: {
@@ -95,22 +185,15 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     }, {});
                     this.setVehicleImageUrl(combinedPayload);
                     this.setVehicleLogo(combinedPayload);
-                    // this.setVehicleStatus(combinedPayload);
-                    // this.setVehicleDetails(combinedPayload);
-
-                    // this.setTechnicalDetails(combinedPayload);
-
-                    // this.setClassificationDetails(combinedPayload);
-
-                    // this.setVehicleDimension(combinedPayload);
-                    // this.setVehicleGeneralInfo(combinedPayload);
-                    // this.setVehicleRegistration(combinedPayload);
-                    // this.setVehicleHistory(combinedPayload);
-
-                    // this.setMOTHistory(combinedPayload);
-
-                    // this.setMotVed(combinedPayload);
-                    // this.setSmmtDetail(combinedPayload);
+                    this.setSmmtDetails(combinedPayload);
+                    this.setVehicleDimension(combinedPayload);
+                    this.setVehicleRegistration(combinedPayload);
+                    this.setMotVed(combinedPayload);
+                    this.setVehicleGeneralInfo(combinedPayload);
+                    this.setPerformance(combinedPayload);
+                    this.setClassificationDetails(combinedPayload);
+                    this.setVehicleHistory(combinedPayload);
+                    this.setMOTHistory(combinedPayload);
                 }
 
             } catch (error) {
@@ -136,52 +219,84 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                 localStorage.setItem('WM', JSON.stringify(encryptedData));
            }
         },
-        setVehicleStatus(combinedPayload){
-            console.log("Setting vehicle status with:", combinedPayload.VehicleStatus);
-            this.vehicleStatus = combinedPayload.VehicleStatus;
-            console.log("New vehicle status state:", this.vehicleStatus);
-            debugger
+        async setSmmtDetails(combinedPayload){
+            if (combinedPayload.SmmtDetails) {
+                const passphrase = 'veh-TNNUE-07';
+                const data = JSON.stringify(combinedPayload.SmmtDetails);
+                const encryptedData = await encryptData(passphrase, data);
+                localStorage.setItem('TNNUE', JSON.stringify(encryptedData));
+            }
         },
-        setVehicleDetails(combinedPayload){
-            this.vehicleDetails = combinedPayload.VehicleDetails;
+        async setVehicleDimension(combinedPayload){
+            if (combinedPayload.TechnicalDetails) {
+                let technical = combinedPayload.TechnicalDetails;
+                if(technical.Dimensions){
+                    const passphrase = 'veh-WUD-08';
+                    const data = JSON.stringify(technical.Dimensions);
+                    const encryptedData = await encryptData(passphrase, data);
+                    localStorage.setItem('WUD', JSON.stringify(encryptedData));
+                }
+            }
         },
-        
-        setTechnicalDetails(combinedPayload){
-            this.technicalDetails = combinedPayload.TechnicalDetails;
+        async setVehicleRegistration(combinedPayload){
+            if (combinedPayload.VehicleRegistration) {
+                const passphrase = 'veh-WSD-09';
+                const data = JSON.stringify(combinedPayload.VehicleRegistration);
+                const encryptedData = await encryptData(passphrase, data);
+                localStorage.setItem('WSD', JSON.stringify(encryptedData));
+            }
         },
-        setClassificationDetails(combinedPayload){
-            this.classificationDetails = combinedPayload.ClassificationDetails;
+        async setMotVed(combinedPayload){
+            let vStatus = combinedPayload.VehicleStatus;
+            if (vStatus) {
+                if(vStatus.MotVed){
+                    const passphrase = 'veh-WNU-10';
+                    const data = JSON.stringify(vStatus.MotVed);
+                    const encryptedData = await encryptData(passphrase, data);
+                    localStorage.setItem('WNU', JSON.stringify(encryptedData));
+                }
+            }
         },
-        setVehicleHistory(combinedPayload){
-            this.vehicleHistory = combinedPayload.VehicleHistory;
-        },
-        setVehicleDimension(combinedPayload){
-            this.dimensions = combinedPayload.TechnicalDetails.Dimensions;
-        },
-        setVehicleGeneralInfo(combinedPayload){
-            this.general = combinedPayload.TechnicalDetails.General;
-
-        },
-        setVehicleRegistration(combinedPayload){
-            this.vehicleRegistration = combinedPayload.VehicleRegistration;
-        },
-        setMotVed(combinedPayload){
-            this.motVed = combinedPayload.VehicleStatus.MotVed;
-        },
-        setSmmtDetail(combinedPayload){
-            Cookie.set('smmtDetail', JSON.stringify(combinedPayload.SmmtDetails), { expires: 7, path: '' });
-        },
-        async setMOTHistory(combinedPayload){
-            if (combinedPayload.MotHistory && Array.isArray(combinedPayload.MotHistory.RecordList)) {
-                // Specify your passphrase (consider a more secure way to handle this in production)
-                const passphrase = 'motHistorySecret';
-
-                // Convert the record list to a JSON string and encrypt it
-                const data = JSON.stringify(combinedPayload.MotHistory.RecordList);
+        async setVehicleGeneralInfo(combinedPayload){
+            if (combinedPayload.TechnicalDetails) {
+                const passphrase = 'veh-WHJ-11';
+                const data = JSON.stringify(combinedPayload.TechnicalDetails?.General);
                 const encryptedData = await encryptData(passphrase, data);
 
-                // Store the encrypted data as a JSON string
-                localStorage.setItem('MOThistory', JSON.stringify(encryptedData));
+                localStorage.setItem('WHJ', JSON.stringify(encryptedData));
+            }
+        },
+        async setPerformance(combinedPayload){
+            if (combinedPayload.TechnicalDetails) {
+                const passphrase = 'veh-PRFNC-12';
+                const data = JSON.stringify(combinedPayload.TechnicalDetails?.Performance);
+                const encryptedData = await encryptData(passphrase, data);
+
+                localStorage.setItem('PRFNC', JSON.stringify(encryptedData));
+            }
+        },
+        async setClassificationDetails(combinedPayload){
+            if (combinedPayload.ClassificationDetails) {
+                const passphrase = 'veh-WDE-12';
+                const data = JSON.stringify(combinedPayload.ClassificationDetails);
+                const encryptedData = await encryptData(passphrase, data);
+                localStorage.setItem('WDE', JSON.stringify(encryptedData));
+            }
+        },
+        async setVehicleHistory(combinedPayload){
+            if (combinedPayload.VehicleHistory) {
+                const passphrase = 'veh-WJY-14';
+                const data = JSON.stringify(combinedPayload.VehicleHistory);
+                const encryptedData = await encryptData(passphrase, data);
+                localStorage.setItem('WJY', JSON.stringify(encryptedData));
+            }
+        },
+        async setMOTHistory(combinedPayload){
+            if (combinedPayload.MotHistory) {
+                const passphrase = 'veh-NPUH-02';
+                const data = JSON.stringify(combinedPayload.MotHistory.RecordList);
+                const encryptedData = await encryptData(passphrase, data);
+                localStorage.setItem('NPUH', JSON.stringify(encryptedData));
             }
         },
     },

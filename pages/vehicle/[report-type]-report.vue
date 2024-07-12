@@ -17,6 +17,15 @@ const downloadReport = () =>{
         navigateTo('/auth/login');
     }
 }
+
+const report_date = () => {
+    const date = new Date();
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    
+    return `${day}-${month}-${year}`;
+}
 </script>
 
 <template>
@@ -24,7 +33,7 @@ const downloadReport = () =>{
         <div class="flex flex-row justify-center gap-28 py-10 border-2">
             <div class="flex flex-col justify-center items-center">
                 <SearchBar />
-                <p class="mt-6 text-xs"><span class="font-bold">Report Date</span> 27-06-2024</p>
+                <p class="mt-6 text-xs"><span class="font-bold">Report Date</span> {{ report_date() }}</p>
                 <p class="font-bold my-5 text-lg">BMW Model 2016</p>
                 <!-- <img src="~/assets/png/car-icon.png" class="w-26" /> -->
                 <img :src="vbrand_logo" class="w-26" alt="">
