@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { useCarRegistrationSearchStore } from '@/stores/carRegistrationSearch';
 const carRegistrationSearchStore = useCarRegistrationSearchStore();
 const vbrand_logo = computed(() => carRegistrationSearchStore.vbrand_logo);
+console.log("vbrand_logo: ", vbrand_logo.value);
 
 const tokenStore = useTokenStore();
 const subscriptionStore = useSubscriptionStore();

@@ -1,6 +1,8 @@
 <script setup>
 const auth = useAuthStore();
 const token = useTokenStore();
+const { $event } = useNuxtApp();
+
 definePageMeta({
   title: 'Login',
   meta: [
@@ -19,8 +21,11 @@ const errorMessage = ref(null);
 
 const handleLoginSubmit = async () => {
     try {
+        $event('user:loggedIn', {
+            "user": "jello josldfls sldfjsl dflskdfjl askdjflksajdf"
+        });
+
         await auth.makeLogin(form);
-        
     } catch (error) {
         console.log("login error: ", error);
         if(error.data.errors)
@@ -31,6 +36,10 @@ const handleLoginSubmit = async () => {
 }
 const removeToken = async () => {
     token.removeToken();
+}
+
+const navigateToRegister = async () => {
+    navigateTo('/auth/register');
 }
 </script>
 

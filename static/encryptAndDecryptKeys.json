@@ -1,45 +1,60 @@
-{"attributes": [
-    {
-        "id": 1, "title": "VehicleImageUrl", "key":"WJV", "passphrase": "veh-WJV-01"
-    },
-    {
-        "id": 2, "title": "MOTHistory", "key":"NPUH", "passphrase": "veh-NPUH-02"
-    },
-    {
-        "id": 3, "title": "VehicleDetails", "key":"WE", "passphrase": "veh-WE-03"
-    },
-    {
-        "id": 4, "title": "VehicleStatus", "key":"WT", "passphrase": "veh-WT-04"
-    },
-    {
-        "id": 5, "title": "VehicleTechnicalDetails", "key":"WUE", "passphrase": "veh-WUE-05"
-    },
-    {
-        "id": 6, "title": "VehicleLogo", "key":"WM", "passphrase": "veh-WM-06"
-    },
-    {
-        "id": 7, "title": "SmmtDetails", "key":"TNNUE", "passphrase": "veh-TNNUE-07"
-    },
-    {
-        "id": 8, "title": "VehicleTechnicalDimensions", "key":"WUD", "passphrase": "veh-WUD-08"
-    },
-    {
-        "id": 9, "title": "VehicleRegistration", "key":"WSD", "passphrase": "veh-WSD-09"
-    },
-    {
-        "id": 10, "title": "VehicleMotVed", "key":"WNU", "passphrase": "veh-WNU-10"
-    },
-    {
-        "id": 11, "title": "VehicleGeneralInfo", "key":"WHJ", "passphrase": "veh-WHJ-11"
-    },
-    {
-        "id": 12, "title": "Performance", "key":"PRFNC", "passphrase": "veh-PRFNC-12"
-    },
-    {
-        "id": 13, "title": "VehicleClassificationDetails", "key":"WDE", "passphrase": "veh-WDE-12"
-    },
-    {
-        "id": 14, "title": "VehicleHistory", "key":"WJY", "passphrase": "veh-WJY-14"
-    }
-   
-]}
+{
+    "attributes": [
+        {
+            "id": 1,
+            "title": "VehicleImageUrl"
+        },
+        {
+            "id": 2,
+            "title": "MOTHistory"
+        },
+        {
+            "id": 3,
+            "title": "VehicleDetails"
+        },
+        {
+            "id": 4,
+            "title": "VehicleStatus"
+        },
+        {
+            "id": 5,
+            "title": "VehicleTechnicalDetails"
+        },
+        {
+            "id": 6,
+            "title": "VehicleLogo"
+        },
+        {
+            "id": 7,
+            "title": "SmmtDetails"
+        },
+        {
+            "id": 8,
+            "title": "VehicleTechnicalDimensions"
+        },
+        {
+            "id": 9,
+            "title": "VehicleRegistration"
+        },
+        {
+            "id": 10,
+            "title": "VehicleMotVed"
+        },
+        {
+            "id": 11,
+            "title": "VehicleGeneralInfo"
+        },
+        {
+            "id": 12,
+            "title": "Performance"
+        },
+        {
+            "id": 13,
+            "title": "VehicleClassificationDetails"
+        },
+        {
+            "id": 14,
+            "title": "VehicleHistory"
+        }
+    ]
+}

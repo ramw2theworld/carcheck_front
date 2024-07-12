@@ -25,6 +25,7 @@ export default defineNuxtConfig({
 
   plugins: [
     '~/plugins/fontawesome.js',
+    '~/plugins/eventBus.js',
   ],
 
   build:{

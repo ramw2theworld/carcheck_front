@@ -1,5 +1,11 @@
 <script setup>
 const auth = useAuthStore();
+const { $listen } = useNuxtApp();
+
+$listen('user:loggedIn', (user) => {
+    debugger
+  console.log('A user was registered!', user)
+})
 
 definePageMeta({
   title: 'Register',
@@ -26,7 +32,6 @@ const handleRegisterSubmit = async () => {
     try {
         const response = await auth.createNewUser(form);
         successMessage.value = response.message;
-        debugger
         setTimeout(() => {
             successMessage.value = "";
             navigateTo("/auth/login")
@@ -38,7 +43,6 @@ const handleRegisterSubmit = async () => {
         console.log("Register error: ", errors.value);
     }
 }
-
 </script>
 
 <template>
