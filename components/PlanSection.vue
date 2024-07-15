@@ -5,6 +5,7 @@
         <h3 class="text-2xl text-gray-800 w-52 text-start">We have the best</h3>
         <h3 class="text-2xl font-bold text-gray-800 w-52 text-start">Plans aro<span class="border-t-orange-500 border-t-4">un</span>d</h3>
       </div>
+      
       <div class="border-2 rounded p-0.5 border-[#0F1829]">
         <button
             :class="{'bg-[#0F1829] text-white': isMonthlyActive, 'text-[#0F1829]': !isMonthlyActive}"

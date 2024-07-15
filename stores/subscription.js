@@ -1,6 +1,9 @@
 export const useSubscriptionStore = defineStore('subscription', {
     state: () => ({ 
-        hasSubscription: {} 
+        hasSubscription: {
+            active: false,
+            auth: false,
+        } 
     }),
     getters: {
         getCurrentSubscription: (state) => state.hasSubscription,
