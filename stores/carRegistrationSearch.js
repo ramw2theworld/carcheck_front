@@ -173,7 +173,8 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
     actions: {
         async searchCarRegNumber(car_reg_number) {
             try {
-                this.car_reg_number = this.reg_number;
+                this.car_reg_number = car_reg_number;
+
                 const response = await apiService.get(`v1/car-check/${car_reg_number}`);
                 if(response.payload && Array.isArray(response.payload)){
                     let combinedPayload = response.payload.reduce((acc, item) => {

@@ -8,9 +8,9 @@ const router = useRouter();
 const planStore = usePlanStore();
 
 const basic_features = reactive(featureData.features.basic_features);
-const standard_features = reactive(featureData.features.standard_features); // corrected spelling
+const standard_features = reactive(featureData.features.standard_features);
 const premium_features = reactive(featureData.features.premium_features);
-const showLoader = ref(false); // should be ref for a single value
+const showLoader = ref(false);
 
 const isMonthlyActive = ref(true);
 const selectedPlan = ref("48h-export-subscription");
@@ -47,7 +47,6 @@ onMounted(async () => {
 
 
 <template>
-
     <div class="bg-[#D9D9D9] py-20">
         <UtilitiesLoadingSpinner v-if="showLoader"/>
         <div class="flex flex-row items-center justify-between md:px-40 px-10" v-else>

@@ -1,13 +1,13 @@
 <template>
     <div class="payment-form">
-      <StripeCard />
+      <Stripe />
     </div>
   </template>
   
   <script setup>
-import StripeCard from '~/components/Payment/Stripe.vue';
 import { ref } from 'vue';
 import { useStripe } from '@/composables/useStripe';
+import Stripe from '~/components/Payment/Stripe.vue';
 
 const { processPayment } = useStripe();
 const isProcessing = ref(false);

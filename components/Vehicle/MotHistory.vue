@@ -1,5 +1,8 @@
 <script setup>
 import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
+library.add(faArrowUp, faArrowDown);
+
 import { onMounted } from 'vue';
 import { useCarRegistrationSearchStore } from '@/stores/carRegistrationSearch';
 
@@ -11,8 +14,6 @@ onMounted(async () => {
   await store.fetchAndDecryptMOTHistory;
 });
 const motHistory = computed(() => store.decryptedMOTHistory);
-
-
 
 const data = ref([
     { id: 1, first_name: "Jeanette", last_name: "Penddreth", gender: "Female", phone: 7878787878 },
@@ -51,10 +52,10 @@ const handleExpandRow = (index) => {
                   <td colspan="7" class="px-6 py-4">
                     MOT #{{ index + 1 }}
                     <span v-if="expandedRow === index" class="px-2">
-                      <FontAwesomeIcon :icon="faArrowDown" />
+                      <font-awesome-icon :icon="faArrowDown" />
                     </span>
                     <span v-else class="px-2">
-                      <FontAwesomeIcon :icon="faArrowUp" />
+                      <font-awesome-icon :icon="faArrowUp" />
                     </span>
                   </td>
                 </tr>
