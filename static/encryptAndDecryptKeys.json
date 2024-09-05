@@ -1,0 +1,60 @@
+{
+    "attributes": [
+        {
+            "id": 1,
+            "title": "VehicleImageUrl"
+        },
+        {
+            "id": 2,
+            "title": "MOTHistory"
+        },
+        {
+            "id": 3,
+            "title": "VehicleDetails"
+        },
+        {
+            "id": 4,
+            "title": "VehicleStatus"
+        },
+        {
+            "id": 5,
+            "title": "VehicleTechnicalDetails"
+        },
+        {
+            "id": 6,
+            "title": "VehicleLogo"
+        },
+        {
+            "id": 7,
+            "title": "SmmtDetails"
+        },
+        {
+            "id": 8,
+            "title": "VehicleTechnicalDimensions"
+        },
+        {
+            "id": 9,
+            "title": "VehicleRegistration"
+        },
+        {
+            "id": 10,
+            "title": "VehicleMotVed"
+        },
+        {
+            "id": 11,
+            "title": "VehicleGeneralInfo"
+        },
+        {
+            "id": 12,
+            "title": "Performance"
+        },
+        {
+            "id": 13,
+            "title": "VehicleClassificationDetails"
+        },
+        {
+            "id": 14,
+            "title": "VehicleHistory"
+        }
+    ]
+}

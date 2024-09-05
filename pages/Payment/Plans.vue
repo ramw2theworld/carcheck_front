@@ -1,19 +1,20 @@
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import featureData from '@/features.json';
 import { usePlanStore } from '@/stores/plan';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const planStore = usePlanStore();
 
 const basic_features = reactive(featureData.features.basic_features);
-const standerd_features = reactive(featureData.features.standerd_features);
+const standard_features = reactive(featureData.features.standard_features);
 const premium_features = reactive(featureData.features.premium_features);
+const showLoader = ref(false);
 
 const isMonthlyActive = ref(true);
 const selectedPlan = ref("48h-export-subscription");
-const plansFetched = ref(null);
 const plans = ref([]);
-
 
 const toggleBilling = (type) => {
     isMonthlyActive.value = (type === 'monthly');
@@ -21,7 +22,7 @@ const toggleBilling = (type) => {
 
 const startChecking = (plan) => {
     planStore.setSelectedPlan(plan);
-    navigateTo("/payment/checkout");
+    router.push("/payment/checkout");
 };
 
 const selectPlan = (plan) => {
@@ -33,26 +34,25 @@ const getFeatureIcon = (iconName) => {
 };
 
 onMounted(async () => {
+    showLoader.value = true;
     await planStore.fetchPlans();  
-    console.log("res: ", planStore.plans)
-    plans.value = planStore.plans.map((item)=>{
-        return {
-            ...item,
-            price: (parseFloat(item.amount_premium) / 100).toFixed(2)
-        }
-    });
-    console.log("fodld: ", plans.value)
-    console.log("selected: ", selectedPlan)
+    console.log("Plans: ", planStore.plans);
+    plans.value = planStore.plans.map((item) => ({
+        ...item,
+        price: (parseFloat(item.amount_premium) / 100).toFixed(2)
+    }));
+    showLoader.value = false;
 });
 </script>
 
+
 <template>
     <div class="bg-[#D9D9D9] py-20">
-        <div class="flex flex-row items-center justify-between md:px-40 px-10">
+        <UtilitiesLoadingSpinner v-if="showLoader"/>
+        <div class="flex flex-row items-center justify-between md:px-40 px-10" v-else>
             <div>
                 <h3 class="text-2xl text-gray-800 w-52 text-start">We have the best</h3>
                 <h3 class="text-2xl font-bold text-gray-800 w-52 text-start">Plans around</h3>
-                {{ plansFetched }}
             </div>
             <div class="border-2 rounded p-0.5 border-[#0F1829]">
                 <button :class="{ 'bg-[#0F1829] text-white': isMonthlyActive, 'text-[#0F1829]': !isMonthlyActive }"
