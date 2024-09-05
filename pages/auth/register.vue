@@ -3,7 +3,6 @@ const auth = useAuthStore();
 const { $listen } = useNuxtApp();
 
 $listen('user:loggedIn', (user) => {
-    debugger
   console.log('A user was registered!', user)
 })
 

@@ -1,4 +1,6 @@
 import ApiService from '../services/apiService';
+import { defineStore } from 'pinia';
+
 
 const apiService = new ApiService();
 
@@ -56,6 +58,20 @@ export const useAuthStore = defineStore('auth', {
                 let response = await apiService.get('user/fetch-users-role-and-permissions', tokenStore.token);
                 console.log("res: ", response);
                 // navigateTo('/auth/login');
+            } catch (error) {
+                throw error;
+            }
+        },
+
+        async fetchUserCars(page = 1, perPage = 1) {
+            const tokenStore = useTokenStore();
+            try {
+                let response = await apiService.get(`v1/user/cars?page=${page}&perPage=${perPage}`, tokenStore.token);
+                if (!response) {
+                    throw new Error('Invalid data structure');
+                }
+                console.log("Err: ", response);
+                return response;
             } catch (error) {
                 throw error;
             }
