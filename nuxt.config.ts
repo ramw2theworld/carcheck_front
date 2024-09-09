@@ -1,9 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
+
   buildModules:[
     '@nuxt/postcss8',
   ],
+
   css: [
     '~/assets/css/fonts.css',
     '~/assets/css/input.css',
@@ -12,14 +14,16 @@ export default defineNuxtConfig({
   ],
 
   modules: [
-    '@nuxtjs/tailwindcss',
+    // '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
-
+    '@nuxt/ui',
   ],
+
   imports:{
     dirs: ['./stores']
   },
+
   pinia: {
     storesDirs: ['./stores/**', './custom-folder/stores/**'],
   },
@@ -45,4 +49,6 @@ export default defineNuxtConfig({
       stripe_public_key: process.env.STRIPE_PUBLIC_KEY,
     },
   },
+
+  compatibilityDate: '2024-09-05',
 })

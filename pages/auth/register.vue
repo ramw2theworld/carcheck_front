@@ -23,23 +23,26 @@ const form = reactive({
     password: null,
     password_confirmation: null,
 });
-const errors = ref([]);
-const errorMessage = ref();
+const errors = ref({});
+const errorMessage = ref('');
 const successMessage = ref('');
 
 const handleRegisterSubmit = async () => {
     try {
+        if (form.password !== form.password_confirmation) {
+            errors.value.password_confirmation = ['Passwords do not match'];
+            return;
+        }
         const response = await auth.createNewUser(form);
         successMessage.value = response.message;
         setTimeout(() => {
-            successMessage.value = "";
-            navigateTo("/auth/login")
+            successMessage.value = '';
+            navigateTo('/auth/login');
         }, 3000);
     } catch (error) {
-        debugger
-        errorMessage.value = error.data?.message
-        errors.value = error.data.errors;
-        console.log("Register error: ", errors.value);
+        console.error('Register error:', error.data);
+        errorMessage.value = error.data?.message || 'An error occurred';
+        errors.value = error.data?.errors || {};
     }
 }
 </script>
@@ -55,34 +58,40 @@ const handleRegisterSubmit = async () => {
                         <div v-if="successMessage" class="p-3 bg-green-200 text-green-800 rounded">
                             {{ successMessage }}
                         </div>
+                        <div v-if="errorMessage" class="p-3 bg-red-100 text-red-800 rounded">
+                            {{ errorMessage }}
+                        </div>
                         <div class="mb-6">
                             <FormLabel for="first_name">First name    </FormLabel>
                             <FormInputText id="first_name" v-model="form.first_name" placeholder="Enter first name" type="text" required/>
-                            <span class="text-red-500" v-if="errors.first_name">{{ errors.first_name[0] }}</span>
+                            <span class="text-red-500" v-if="errors['first_name']">{{ errors['first_name'][0] }}</span>
+
                         </div>
                         <div class="mb-6">
                             <FormLabel for="last_name">Last name</FormLabel>
                             <FormInputText id="last_name" v-model="form.last_name" placeholder="Enter last name" type="text" required/>
-                            <span class="text-red-500" v-if="errors.last_name">{{ errors.last_name[0] }}</span>
+                            <span class="text-red-500" v-if="errors['last_name']">{{ errors['last_name'][0] }}</span>
+
                         </div>
                         <div class="mb-6">
                             <FormLabel for="email">Email</FormLabel>
                             <FormInputText id="email" v-model="form.email" placeholder="user@email.com" type="text" required/>
-                            <span class="text-red-500" v-if="errors.email">{{ errors.email[0] }}</span>
+                            <span class="text-red-500" v-if="errors['email']">{{ errors['email'][0] }}</span>
+
                         </div>
                         <div class="mb-6">
                             <FormLabel for="password">Password</FormLabel>
                             <FormInputText id="password" v-model="form.password" placeholder="password"
                                 type="password" required/>
 
-                            <span class="text-red-500" v-if="errors.password">{{ errors.password[0] }}</span>
+                            <span class="text-red-500" v-if="errors['password']">{{ errors['password'][0] }}</span>
                         </div>
                         <div class="mb-6">
                             <FormLabel for="password_confirmation">Confirm Password</FormLabel>
                             <FormInputText id="password_confirmation" v-model="form.password_confirmation" placeholder="Confirm password"
                                 type="password" required/>
 
-                            <span class="text-red-500" v-if="errors.password">{{ errors.password[0] }}</span>
+                            <span class="text-red-500" v-if="errors.password_confirmation">{{ errors.password_confirmation[0]??errors.password_confirmation }}</span>
                         </div>
                         <div class="flex items-start mb-6">
                             <div class="flex items-center h-5">

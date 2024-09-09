@@ -8,7 +8,7 @@ const router = useRouter();
 const planStore = usePlanStore();
 
 const basic_features = reactive(featureData.features.basic_features);
-const standard_features = reactive(featureData.features.standard_features);
+const standard_features = reactive(featureData.features.standerd_features);
 const premium_features = reactive(featureData.features.premium_features);
 const showLoader = ref(false);
 
@@ -36,7 +36,6 @@ const getFeatureIcon = (iconName) => {
 onMounted(async () => {
     showLoader.value = true;
     await planStore.fetchPlans();  
-    console.log("Plans: ", planStore.plans);
     plans.value = planStore.plans.map((item) => ({
         ...item,
         price: (parseFloat(item.amount_premium) / 100).toFixed(2)
@@ -101,9 +100,9 @@ onMounted(async () => {
                     </div>
                 </div>
 
-                <!-- standerd plan  -->
+                <!-- standard plan  -->
                 <div class="flex flex-col items-start justify-start mt-2 gap-2" v-if="plan.plan_code == '48h-export-subscription'">
-                    <div v-for="b_feature in standerd_features" :key="b_feature.id"
+                    <div v-for="b_feature in standard_features" :key="b_feature.id"
                         class="flex flex-row items-center justify-start">
                         <img :src="getFeatureIcon(b_feature.icon)" :alt="b_feature.title" class="w-6 orange-filter" />
                         <h3 :class="{

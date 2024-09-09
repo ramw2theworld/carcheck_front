@@ -38,7 +38,7 @@ export default {
                     Settings
                 </NuxtLink>
 
-                <NuxtLink class="nav-link" to="/my-plans">
+                <NuxtLink class="nav-link" to="/my-plan">
                     <div class="sb-nav-link-icon">
                         <!-- <FontAwesomeIcon :icon="['fas', 'plans']" /> -->
                     </div>
