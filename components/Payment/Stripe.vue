@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import type { StripeCardCvcElement, StripeCardExpiryElement, StripeCardNumberElement, StripeElements } from '@stripe/stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import ApiService from '~/services/apiService';
@@ -119,7 +120,7 @@ async function handleCheckoutClick() {
             if(selectedPlan.plan_code === "single-offer"){
                 debugger
             }else{
-                await createSubscription();
+                await createSubscription(selectedPlan);
             }
         }
     } catch (error) {
@@ -128,35 +129,23 @@ async function handleCheckoutClick() {
         loading.value = false;
     }
 }
-async function createSubscription() {
+async function createSubscription(selectedPlan) {
     const user = auth.getCurrentUser;
-    console.log("c: ", customerId.value)
-    console.log("cddd: ", paymentMethodId.value)
-    alert(paymentMethodId.value);
     try {
-        const response: any = await apiService.post("payment/process", {
+        await apiService.post("payment/process", {
             customer_id: customerId.value,
             payment_method_id: paymentMethodId.value,
             email: user.email,
             billing_details: {
                 name: cardholderName.value,
             },
+            plan: selectedPlan,
+        }).then((response)=>{
+            debugger;
+        }).catch((error)=>{
+            debugger;
         });
 
-        if (response.success || response.status === 403) {
-            //   await useAuthStore().updateActiveStatus(true);
-            //   const actionCookie = useCookie('actionCookie');
-            //   if (useActivityStore().getUserAction || actionCookie.value) {
-            //     navigateTo('/loading');
-            //   } else {
-            //     navigateTo('/dashboard');
-            //   }
-            if (response.status === 403) {
-                errorMessage.value = "You are already an active subscriber.";
-            }
-        } else {
-            errorMessage.value = `Payment failed: ${response.message}`;
-        }
     } catch (error) {
         console.error({ error });
         errorMessage.value = "An unexpected error occurred.";
