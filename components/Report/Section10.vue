@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <section class="h-[23rem] bg-fuchsia-400">
+  <report-wrapper class="h-[23rem] bg-fuchsia-400">
 
-  </section>
+  </report-wrapper>
 </template>

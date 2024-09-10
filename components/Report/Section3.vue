@@ -3,7 +3,10 @@
 </script>
 
 <template>
-  <section class="h-[470px] bg-green-500">
+  <report-wrapper class="h-[470px] bg-green-500">
+    <div class=" ">
 
-  </section>
+    </div>
+  </report-wrapper>
+
 </template>
