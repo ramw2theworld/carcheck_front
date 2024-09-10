@@ -1,48 +1,31 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-
-  buildModules:[
-    '@nuxt/postcss8',
-  ],
-
   css: [
-    '~/assets/css/fonts.css',
-    '~/assets/css/input.css',
-    '@fortawesome/fontawesome-svg-core/styles.css',
-    '~/assets/css/admin.css',
+    "~/assets/css/fonts.css",
+    "~/assets/css/input.css",
+    "@fortawesome/fontawesome-svg-core/styles.css",
+    // "~/assets/css/admin.css",
   ],
 
   modules: [
-    // '@nuxtjs/tailwindcss',
-    '@pinia/nuxt',
-    '@pinia-plugin-persistedstate/nuxt',
-    '@nuxt/ui',
+    // "@nuxtjs/tailwindcss",
+    "@pinia/nuxt",
+    "@pinia-plugin-persistedstate/nuxt",
+    "@nuxt/ui",
   ],
 
-  imports:{
-    dirs: ['./stores']
+  imports: {
+    dirs: ["./stores"],
   },
 
   pinia: {
-    storesDirs: ['./stores/**', './custom-folder/stores/**'],
+    storesDirs: ["./stores/**", "./custom-folder/stores/**"],
   },
 
-  plugins: [
-    '~/plugins/fontawesome.js',
-    '~/plugins/eventBus.js',
-  ],
+  plugins: ["~/plugins/fontawesome.js", "~/plugins/eventBus.js"],
 
-  build:{
-    postcss: {
-      postcssOptions: {
-        plugins: {
-          tailwindcss: {},
-          autoprefixer: {},
-        },
-      },
-    },
-  },
+  build: {},
 
   runtimeConfig: {
     public: {
@@ -50,5 +33,5 @@ export default defineNuxtConfig({
     },
   },
 
-  compatibilityDate: '2024-09-05',
-})
+  compatibilityDate: "2024-09-05",
+});
