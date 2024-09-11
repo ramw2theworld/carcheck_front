@@ -7,7 +7,7 @@ const toggleTableVisibility = () => {
 
 
 <template>
-  <report-wrapper class="h-[35.7rem] py-8 bg-red-500">
+  <report-wrapper class="py-8">
     <div @click="toggleTableVisibility" class="cursor-pointer text-black flex items-center justify-between">
       <div class="flex items-center space-x-4">
         <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -115,7 +115,7 @@ const toggleTableVisibility = () => {
           </tr>
         </tbody>
       </table>
-      <div class="bg-[#EF343A] w-full flex items-center justify-center py-2">
+      <div class="bg-[#FF7400] w-full flex items-center justify-center py-2">
         <h3 class="text-2xl font-semibold">Lorem ipsum dolor sit amet. <a href="#" class="underline">check the full
             report</a></h3>
       </div>
