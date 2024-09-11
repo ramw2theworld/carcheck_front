@@ -1,21 +1,20 @@
 <template>
   <canvas :class="props.class" ref="chartCanvas" :height="height" :width="width"></canvas>
-
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import { Chart, BarController, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
+import { onMounted, ref, computed } from 'vue';
+import { Chart, LineController, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
 
 const props = defineProps<{
   data: { label: string; value: number }[];
   class?: string;
   height?: {
-    type: number | string;
+    type: (number | string)[];
     default: 25;
   };
   width?: {
-    type: number | string;
+    type: (number | string)[];
     default: '100%';
   };
 }>();
@@ -32,25 +31,25 @@ function convertToNumber(value: any) {
   return typeof value === 'string' ? parseFloat(value) : value;
 }
 
-Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip, Legend);
+Chart.register(LineController, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 const chartCanvas = ref<HTMLCanvasElement | null>(null);
 
 onMounted(() => {
   if (chartCanvas.value) {
     new Chart(chartCanvas.value, {
-      type: 'bar',
+      type: 'line',
       data: {
         labels: labels.value,
         datasets: [
           {
             label: 'Dataset 1',
             data: values.value,
-            backgroundColor: '#F94144',
-            // borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1,
-            barThickness: 20,
-            maxBarThickness: 50,
+            borderColor: '#F94144',
+            backgroundColor: 'rgba(249, 65, 68, 0.2)',
+            borderWidth: 2,
+            pointRadius: 4,
+            fill: true, // Fill area under the line
           },
         ],
       },
@@ -77,3 +76,10 @@ onMounted(() => {
   }
 });
 </script>
+
+<style scoped>
+/* canvas {
+  width: 100% !important;
+  height: 100% !important;
+} */
+</style>

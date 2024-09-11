@@ -75,8 +75,11 @@ const chartData = [
         <rect x="6.66602" y="2.66663" width="2.66667" height="2.66667" rx="1.33333" fill="white" />
       </svg>
     </div>
-    <div v-show="isTableVisible" class="text-black h-[25rem] my-10 w-full">
-      <chart-bar :data="chartData" />
+    <div v-show="isTableVisible" class="text-black my-10 w-full">
+
+      <ClientOnly>
+        <chart-bar :data="chartData" height="25" width="100%" />
+      </ClientOnly>
     </div>
   </report-wrapper>
 </template>

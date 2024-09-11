@@ -3,6 +3,25 @@ const isTableVisible = ref(true)
 const toggleTableVisibility = () => {
   isTableVisible.value = !isTableVisible.value
 }
+
+const chartData = [
+  { label: "01/2022", value: 12371 },
+  { label: "02/2022", value: 30000 },
+  { label: "03/2022", value: 30000 },
+  { label: "04/2022", value: 30000 },
+  { label: "05/2022", value: 23523 },
+  { label: "06/2022", value: 64645 },
+  { label: "07/2022", value: 34555 },
+  { label: "08/2022", value: 34543 },
+  { label: "09/2022", value: 92335 },
+  { label: "03/2022", value: 30000 },
+  { label: "04/2022", value: 30000 },
+  { label: "05/2022", value: 23523 },
+  { label: "06/2022", value: 64645 },
+  { label: "07/2022", value: 34555 },
+  { label: "08/2022", value: 34543 },
+  { label: "09/2022", value: 92335 },
+];
 </script>
 
 <template>
@@ -63,7 +82,7 @@ const toggleTableVisibility = () => {
     </div>
 
     <div v-show="isTableVisible" class="space-y-3">
-      <div class="flex space-x-12 px-8 mt-11">
+      <div class="flex space-x-12 px-8 mt-11 pb-3">
         <div>
           <h4 class="text-xl font-bold">
             Current <br /> Mileage
@@ -87,11 +106,11 @@ const toggleTableVisibility = () => {
         </div>
         <div class="flex flex-col items-center justify-start flex-1 space-y-1">
           <p>Lorem ipsum dolor sit amet.</p>
-          <button class="bg-[#FF7400] rounded-lg w-3/4 py-3">Get full report</button>
+          <button class="bg-[#FF7400] text-white text-xl px-20 rounded-lg py-2">Get full report</button>
         </div>
       </div>
-      <div>
-        <div class="bg-red-500 w-full h-[17.4rem]">a</div>
+      <div class="pt-10 border-t">
+        <chart-line :data="chartData" height="25" width="100%" />
       </div>
     </div>
   </report-wrapper>
