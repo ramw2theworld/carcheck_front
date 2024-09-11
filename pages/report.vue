@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 
+
 </script>
 
 <template>
@@ -9,31 +10,31 @@
     <ReportSection1 />
 
     <!-- Section 2 -->
-    <ReportSection2 />
+    <ReportInfo />
 
     <!-- Section 3 -->
-    <ReportSection3 />
+    <ReportMileage />
 
     <!-- Section 4 -->
-    <ReportSection4 />
+    <ReportDamage />
 
     <!-- Section 5 -->
-    <ReportSection5 />
+    <ReportMot />
 
     <!-- Section 6 -->
-    <ReportSection6 />
+    <ReportVehicle />
 
     <!-- Section 7 -->
-    <ReportSection7 />
+    <ReportFinance />
 
     <!-- Section 8 -->
-    <ReportSection8 />
+    <ReportValuation />
 
     <!-- Section 9 -->
-    <ReportSection9 />
+    <ReportTax />
 
     <!-- Section 10 -->
-    <ReportSection10 />
+    <ReportRisk />
 
   </div>
 
