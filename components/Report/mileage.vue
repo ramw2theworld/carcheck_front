@@ -6,7 +6,7 @@ const toggleTableVisibility = () => {
 </script>
 
 <template>
-  <report-wrapper class="h-[470px] py-7 text-black">
+  <report-wrapper class="pt-7 text-black">
     <div @click="toggleTableVisibility" class="cursor-pointer text-black flex items-center justify-between">
       <div class="flex items-center space-x-4">
         <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -62,17 +62,37 @@ const toggleTableVisibility = () => {
       </svg>
     </div>
 
-    <div>
-      <div>
-        <h3 class="text-2xl">
-          Current Mileage
-        </h3>
+    <div v-show="isTableVisible" class="space-y-3">
+      <div class="flex space-x-12 px-8 mt-11">
+        <div>
+          <h4 class="text-xl font-bold">
+            Current <br /> Mileage
+          </h4>
+        </div>
+        <div>
+          <h3 class="text-2xl">
+            8273273
+          </h3>
+          <small>
+            Last registration:
+            <b>
+              15/06/2012
+            </b>
+          </small>
+        </div>
+        <div class="flex flex-col">
+          <small>Total registration: <b>10</b></small>
+          <small>Odometer: <b>In miles</b></small>
+          <small>First registration: <b>12/02/1233</b></small>
+        </div>
+        <div class="flex flex-col items-center justify-start flex-1 space-y-1">
+          <p>Lorem ipsum dolor sit amet.</p>
+          <button class="bg-[#FF7400] rounded-lg w-3/4 py-3">Get full report</button>
+        </div>
       </div>
       <div>
-
+        <div class="bg-red-500 w-full h-[17.4rem]">a</div>
       </div>
-      <div></div>
-      <div></div>
     </div>
   </report-wrapper>
 

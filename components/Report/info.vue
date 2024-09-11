@@ -43,7 +43,7 @@ const toggleTableVisibility = () => {
     </div>
 
     <transition name="collapse">
-      <div v-if="isTableVisible">
+      <div v-show="isTableVisible">
         <table class="w-full text-black mt-4">
           <thead>
             <tr class="header-row">
