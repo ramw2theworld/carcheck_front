@@ -72,8 +72,8 @@ const onSwiper = (swiper: { slideTo: (arg0: number, arg1: number) => void; }) =>
 };
 
 const nextSlide = () => {
-  if (motHistoryIndex.value > 0) {
-    motHistoryIndex.value--;
+  if (motHistoryIndex.value < 100) {
+    motHistoryIndex.value++;
   }
   if (swiperInstance) {
     swiperInstance.slideTo(motHistoryIndex.value, 800);
@@ -82,8 +82,8 @@ const nextSlide = () => {
 
 const prevSlide = () => {
 
-  if (motHistoryIndex.value < 100) {
-    motHistoryIndex.value++;
+  if (motHistoryIndex.value > 0) {
+    motHistoryIndex.value--;
   }
   if (swiperInstance) {
     swiperInstance.slideTo(motHistoryIndex.value, 800);
@@ -219,10 +219,10 @@ function isMOThistoryLocked(index: number) {
           </table>
         </div>
       </div>
-      <div class="flex items-center justify-between w-full">
+      <div class="flex items-center justify-between w-full px-5">
         <div class="w-fit">
           <button @click="nextSlide"
-            class="w-8 h-8 border items-center justify-center flex rounded hover:bg-[#FF7400] transition-colors duration-300">
+            class="w-8 h-8 border border-black items-center justify-center flex rounded hover:bg-[#FF7400] transition-colors duration-300">
             <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M6.16123 8.84323C6.06624 8.74836 6.01281 8.61965 6.0127 8.48539V8.22883C6.01425 8.09487 6.06746 7.96668 6.16123 7.87099L9.63161 4.40737C9.69499 4.34346 9.78128 4.30751 9.87129 4.30751C9.96131 4.30751 10.0476 4.34346 10.111 4.40737L10.5903 4.88674C10.6539 4.94896 10.6896 5.03413 10.6896 5.12305C10.6896 5.21196 10.6539 5.29713 10.5903 5.35936L7.58584 8.35711L10.5903 11.3549C10.6543 11.4183 10.6902 11.5045 10.6902 11.5946C10.6902 11.6846 10.6543 11.7709 10.5903 11.8342L10.111 12.3069C10.0476 12.3708 9.96131 12.4067 9.87129 12.4067C9.78128 12.4067 9.69499 12.3708 9.63161 12.3069L6.16123 8.84323Z"
@@ -251,7 +251,7 @@ function isMOThistoryLocked(index: number) {
               <span v-else
                 class="h-8 w-8 border items-center justify-center flex rounded border-[#FF7400] text-[#FF7400] hover:bg-[#FF7400] hover:text-white">
                 <small>
-                  #{{ index }}
+                  #{{ index + 1 }}
                 </small>
               </span>
             </swiper-slide>
@@ -259,7 +259,7 @@ function isMOThistoryLocked(index: number) {
         </div>
         <div class="w-fit">
           <button @click="prevSlide"
-            class="w-8 h-8 border items-center justify-center flex rounded hover:bg-[#FF7400] transition-colors duration-300">
+            class="w-8 h-8 border border-black items-center justify-center flex rounded hover:bg-[#FF7400] transition-colors duration-300">
             <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M6.16123 8.84323C6.06624 8.74836 6.01281 8.61965 6.0127 8.48539V8.22883C6.01425 8.09487 6.06746 7.96668 6.16123 7.87099L9.63161 4.40737C9.69499 4.34346 9.78128 4.30751 9.87129 4.30751C9.96131 4.30751 10.0476 4.34346 10.111 4.40737L10.5903 4.88674C10.6539 4.94896 10.6896 5.03413 10.6896 5.12305C10.6896 5.21196 10.6539 5.29713 10.5903 5.35936L7.58584 8.35711L10.5903 11.3549C10.6543 11.4183 10.6902 11.5045 10.6902 11.5946C10.6902 11.6846 10.6543 11.7709 10.5903 11.8342L10.111 12.3069C10.0476 12.3708 9.96131 12.4067 9.87129 12.4067C9.78128 12.4067 9.69499 12.3708 9.63161 12.3069L6.16123 8.84323Z"
@@ -273,23 +273,23 @@ function isMOThistoryLocked(index: number) {
           <tr class="header-row">
             <th colspan="2" class="bg-[#FF7400]">
               <div class="flex items-center justify-between w-full text-white">
-                <div class="font-extralight flex items-center space-x-2">
+                <button @click="prevSlide" class="font-extralight flex items-center space-x-2">
                   <svg width="5" height="9" viewBox="0 0 5 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M0.148537 4.53572C0.0535461 4.44085 0.00011819 4.31214 0 4.17788V3.92132C0.0015556 3.78736 0.0547671 3.65917 0.148537 3.56348L3.61891 0.0998571C3.6823 0.035948 3.76858 0 3.8586 0C3.94861 0 4.0349 0.035948 4.09828 0.0998571L4.57765 0.579228C4.64116 0.641454 4.67695 0.726624 4.67695 0.815537C4.67695 0.90445 4.64116 0.989621 4.57765 1.05185L1.57315 4.0496L4.57765 7.04736C4.64156 7.11074 4.67751 7.19703 4.67751 7.28704C4.67751 7.37706 4.64156 7.46334 4.57765 7.52673L4.09828 7.99935C4.0349 8.06326 3.94861 8.0992 3.8586 8.0992C3.76858 8.0992 3.6823 8.06326 3.61891 7.99935L0.148537 4.53572Z"
                       fill="#EEEEEE" />
                   </svg>
                   <small>Previous MOT</small>
-                </div>
-                <p>MOT #1</p>
-                <div class="font-extralight flex items-center space-x-2">
+                </button>
+                <p>MOT #{{ motHistoryIndex + 1 }}</p>
+                <button @click="nextSlide" class="font-extralight flex items-center space-x-2">
                   <small>Next MOT</small>
                   <svg width="5" height="9" viewBox="0 0 5 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M4.5292 3.5634C4.62419 3.65827 4.67762 3.78698 4.67773 3.92124L4.67773 4.1778C4.67618 4.31176 4.62297 4.43996 4.5292 4.53564L1.05882 7.99926C0.995435 8.06317 0.90915 8.09912 0.819137 8.09912C0.729125 8.09912 0.642839 8.06317 0.579452 7.99926L0.100081 7.51989C0.036572 7.45767 0.00078303 7.3725 0.000783038 7.28358C0.000783046 7.19467 0.0365721 7.1095 0.100081 7.04727L3.10459 4.04952L0.100082 1.05176C0.0361725 0.988376 0.000224743 0.902091 0.000224751 0.812078C0.000224758 0.722066 0.0361726 0.63578 0.100082 0.572393L0.579453 0.0997735C0.64284 0.0358645 0.729125 -8.33149e-05 0.819138 -8.3307e-05C0.909151 -8.32991e-05 0.995436 0.0358645 1.05882 0.0997736L4.5292 3.5634Z"
                       fill="#EEEEEE" />
                   </svg>
-                </div>
+                </button>
               </div>
             </th>
           </tr>
