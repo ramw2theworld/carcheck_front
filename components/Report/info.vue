@@ -74,7 +74,7 @@ const toggleTableVisibility = () => {
           </tbody>
         </table>
 
-        <div class="items-center justify-center flex space-x-1 bg-[#FF7400] text-2xl py-2">
+        <div class="items-center justify-center flex space-x-1 bg-[#FF7400] text-xl py-2">
           <p>Unlock 87 more rows with the</p>
           <a href="#" class="underline">full report</a>
         </div>
@@ -104,7 +104,6 @@ td {
   border: 1px solid #ddd;
   padding: 0.58rem 1.5rem;
   text-align: left;
-  font-size: 20.5px;
   width: 50%;
 }
 

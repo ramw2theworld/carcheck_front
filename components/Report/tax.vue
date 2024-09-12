@@ -100,7 +100,8 @@ function setco2label(value: number) {
           </tbody>
         </table>
         <div class="bg-[#FF7400] w-full flex items-center justify-center py-2">
-          <h3 class="text-2xl font-semibold">Lorem ipsum dolor sit amet. <a href="#" class="underline">check the full
+          <h3 class="text-xl font-semibold text-white">Lorem ipsum dolor sit amet. <a href="#" class="underline">check
+              the full
               report</a></h3>
         </div>
       </div>
@@ -240,7 +241,6 @@ th,
 td {
   border: 1px solid #ddd;
   text-align: left;
-  font-size: 20.5px;
   width: 50%;
 }
 

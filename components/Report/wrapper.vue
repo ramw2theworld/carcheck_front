@@ -3,7 +3,7 @@ const props = defineProps<{
   class?: string
 }>()
 </script><template>
-  <section class="px-[8.25rem]" :class="props.class">
+  <section class="xl:px-[8.25rem] px-5" :class="props.class">
     <slot />
   </section>
 </template>
