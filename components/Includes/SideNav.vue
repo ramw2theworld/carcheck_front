@@ -3,14 +3,13 @@ import { ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faTachometerAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faTachometerAlt, faSignOutAlt, faUserAlt,faListCheck } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faTachometerAlt, faSignOutAlt);
+library.add(faTachometerAlt, faSignOutAlt, faUserAlt, faListCheck);
 
 const auth = useAuthStore();
 
 const logout = async () => {
-    alert("i'm here");
     await auth.logout();
 };
 
@@ -32,13 +31,15 @@ defineExpose({ logout });
                 <NuxtLink class="nav-link" to="/user">
                     <div class="sb-nav-link-icon">
                         <!-- <FontAwesomeIcon :icon="['fas', 'user']" /> -->
+                        <FontAwesomeIcon :icon="['fas', 'user-alt']" />
+
                     </div>
                     User
                 </NuxtLink>
 
                 <NuxtLink class="nav-link" to="/my-plan">
                     <div class="sb-nav-link-icon">
-                        <!-- <FontAwesomeIcon :icon="['fas', 'plans']" /> -->
+                        <FontAwesomeIcon :icon="['fas', 'list-check']" />
                     </div>
                     My Plans
                 </NuxtLink>
