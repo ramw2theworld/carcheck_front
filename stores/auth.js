@@ -1,7 +1,5 @@
 import ApiService from '../services/apiService';
 import { defineStore } from 'pinia';
-
-
 const apiService = new ApiService();
 
 export const useAuthStore = defineStore('auth', {
@@ -20,6 +18,8 @@ export const useAuthStore = defineStore('auth', {
             try {
                 const response = await apiService.post('login', form);
                 if(response.payload){
+                    const subscription = useSubscriptionStore();
+                    subscription.setHasSubscription(response.payload.hasSubscription);
                     this.setCommonSetter(response.payload);
                 }
             } catch (error) {
@@ -33,6 +33,7 @@ export const useAuthStore = defineStore('auth', {
                 if(response.payload){
                     this.setCommonSetter(response.payload);
                 }
+                return response;
             } catch (error) {
                 throw error;
             }

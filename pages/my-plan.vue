@@ -2,10 +2,12 @@
 import { onMounted, ref, computed, reactive } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useSubscriptionStore } from '@/stores/subscription';
+
 const auth = useAuthStore();
-const subscription = useSubscriptionStore();
+const subscriptionStore = useSubscriptionStore();
+
 const cars = ref([]);
-const email = ref('dopij66555@janfab.com');
+const email = ref(auth.getCurrentUser.email);
 const currentSubscription = ref();
 const isLoading = ref(false);
 const showModal = ref(false);
@@ -19,9 +21,10 @@ definePageMeta({
 onMounted(async () => {
     try {
         isLoading.value = true;
-        let response = await subscription.fetchUserSubscription(email.value);
-        if(response.success){
-            currentSubscription.value = response.payload;
+        let subscription = await subscriptionStore.fetchUserSubscription(email.value);
+        debugger
+        if(subscription){
+            currentSubscription.value = subscription;
         }else{
             console.log("something went wrong")
         }
@@ -43,7 +46,7 @@ function toggleModal() {
 async function cancelSubscription(original_id){
     try {
         isLoading.value = true;
-        let response = await subscription.cancelSubscription(original_id);
+        let response = await subscriptionStore.cancelSubscription(original_id);
         if(response.success){
             currentSubscription.value = response.payload;
         }else{

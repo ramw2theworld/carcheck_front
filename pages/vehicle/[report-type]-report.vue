@@ -15,7 +15,7 @@ onMounted(() => {
 
 const downloadReport = () => {
     if (tokenStore.getToken && tokenStore.getStatus) { 
-        let hasSubscription = subscriptionStore.getCurrentSubscription;
+        let hasSubscription = subscriptionStore.getHasSubscription;
 
         if (hasSubscription) {
             if(hasSubscription.active){

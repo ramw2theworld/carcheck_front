@@ -3,6 +3,8 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import type { StripeCardCvcElement, StripeCardExpiryElement, StripeCardNumberElement, StripeElements } from '@stripe/stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import ApiService from '~/services/apiService';
+import { useSubscriptionStore } from '@/stores/subscription';
+
 const auth = useAuthStore();
 const plan = usePlanStore();
 const subscriptionStore = useSubscriptionStore();
@@ -142,8 +144,12 @@ async function createSubscription(selectedPlan) {
             plan: selectedPlan,
         }).then((response)=>{
             debugger;
+            subscriptionStore.setCurrentSubscription(response.payload.subscription);
         }).catch((error)=>{
-            debugger;
+            console.log("error: ", error);
+            if(error.data.success==false){
+                errorMessage.value = error.data.message
+            }
         });
 
     } catch (error) {
@@ -187,8 +193,10 @@ const planPrice = computed(() => {
                         <span class="text-[#0F1829] text-xs rounded bg-[#FF7400] px-2 py-0.5"
                             >£{{ planPrice }}</span>
                     </div>
-                    
                         <form @submit.prevent="handleCheckoutClick">
+                            <div class="alert alert-danger" v-if="errorMessage">
+                                <span class="alert alert-danger">{{ errorMessage }}</span>
+                            </div>
                             <div class="mb-4 w-full">
                                 <label for="cardholder-name" class="block mb-2 text-sm font-bold">Cardholder's Name</label>
                                 <div class="flex items-center py-1 border-2 border-[#4A2EB6] w-full overflow-hidden ">

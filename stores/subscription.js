@@ -13,12 +13,57 @@ export const useSubscriptionStore = defineStore('subscription', {
         }
     },
     getters: {
-        getCurrentSubscription: (state) => state.hasSubscription,
+        // getHasSubscription: (state) => state.hasSubscription,
     },
     actions: {
-        setCurrentSubscription(subscription) {
-            this.hasSubscription = subscription
+        async setHasSubscription(hasSubscription) {
+            let code = systematicFourCharCode('hasSubscription')
+            if (hasSubscription !=null || hasSubscription !="undefined") {
+                const data = JSON.stringify(hasSubscription);
+                const encryptedData = await encryptData(code, data);
+
+                localStorage.setItem(code, JSON.stringify(encryptedData));
+            }
+
+            this.hasSubscription = hasSubscription;
         },
+        async getHasSubscription() {
+            let code = systematicFourCharCode('hasSubscription');
+            const encryptedData = localStorage.getItem(code);
+            if (encryptedData) {
+                try {
+                    const decrypted = await decryptData(`${code}`, JSON.parse(encryptedData));
+                    this.hasSubscription = JSON.parse(decrypted);
+                } catch (error) {
+                    console.error("Failed to decrypt current subscription:", error);
+                }
+            }
+        },
+
+        async setCurrentSubscription(subscription){
+            let code = systematicFourCharCode('currentSubscription')
+            if (subscription !=null || subscription !="undefined") {
+                const data = JSON.stringify(subscription);
+                const encryptedData = await encryptData(code, data);
+
+                localStorage.setItem(code, JSON.stringify(encryptedData));
+            }
+
+            this.subscription = subscription;
+        },
+        // async getUserSubscription() {
+        //     let code = systematicFourCharCode('currentSubscription');
+        //     const encryptedData = localStorage.getItem(code);
+        //     if (encryptedData) {
+        //         try {
+        //             const decrypted = await decryptData(`${code}`, JSON.parse(encryptedData));
+        //             this.subscription = JSON.parse(decrypted);
+                    
+        //         } catch (error) {
+        //             console.error("Failed to decrypt current subscription:", error);
+        //         }
+        //     }
+        // },
 
         // fetch subscription 
         async fetchUserSubscription(email) {
@@ -27,8 +72,17 @@ export const useSubscriptionStore = defineStore('subscription', {
                     email: email
                 });
                 console.log(response);
-                return response;
-                
+                let subscription = response.payload;
+                // return response;
+                let code = systematicFourCharCode('currentSubscription')
+                if (subscription !=null || subscription !="undefined") {
+                    const data = JSON.stringify(subscription);
+                    const encryptedData = await encryptData(code, data);
+
+                    localStorage.setItem(code, JSON.stringify(encryptedData));
+                }
+
+                return subscription;                
             } catch (error) {
                 throw error;
             }
