@@ -1,3 +1,6 @@
+import ApiService from '@/services/apiService';
+const apiService = new ApiService();
+
 export const useSubscriptionStore = defineStore('subscription', {
     state: () => {
         return {
@@ -18,15 +21,28 @@ export const useSubscriptionStore = defineStore('subscription', {
         },
 
         // fetch subscription 
-        async fetchUserSubscription() {
-            const tokenStore = useTokenStore();
+        async fetchUserSubscription(email) {
             try {
-                let response = await apiService.get(`v1/user/subscription`, tokenStore.token);
-                if (!response) {
-                    throw new Error('Invalid data structure');
-                }
-                console.log("Err: ", response);
+                const response = await apiService.post('payment/subscription', {
+                    email: email
+                });
+                console.log(response);
                 return response;
+                
+            } catch (error) {
+                throw error;
+            }
+        },
+
+        // cancel subscription 
+        async cancelSubscription(original_id) {
+            try {
+                const response = await apiService.post('payment/subscription/cancel', {
+                    original_id: original_id
+                });
+                console.log(response);
+                return response;
+                
             } catch (error) {
                 throw error;
             }
