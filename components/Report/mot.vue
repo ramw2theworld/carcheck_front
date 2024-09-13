@@ -26,8 +26,8 @@ const breakpoints =
     slidesPerView: 8,
     spaceBetween: 20,
   },
-  769: {
-    slidesPerView: 15,
+  768: {
+    slidesPerView: 13,
     spaceBetween: 20,
   },
   1025: {
@@ -103,7 +103,7 @@ function isMOThistoryLocked(index: number) {
 <template>
   <report-wrapper>
     <div @click="toggleTableVisibility"
-      class="cursor-pointer text-black flex flex-col lg:flex-row items-center justify-between">
+      class="cursor-pointer text-black flex flex-col md:flex-row items-center justify-between">
       <!-- ------------------------------- -->
       <div class="flex items-center space-x-4">
         <svg width="23" height="28" viewBox="0 0 23 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -139,7 +139,7 @@ function isMOThistoryLocked(index: number) {
       <!-- ------------------------------- -->
       <div class="flex flex-col items-center justify-start flex-1 space-y-1">
         <p>Lorem ipsum dolor sit amet.</p>
-        <button class="bg-[#FF7400] text-white text-xl px-20 rounded-lg py-2">Get full report</button>
+        <button class="bg-[#FF7400] text-white text-xl w-72 rounded-lg py-2">Get full report</button>
       </div>
       <!-- ------------------------------- -->
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -150,8 +150,8 @@ function isMOThistoryLocked(index: number) {
       <!-- ------------------------------- -->
     </div>
     <div v-show="isTableVisible" class="text-black space-y-4 w-full">
-      <div class="flex flex-col md:flex-row items-center justify-center">
-        <div class="w-full lg:w-1/3 relative">
+      <div class="flex flex-col lg:flex-row items-center justify-center">
+        <div class="w-full md:w-7/12 lg:w-1/3 relative">
           <chart-gauge failRate="70" height="30" width="100%" />
           <!-- <div class="flex items-center justify-center space-x-5 -translate-y-16 translate-x-1/3 absolute">
             <div class="flex items-center justify-center space-x-2">

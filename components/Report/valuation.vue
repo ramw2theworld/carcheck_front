@@ -33,7 +33,7 @@ function getChartHeight() {
 <template>
   <report-wrapper>
     <div @click="toggleTableVisibility"
-      class="cursor-pointer text-black flex flex-col lg:flex-row items-center justify-between">
+      class="cursor-pointer text-black flex flex-col md:flex-row items-center justify-between">
       <div class="flex items-center space-x-4">
         <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
           <g clip-path="url(#clip0_230_6081)">
@@ -81,7 +81,7 @@ function getChartHeight() {
       </div>
 
       <small>Unlock all valuation details on the full report</small>
-      <button class="bg-[#FF7400] text-white text-xl px-20 rounded-lg py-2">
+      <button class="bg-[#FF7400] text-white text-xl w-72 rounded-lg py-2">
         Get full report
       </button>
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

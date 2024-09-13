@@ -96,7 +96,7 @@ function getChartHeight() {
     </div>
 
     <div v-show="isTableVisible" class="space-y-3">
-      <div class="flex flex-col lg:flex-row lg:space-x-12 lg:px-8 mt-11 pb-3">
+      <div class="flex flex-col md:flex-row md:space-x-12 lg:px-8 mt-11 pb-3">
         <div>
           <h4 class="text-xl font-bold hidden lg:solid">
             Current <br /> Mileage
@@ -132,7 +132,7 @@ function getChartHeight() {
 
         <div class="flex flex-col items-center justify-start flex-1 space-y-1">
           <p>Lorem ipsum dolor sit amet.</p>
-          <button class="bg-[#FF7400] text-white text-xl px-20 rounded-lg py-2">Get full report</button>
+          <button class="bg-[#FF7400] text-white text-xl w-72 rounded-lg py-2">Get full report</button>
         </div>
       </div>
       <div class="pt-10 border-t">
