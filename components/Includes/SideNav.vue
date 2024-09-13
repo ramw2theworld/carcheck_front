@@ -1,15 +1,20 @@
-<script>
+<script setup>
+import { ref } from 'vue';
+import { useAuthStore } from '@/stores/auth';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faTachometerAlt  } from '@fortawesome/free-solid-svg-icons';
+import { faTachometerAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faTachometerAlt);
+library.add(faTachometerAlt, faSignOutAlt);
 
-export default {
-  components: {
-    FontAwesomeIcon
-  }
+const auth = useAuthStore();
+
+const logout = async () => {
+    alert("i'm here");
+    await auth.logout();
 };
+
+defineExpose({ logout });
 </script>
 
 
@@ -31,19 +36,19 @@ export default {
                     User
                 </NuxtLink>
 
-                <NuxtLink class="nav-link" to="/settings">
-                    <div class="sb-nav-link-icon">
-                        <!-- <FontAwesomeIcon :icon="['fas', 'settings']" /> -->
-                    </div>
-                    Settings
-                </NuxtLink>
-
                 <NuxtLink class="nav-link" to="/my-plan">
                     <div class="sb-nav-link-icon">
                         <!-- <FontAwesomeIcon :icon="['fas', 'plans']" /> -->
                     </div>
                     My Plans
                 </NuxtLink>
+
+                <button class="nav-link" @click="logout">
+                    <div class="sb-nav-link-icon">
+                        <FontAwesomeIcon :icon="['fas', 'sign-out-alt']" />
+                    </div>
+                    Logout
+                </button>
             </div>
         </div>
         <div class="sb-sidenav-footer">
