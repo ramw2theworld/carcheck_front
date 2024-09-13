@@ -106,8 +106,9 @@ function setco2label(value: number) {
         </div>
       </div>
 
-      <div class="flex items-center justify-center relative px-20 mt-20">
-        <div v-if="co2label >= 0" class="absolute -top-6 bg-black text-white text-sm py-1 w-[8.95rem] text-center"
+      <div class="flex items-center justify-center relative lg:px-20 mt-20">
+        <div v-if="co2label >= 0"
+          class="hidden lg:block absolute -top-6 bg-black text-white text-sm py-1 w-[8.95rem] text-center"
           :style="{ left: getLabelPosition() }">
           YOUR LABEL
         </div>

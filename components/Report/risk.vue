@@ -42,7 +42,7 @@ const toggleTableVisibility = () => {
       </svg>
     </div>
     <div v-show="isTableVisible" class="text-black space-y-4">
-      <div class="mt-10 grid grid-cols-3 gap-x-5">
+      <div class="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-x-5 gap-y-5 lg:gap-y-0">
         <div class="bg-[#EEEEEE] rounded py-3 flex items-center">
           <div class="w-1/2 flex items-center justify-center">
             <svg width="149" height="76" viewBox="0 0 149 76" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -89,7 +89,7 @@ const toggleTableVisibility = () => {
           </div>
         </div>
       </div>
-      <div class="flex items-center justify-between">
+      <div class="flex flex-col lg:flex-row items-center justify-between">
         <p class="text-2xl font-extralight">Read more about this car’s risks by unlocking the full report</p>
         <button class="bg-[#FF7400] text-white text-xl px-20 rounded-lg py-2">Get full report</button>
       </div>

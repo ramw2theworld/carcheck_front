@@ -22,6 +22,20 @@ const chartData = [
   { label: "08/2022", value: 34543 },
   { label: "09/2022", value: 92335 },
 ];
+
+function getChartHeight() {
+
+  const screenWidth = window.innerWidth;
+
+  if (screenWidth >= 1024) {
+    return 25;
+  } else if (screenWidth >= 768) {
+    return 40;
+  } else {
+    return 50;
+  }
+
+}
 </script>
 
 <template>
@@ -82,12 +96,18 @@ const chartData = [
     </div>
 
     <div v-show="isTableVisible" class="space-y-3">
-      <div class="flex space-x-12 px-8 mt-11 pb-3">
+      <div class="flex flex-col lg:flex-row lg:space-x-12 lg:px-8 mt-11 pb-3">
         <div>
-          <h4 class="text-xl font-bold">
+          <h4 class="text-xl font-bold hidden lg:solid">
             Current <br /> Mileage
           </h4>
+          <h4 class="text-xl font-bold solid lg:hidden">
+            Current Mileage
+          </h4>
         </div>
+
+        <!-- ---------------------------------------------------- -->
+
         <div>
           <h3 class="text-2xl">
             8273273
@@ -99,18 +119,26 @@ const chartData = [
             </b>
           </small>
         </div>
+
+        <!-- ---------------------------------------------------- -->
+
         <div class="flex flex-col">
           <small>Total registration: <b>10</b></small>
           <small>Odometer: <b>In miles</b></small>
           <small>First registration: <b>12/02/1233</b></small>
         </div>
+
+        <!-- ---------------------------------------------------- -->
+
         <div class="flex flex-col items-center justify-start flex-1 space-y-1">
           <p>Lorem ipsum dolor sit amet.</p>
           <button class="bg-[#FF7400] text-white text-xl px-20 rounded-lg py-2">Get full report</button>
         </div>
       </div>
       <div class="pt-10 border-t">
-        <chart-line :data="chartData" height="25" width="100%" />
+        <client-only>
+          <chart-line :data="chartData" :height="getChartHeight()" width="100%" />
+        </client-only>
       </div>
     </div>
   </report-wrapper>

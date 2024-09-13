@@ -19,11 +19,11 @@ const toggleTableVisibility = () => {
 const breakpoints =
 {
   0: {
-    slidesPerView: 20,
+    slidesPerView: 6,
     spaceBetween: 20,
   },
   426: {
-    slidesPerView: 20,
+    slidesPerView: 8,
     spaceBetween: 20,
   },
   769: {
@@ -102,7 +102,8 @@ function isMOThistoryLocked(index: number) {
 
 <template>
   <report-wrapper>
-    <div @click="toggleTableVisibility" class="cursor-pointer text-black flex items-center justify-between">
+    <div @click="toggleTableVisibility"
+      class="cursor-pointer text-black flex flex-col lg:flex-row items-center justify-between">
       <!-- ------------------------------- -->
       <div class="flex items-center space-x-4">
         <svg width="23" height="28" viewBox="0 0 23 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -149,10 +150,10 @@ function isMOThistoryLocked(index: number) {
       <!-- ------------------------------- -->
     </div>
     <div v-show="isTableVisible" class="text-black space-y-4 w-full">
-      <div class="flex items-center justify-center">
-        <div class="w-1/3 relative">
+      <div class="flex flex-col md:flex-row items-center justify-center">
+        <div class="w-full lg:w-1/3 relative">
           <chart-gauge failRate="70" height="30" width="100%" />
-          <div class="flex items-center justify-center space-x-5 -translate-y-16 translate-x-1/3 absolute">
+          <!-- <div class="flex items-center justify-center space-x-5 -translate-y-16 translate-x-1/3 absolute">
             <div class="flex items-center justify-center space-x-2">
               <span class="block bg-red-600 h-3 w-3 rounded-full"></span>
               <p>Fail rate(12)</p>
@@ -161,9 +162,9 @@ function isMOThistoryLocked(index: number) {
               <span class="block bg-[#FF7400] h-3 w-3 rounded-full"></span>
               <p>Pass rate(42)</p>
             </div>
-          </div>
+          </div> -->
         </div>
-        <div class="flex-1 pl-10">
+        <div class="flex-1 lg:pl-10">
           <table class="w-full text-black mt-6">
             <thead>
               <tr class="header-row">
@@ -198,7 +199,7 @@ function isMOThistoryLocked(index: number) {
           </table>
         </div>
       </div>
-      <div class="flex items-center justify-between w-full px-5">
+      <div class="flex items-center justify-between w-full lg:px-5">
         <div class="w-fit">
           <button @click="nextSlide"
             class="w-8 h-8 border border-black items-center justify-center flex rounded hover:bg-[#FF7400] transition-colors duration-300">

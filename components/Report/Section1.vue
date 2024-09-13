@@ -4,9 +4,9 @@
 </script>
 
 <template>
-  <report-wrapper class="h-[258px] w-full bg-[#EEEEEE]">
-    <div class="flex space-x-8  h-full text-black">
-      <div class="w-[24%] flex flex-col items-center justify-center">
+  <report-wrapper class="py-5 w-full bg-[#EEEEEE]">
+    <div class="flex flex-col lg:flex-row space-x-8 space-y-5 lg:space-y-0 h-full text-black">
+      <div class="lg:w-[24%] flex flex-col items-center justify-center">
         <img src="/images/png/report/image 2.png" alt="">
         <h3 class="font-bold">HONDA CIVIC TYPE-R GT I-VTEC</h3>
         <div class="bg-[#FFA500] h-[42px] flex items-center justify-center rounded border w-full">
@@ -25,9 +25,15 @@
           <p class="font-bold">12</p>
         </div>
       </div>
-      <div class="w-[36.5%] flex items-center justify-center">
+
+      <!-- ---------------------------------------------------- -->
+
+      <div class="lg:w-[36.5%] flex items-center justify-center">
         <img src="/images/png/report/demo car 1.png" alt="">
       </div>
+
+      <!-- ---------------------------------------------------- -->
+
       <div class="flex-1 flex flex-col items-center justify-center space-y-4">
         <h3 class="text-3xl font-bold">
           Your report is ready !

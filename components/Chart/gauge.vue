@@ -57,11 +57,31 @@ onMounted(() => {
       cutout: '70%', // Makes it look like a gauge
       plugins: {
         legend: {
-          display: false, // Hide legend
+          display: true,
+          position: 'bottom',
+          labels: {
+            usePointStyle: true, // Use dots instead of squares for legend items
+            pointStyle: 'circle',
+            generateLabels() {
+              return [
+                {
+                  text: `Fail rate (${failRate.value})`,
+                  fillStyle: '#F94144',
+                },
+                {
+                  text: `Pass rate (${passRate.value})`,
+                  fillStyle: '#F2A03D',
+                },
+              ];
+            },
+          },
         },
         tooltip: {
           enabled: false, // Disable tooltips
         },
+      },
+      hover: {
+        mode: null,
       },
       animation: {
         onComplete() {
@@ -127,19 +147,17 @@ onMounted(() => {
           ctx.stroke();
           ctx.restore();  // Draw the needle
 
-
-
           // Draw the needle's pivot point (center circle)
           ctx.beginPath();
           ctx.arc(centerX, centerY, 10, 0, Math.PI * 2); // Circle at the bottom
           ctx.fillStyle = '#000'; // Circle color
           ctx.fill();
 
-
-          // drawPercentage(ctx, centerX, centerY, chartRadius, passRate.value, failRate.value);
+          drawSegmentPercentage(ctx, centerX, centerY, chartRadius);
 
         },
       },
+      events: [],
     };
 
     new Chart(chartCanvas.value, {
@@ -150,29 +168,47 @@ onMounted(() => {
   }
 });
 
-// function drawPercentage(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, chartRadius: number, passRate: number, failRate: number) {
-//   // Font settings for text
-//   ctx.font = 'bold 20px Arial';
-//   ctx.fillStyle = '#fff';
-//   ctx.textAlign = 'center';
+function drawSegmentPercentage(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, chartRadius: number) {
+  ctx.font = 'bold 14px Arial'; // Set larger font for visibility
+  ctx.fillStyle = '#fff'; // Set text color to black for visibility
+  ctx.textAlign = 'center'; // Center align the text
 
-//   // Calculate angles for pass and fail segments
-//   const passAngle = (Math.PI / 2) + (Math.PI * (passRate / 100));
-//   const failAngle = (Math.PI / 2) + (Math.PI * (failRate / 100));
+  // Calculate positions for pass and fail percentages
+  const passX = centerX - (chartRadius / 2 * 3.25); // Adjust X position for pass percentage
+  const passY = centerY - (chartRadius / 4); // Adjust Y position for pass percentage
+  ctx.fillText(`${passRate.value}%`, passX, passY);
 
-//   // Pass rate position (center of pass segment)
-//   const passX = (-Math.PI / 2) + (Math.PI * passAngle) * 13; // Adjusted position for pass rate
-//   const passY = (-Math.PI / 2) + (Math.PI * passAngle) * 13;
+  const failX = centerX + (chartRadius / 2 * 3.25); // Adjust X position for fail percentage
+  const failY = centerY - (chartRadius / 4); // Adjust Y position for fail percentage
+  ctx.fillText(`${failRate.value}%`, failX, failY);
+}
 
-//   ctx.fillText(`${passRate}%`, passX, passY);
+// function drawSegmentPercentage(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, chartRadius: number) {
+//   // Get the screen width
+//   const screenWidth = window.innerWidth;
 
-//   // Fail rate position (center of fail segment)
-//   const failX = centerX + (chartRadius - 60) * Math.cos(Math.PI / 2 + (Math.PI * (failAngle))); // Adjusted for fail rate
-//   const failY = centerY + (chartRadius - 60) * Math.sin(Math.PI / 2 + (Math.PI * (failAngle)));
-//   ctx.fillText(`${failRate}%`, failX, failY);
+//   // Adjust font size dynamically based on the screen width
+//   let fontSize = screenWidth / 50; // Adjust font size based on the screen width
+//   if (fontSize < 12) fontSize = 12; // Minimum font size for small screens
+//   if (fontSize > 24) fontSize = 14; // Maximum font size for large screens
+
+//   ctx.font = `bold ${fontSize}px Arial`;
+//   ctx.fillStyle = '#fff'; // Set text color to white for visibility
+//   ctx.textAlign = 'center'; // Center align the text
+
+//   // Dynamically calculate the horizontal (X) offset based on the screen size
+//   const dynamicOffset = screenWidth / 9; // Dynamic offset for positioning the text
+
+//   // Calculate positions for pass and fail percentages with dynamic X adjustment
+//   const passX = centerX - dynamicOffset; // Dynamically adjust X position for pass percentage
+//   const passY = centerY - (chartRadius / 4); // Adjust Y position for pass percentage
+//   ctx.fillText(`${passRate.value}%`, passX, passY);
+
+//   const failX = centerX + dynamicOffset; // Dynamically adjust X position for fail percentage
+//   const failY = centerY - (chartRadius / 4); // Adjust Y position for fail percentage
+//   ctx.fillText(`${failRate.value}%`, failX, failY);
 // }
+
 </script>
 
-<style scoped>
-/* Add custom styles if needed */
-</style>
+<style scoped></style>

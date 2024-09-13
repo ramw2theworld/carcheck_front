@@ -15,10 +15,25 @@ const chartData = [
   { label: "asdasd", value: 34543 },
   { label: "axasa", value: 52335 },
 ];
+
+function getChartHeight() {
+
+  const screenWidth = window.innerWidth;
+
+  if (screenWidth >= 1024) {
+    return 25;
+  } else if (screenWidth >= 768) {
+    return 40;
+  } else {
+    return 50;
+  }
+
+}
 </script>
 <template>
   <report-wrapper>
-    <div @click="toggleTableVisibility" class="cursor-pointer text-black flex items-center justify-between">
+    <div @click="toggleTableVisibility"
+      class="cursor-pointer text-black flex flex-col lg:flex-row items-center justify-between">
       <div class="flex items-center space-x-4">
         <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
           <g clip-path="url(#clip0_230_6081)">
@@ -49,7 +64,7 @@ const chartData = [
         </svg>
 
         <p class="text-2xl font-bold flex items-center justify-center">
-          VEHICLE HISTORY
+          VALUATION DETAILS
         </p>
         <span>
           <svg v-if="isTableVisible" width="12" height="7" viewBox="0 0 12 7" fill="none"
@@ -78,7 +93,7 @@ const chartData = [
     <div v-show="isTableVisible" class="text-black my-10 w-full">
 
       <ClientOnly>
-        <chart-bar :data="chartData" height="25" width="100%" />
+        <chart-bar :data="chartData" :height="getChartHeight()" width="100%" />
       </ClientOnly>
     </div>
   </report-wrapper>

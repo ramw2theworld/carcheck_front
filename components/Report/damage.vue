@@ -50,8 +50,8 @@ const toggleTableVisibility = () => {
         <rect x="6.66602" y="2.66663" width="2.66667" height="2.66667" rx="1.33333" fill="white" />
       </svg>
     </div>
-    <div v-show="isTableVisible" class="flex w-full pt-4 space-x-8">
-      <div class="w-2/3">
+    <div v-show="isTableVisible" class="flex flex-row w-full pt-4 space-x-8">
+      <div class="lg:w-2/3">
         <table class="w-full text-black">
           <thead>
             <tr class="header-row">
@@ -100,7 +100,7 @@ const toggleTableVisibility = () => {
               report</a></h3>
         </div>
       </div>
-      <div class="h-full w-1/3 flex justify-center">
+      <div class="hidden h-full w-1/3 md:flex justify-center">
         <img src="/images/png/report/damage.png" alt="">
       </div>
     </div>
