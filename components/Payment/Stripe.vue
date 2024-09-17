@@ -132,6 +132,7 @@ async function handleCheckoutClick() {
     }
 }
 async function createSubscription(selectedPlan) {
+    console.log("selected plan: ", selectedPlan);
     const user = auth.getCurrentUser;
     try {
         await apiService.post("payment/process", {
@@ -141,11 +142,27 @@ async function createSubscription(selectedPlan) {
             billing_details: {
                 name: cardholderName.value,
             },
-            plan: selectedPlan,
+            plan_id: selectedPlan.id,
         }).then((response)=>{
             debugger;
-            subscriptionStore.setCurrentSubscription(response.payload.subscription);
+
+            let subscriptionData = response.payload.hasSubscription;
+
+            subscriptionStore.setHasSubscription(subscriptionData);
+
+            
+            subscriptionStore.setCurrentSubscription(response.subscription);
+
+            if(response.plan.plan_code=='48h-basic-subscription'){
+                // 48h-basic-subscription
+                navigateTo('/vehicle/basic-report');
+            }else if(response.plan.plan_code=='48h-export-subscription'){
+                navigateTo('/vehicle/export-report');
+            }else{
+                navigateTo('/vehicle/single-offer-report');
+            }
         }).catch((error)=>{
+            debugger
             console.log("error: ", error);
             if(error.data.success==false){
                 errorMessage.value = error.data.message
@@ -153,8 +170,9 @@ async function createSubscription(selectedPlan) {
         });
 
     } catch (error) {
+        debugger
         console.error({ error });
-        errorMessage.value = "An unexpected error occurred.";
+        errorMessage.value = "An unexpected error occurred while creating subscription.";
     }
 }
 

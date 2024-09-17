@@ -18,9 +18,8 @@ export const useAuthStore = defineStore('auth', {
             try {
                 const response = await apiService.post('login', form);
                 if(response.payload){
-                    const subscription = useSubscriptionStore();
-                    subscription.setHasSubscription(response.payload.hasSubscription);
                     this.setCommonSetter(response.payload);
+                    return response;
                 }
             } catch (error) {
                 throw error;
@@ -46,8 +45,17 @@ export const useAuthStore = defineStore('auth', {
                 
                 this.removeUser();
                 tokenStore.removeToken();
+                const subscription = useSubscriptionStore();
+                subscription.setHasSubscription({
+                    auth: false,
+                    active: false,
+                    subscription_type: null,
+                    request_count: 0,
+                });
+                localStorage.clear();
+                sessionStorage.clear();
 
-                // navigateTo('/auth/login');
+                navigateTo('/auth/login');
             } catch (error) {
                 throw error;
             }
@@ -83,8 +91,6 @@ export const useAuthStore = defineStore('auth', {
                 token.setToken(payload.access_token);
                 this.user = payload.user;
             }
-
-            return navigateTo('/dashboard');
         },
         removeUser() {
             console.log("remove user");

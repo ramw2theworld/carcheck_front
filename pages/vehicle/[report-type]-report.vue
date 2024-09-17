@@ -1,32 +1,71 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-
+import carDefaultImage from '/images/car-icon.png';
+import ApiService from '~/services/apiService';
 const carRegistrationSearchStore = useCarRegistrationSearchStore();
 const tokenStore = useTokenStore();
 const subscriptionStore = useSubscriptionStore();
-const planStore = usePlanStore(); 
+const planStore = usePlanStore();
+const authStore = useAuthStore();
 const router = useRouter();
 
 const vbrand_logo = computed(() => carRegistrationSearchStore.vbrand_logo);
+const apiService = new ApiService();
+
+const errorMessage = ref(null);
+const reportText = ref("Download Report")
 
 onMounted(() => {
-  console.log("vbrand_logo: ", vbrand_logo.value);
+    console.log("vbrand_logo: ", vbrand_logo.value);
 });
 
-const downloadReport = () => {
-    if (tokenStore.getToken && tokenStore.getStatus) { 
-        let hasSubscription = subscriptionStore.getHasSubscription;
+const downloadReport = async () => {
+    reportText.value = "Downloading...";
+    if (tokenStore.getToken && tokenStore.getStatus) {
+        let subscription = await subscriptionStore.getUserSubscription();
+        let hasSubscription = await subscriptionStore.getHasSubscription();
 
-        if (hasSubscription) {
-            if(hasSubscription.active){
-                console.log("subs: ", subscriptionStore);
+        if (hasSubscription.request_count > 0) {
+            try {
+                let report_type="";
+                if(subscription?.plan?.plan_code=="48h-export-subscription"){
+                    report_type = "export";
+                }else if(subscription?.plan?.plan_code=="48h-basic-subscription"){
+                    report_type = "basic";
+                }else{
+                    report_type = "single-offer";
+                }
+                const response = await apiService.post('users/download-report', {
+                    email: authStore.user?.email,
+                    report_type: report_type
+                }, { responseType: 'blob' });
+
+                if (response.success && response.payload) {
+                    const downloadUrl = response.payload;
+
+                    const link = document.createElement('a');
+                    link.href = downloadUrl;
+                    link.download = `report-${reportDate()}.pdf`;
+                    link.target = '_blank';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+
+                    reportText.value = "Downloaded";
+                } else {
+                    reportText.value = "Download Report";
+                    errorMessage.value = "Failed to retrieve the report data";
+                    console.error("Error: Invalid response status", response.status);
+                }
+
+            } catch (error) {
+                reportText.value = "Download Report";
+                if(error.data)
+                    errorMessage.value = error.data.error;
             }
-            console.log("hello there for the stests sldfjlsdjflkflsjdfl");
-            router.push('/payment/plans');
-        } else if (planStore.selectedPlan) {
-            router.push('/payment/checkout');
         } else {
-            router.push('/payment/plans');
+            reportText.value = "Download Report";
+            console.error("No remaining report downloads available.");
         }
     } else {
         router.push('/auth/login');
@@ -40,7 +79,6 @@ const reportDate = () => {
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
 };
-import carDefaultImage from '/images/car-icon.png';
 
 </script>
 
@@ -58,7 +96,10 @@ import carDefaultImage from '/images/car-icon.png';
             <div>
                 <div class="flex flex-col justify-center items-center">
                     <h1 class="text-2xl font-bold">YOUR <span class="text-orange-500">CAR REPORT</span> IS READY!</h1>
-                    <button @click.prevent="downloadReport" class="rounded bg-orange-500 text-white text-lg px-20 py-2 mt-6">Download Report</button>
+                    <button @click.prevent="downloadReport"
+                        class="rounded bg-orange-500 text-white text-lg px-20 py-2 mt-6">{{ reportText }}</button>
+                    
+                    <p v-if="errorMessage" id="standard_error_help" class="mt-2 text-xs text-red-600 dark:text-red-400"><span class="font-medium"></span> {{ errorMessage }}</p>
                 </div>
                 <Features></Features>
             </div>

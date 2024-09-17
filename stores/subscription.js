@@ -8,6 +8,8 @@ export const useSubscriptionStore = defineStore('subscription', {
                 auth: false,
                 active: false,
                 subscription_type: null,
+                request_count: 0,
+
             },
             subscription: null,
         }
@@ -34,10 +36,12 @@ export const useSubscriptionStore = defineStore('subscription', {
                 try {
                     const decrypted = await decryptData(`${code}`, JSON.parse(encryptedData));
                     this.hasSubscription = JSON.parse(decrypted);
+                    
                 } catch (error) {
                     console.error("Failed to decrypt current subscription:", error);
                 }
             }
+            return this.hasSubscription;
         },
 
         async setCurrentSubscription(subscription){
@@ -51,19 +55,20 @@ export const useSubscriptionStore = defineStore('subscription', {
 
             this.subscription = subscription;
         },
-        // async getUserSubscription() {
-        //     let code = systematicFourCharCode('currentSubscription');
-        //     const encryptedData = localStorage.getItem(code);
-        //     if (encryptedData) {
-        //         try {
-        //             const decrypted = await decryptData(`${code}`, JSON.parse(encryptedData));
-        //             this.subscription = JSON.parse(decrypted);
+        async getUserSubscription() {
+            let code = systematicFourCharCode('currentSubscription');
+            const encryptedData = localStorage.getItem(code);
+            if (encryptedData) {
+                try {
+                    const decrypted = await decryptData(`${code}`, JSON.parse(encryptedData));
+                    this.subscription = JSON.parse(decrypted);
                     
-        //         } catch (error) {
-        //             console.error("Failed to decrypt current subscription:", error);
-        //         }
-        //     }
-        // },
+                } catch (error) {
+                    console.error("Failed to decrypt current subscription:", error);
+                }
+            }
+            return this.subscription;
+        },
 
         // fetch subscription 
         async fetchUserSubscription(email) {
