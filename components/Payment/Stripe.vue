@@ -131,11 +131,12 @@ async function handleCheckoutClick() {
         loading.value = false;
     }
 }
+
 async function createSubscription(selectedPlan) {
     console.log("selected plan: ", selectedPlan);
     const user = auth.getCurrentUser;
     try {
-        await apiService.post("payment/process", {
+        const response = await apiService.post("payment/process", {
             customer_id: customerId.value,
             payment_method_id: paymentMethodId.value,
             email: user.email,
@@ -143,36 +144,33 @@ async function createSubscription(selectedPlan) {
                 name: cardholderName.value,
             },
             plan_id: selectedPlan.id,
-        }).then((response)=>{
-            debugger;
-
-            let subscriptionData = response.payload.hasSubscription;
-
-            subscriptionStore.setHasSubscription(subscriptionData);
-
-            
-            subscriptionStore.setCurrentSubscription(response.subscription);
-
-            if(response.plan.plan_code=='48h-basic-subscription'){
-                // 48h-basic-subscription
-                navigateTo('/vehicle/basic-report');
-            }else if(response.plan.plan_code=='48h-export-subscription'){
-                navigateTo('/vehicle/export-report');
-            }else{
-                navigateTo('/vehicle/single-offer-report');
-            }
-        }).catch((error)=>{
-            debugger
-            console.log("error: ", error);
-            if(error.data.success==false){
-                errorMessage.value = error.data.message
-            }
         });
 
+        let payload = response.payload;
+        
+        if (payload?.hasSubscription) {
+            await subscriptionStore.setHasSubscription(payload.hasSubscription);
+        }
+
+        if (payload?.subscription) {
+            await subscriptionStore.setCurrentSubscription(payload.subscription);
+        }
+
+        if (selectedPlan.plan_code === '48h-basic-subscription') {
+            navigateTo('/vehicle/basic-report');
+        } else if (selectedPlan.plan_code === '48h-export-subscription') {
+            navigateTo('/vehicle/export-report');
+        } else {
+            navigateTo('/vehicle/single-offer-report');
+        }
+        
     } catch (error) {
-        debugger
-        console.error({ error });
-        errorMessage.value = "An unexpected error occurred while creating subscription.";
+        console.error("Error creating subscription: ", error);
+        if (error.data && error.data.success === false) {
+            errorMessage.value = error.data.message;
+        } else {
+            errorMessage.value = "An unexpected error occurred while creating the subscription.";
+        }
     }
 }
 

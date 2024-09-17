@@ -25,7 +25,7 @@ const downloadReport = async () => {
         let subscription = await subscriptionStore.getUserSubscription();
         let hasSubscription = await subscriptionStore.getHasSubscription();
 
-        if (hasSubscription.request_count > 0) {
+        if ((hasSubscription.request_count > 0) && hasSubscription.active) {
             try {
                 let report_type="";
                 if(subscription?.plan?.plan_code=="48h-export-subscription"){
@@ -55,7 +55,7 @@ const downloadReport = async () => {
                 } else {
                     reportText.value = "Download Report";
                     errorMessage.value = "Failed to retrieve the report data";
-                    console.error("Error: Invalid response status", response.status);
+                    console.error("Error: Invalid response status", response.success);
                 }
 
             } catch (error) {
@@ -66,9 +66,10 @@ const downloadReport = async () => {
         } else {
             reportText.value = "Download Report";
             console.error("No remaining report downloads available.");
+            navigateTo('/payment/plans')
         }
     } else {
-        router.push('/auth/login');
+        navigateTo('/auth/login');
     }
 };
 
