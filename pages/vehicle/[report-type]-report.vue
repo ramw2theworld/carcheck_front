@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
 import carDefaultImage from '/images/car-icon.png';
 import ApiService from '~/services/apiService';
 const carRegistrationSearchStore = useCarRegistrationSearchStore();
@@ -7,7 +6,6 @@ const tokenStore = useTokenStore();
 const subscriptionStore = useSubscriptionStore();
 const planStore = usePlanStore();
 const authStore = useAuthStore();
-const router = useRouter();
 
 const vbrand_logo = computed(() => carRegistrationSearchStore.vbrand_logo);
 const apiService = new ApiService();
