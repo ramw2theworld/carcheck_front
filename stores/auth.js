@@ -1,7 +1,5 @@
 import ApiService from '../services/apiService';
 import { defineStore } from 'pinia';
-
-
 const apiService = new ApiService();
 
 export const useAuthStore = defineStore('auth', {
@@ -21,6 +19,7 @@ export const useAuthStore = defineStore('auth', {
                 const response = await apiService.post('login', form);
                 if(response.payload){
                     this.setCommonSetter(response.payload);
+                    return response;
                 }
             } catch (error) {
                 throw error;
@@ -33,6 +32,7 @@ export const useAuthStore = defineStore('auth', {
                 if(response.payload){
                     this.setCommonSetter(response.payload);
                 }
+                return response;
             } catch (error) {
                 throw error;
             }
@@ -45,8 +45,17 @@ export const useAuthStore = defineStore('auth', {
                 
                 this.removeUser();
                 tokenStore.removeToken();
+                const subscription = useSubscriptionStore();
+                subscription.setHasSubscription({
+                    auth: false,
+                    active: false,
+                    subscription_type: null,
+                    request_count: 0,
+                });
+                localStorage.clear();
+                sessionStorage.clear();
 
-                // navigateTo('/auth/login');
+                navigateTo('/auth/login');
             } catch (error) {
                 throw error;
             }
@@ -76,15 +85,12 @@ export const useAuthStore = defineStore('auth', {
                 throw error;
             }
         },
-
         setCommonSetter(payload) {
             const token = useTokenStore();
             if (payload.access_token && payload.user) {
                 token.setToken(payload.access_token);
                 this.user = payload.user;
             }
-
-            return navigateTo('/dashboard');
         },
         removeUser() {
             console.log("remove user");

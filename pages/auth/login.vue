@@ -2,6 +2,9 @@
 const auth = useAuthStore();
 const token = useTokenStore();
 const { $event } = useNuxtApp();
+const subscriptionStore = useSubscriptionStore();
+const planStore = usePlanStore();
+
 
 definePageMeta({
   title: 'Login',
@@ -25,13 +28,42 @@ const handleLoginSubmit = async () => {
             "user": "jello josldfls sldfjsl dflskdfjl askdjflksajdf"
         });
 
-        await auth.makeLogin(form);
+        let response = await auth.makeLogin(form);
+        if(response.success){
+            if(response.payload){
+                debugger
+                let payload = response.payload;
+                let hasSubscription = payload.hasSubscription;
+                let subscription = payload.subscription;
+                let user = payload.user;
+
+                await subscriptionStore.setHasSubscription(hasSubscription);
+                await subscriptionStore.setCurrentSubscription(subscription);
+                await auth.setUser(user);
+
+                if(hasSubscription.active){
+                    console.log("subs: ", hasSubscription);
+                    if(subscription.plan.plan_code === "48h-export-subscription"){
+                        navigateTo('/vehicle/export-report');
+                    }else if(subscription.plan.plan_code === "48h-basic-subscription"){
+                        navigateTo('/vehicle/basic-report');
+                    }else{
+                        navigateTo('/vehicle/single-offer-report');
+                    }
+                }else{
+                    navigateTo('/payment/plans');
+                }
+            }
+        }else{
+            errorMessage.value = "Something went wrong. Please verify your credential and try again.";
+        }
     } catch (error) {
+        debugger
         console.log("login error: ", error);
-        if(error.data.errors)
+        if(error?.data?.message)
             errors.value = error.data?.errors
         else
-            errorMessage.value = error.data.message;
+            errorMessage.value = error;
     }
 }
 const removeToken = async () => {

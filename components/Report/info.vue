@@ -1,9 +1,26 @@
 <script lang="ts" setup>
+import { onMounted, computed, ref, watch } from 'vue';
+
 const isTableVisible = ref(true)
-// h-[458px]
+const dateFirstRegistered = ref("");
+
+const carRegistrationSearchStore = useCarRegistrationSearchStore();
+const smmtDetail = computed(() => carRegistrationSearchStore.smmtDetails);
+const vehicleRegistration = computed(() => carRegistrationSearchStore.vehicleRegistration);
+onMounted(async () => {
+  await carRegistrationSearchStore.fetchSmmtDetails();
+  await carRegistrationSearchStore.fetchVehicleRegistration();
+});
+
 const toggleTableVisibility = () => {
   isTableVisible.value = !isTableVisible.value
 }
+watch(vehicleRegistration, (newValue) => {
+  if (newValue && newValue.DateFirstRegistered) {
+    const registeredDate = newValue.DateFirstRegistered;
+    dateFirstRegistered.value = new Date(registeredDate).toISOString().split('T')[0]; 
+  }
+}, { immediate: true });
 </script>
 
 <template>
@@ -57,19 +74,19 @@ const toggleTableVisibility = () => {
             </tr>
             <tr>
               <th>Fuel Type</th>
-              <td>Diesel</td>
+              <td>{{ smmtDetail.FuelType }}</td>
             </tr>
             <tr>
               <th>Make</th>
-              <td>Honda</td>
+              <td>{{ vehicleRegistration.Make }}</td>
             </tr>
             <tr>
               <th>Model</th>
-              <td>Civic</td>
+              <td>{{ vehicleRegistration.Model }}</td>
             </tr>
             <tr>
               <th>First registered</th>
-              <td>15/06/2012</td>
+              <td>{{ dateFirstRegistered }}</td>
             </tr>
           </tbody>
         </table>

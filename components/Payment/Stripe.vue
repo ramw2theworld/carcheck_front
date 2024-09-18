@@ -3,6 +3,8 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import type { StripeCardCvcElement, StripeCardExpiryElement, StripeCardNumberElement, StripeElements } from '@stripe/stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import ApiService from '~/services/apiService';
+import { useSubscriptionStore } from '@/stores/subscription';
+
 const auth = useAuthStore();
 const plan = usePlanStore();
 const subscriptionStore = useSubscriptionStore();
@@ -129,26 +131,46 @@ async function handleCheckoutClick() {
         loading.value = false;
     }
 }
+
 async function createSubscription(selectedPlan) {
+    console.log("selected plan: ", selectedPlan);
     const user = auth.getCurrentUser;
     try {
-        await apiService.post("payment/process", {
+        const response = await apiService.post("payment/process", {
             customer_id: customerId.value,
             payment_method_id: paymentMethodId.value,
             email: user.email,
             billing_details: {
                 name: cardholderName.value,
             },
-            plan: selectedPlan,
-        }).then((response)=>{
-            debugger;
-        }).catch((error)=>{
-            debugger;
+            plan_id: selectedPlan.id,
         });
 
+        let payload = response.payload;
+        
+        if (payload?.hasSubscription) {
+            await subscriptionStore.setHasSubscription(payload.hasSubscription);
+        }
+
+        if (payload?.subscription) {
+            await subscriptionStore.setCurrentSubscription(payload.subscription);
+        }
+
+        if (selectedPlan.plan_code === '48h-basic-subscription') {
+            navigateTo('/vehicle/basic-report');
+        } else if (selectedPlan.plan_code === '48h-export-subscription') {
+            navigateTo('/vehicle/export-report');
+        } else {
+            navigateTo('/vehicle/single-offer-report');
+        }
+        
     } catch (error) {
-        console.error({ error });
-        errorMessage.value = "An unexpected error occurred.";
+        console.error("Error creating subscription: ", error);
+        if (error.data && error.data.success === false) {
+            errorMessage.value = error.data.message;
+        } else {
+            errorMessage.value = "An unexpected error occurred while creating the subscription.";
+        }
     }
 }
 
@@ -187,8 +209,10 @@ const planPrice = computed(() => {
                         <span class="text-[#0F1829] text-xs rounded bg-[#FF7400] px-2 py-0.5"
                             >£{{ planPrice }}</span>
                     </div>
-                    
                         <form @submit.prevent="handleCheckoutClick">
+                            <div class="alert alert-danger" v-if="errorMessage">
+                                <span class="alert alert-danger">{{ errorMessage }}</span>
+                            </div>
                             <div class="mb-4 w-full">
                                 <label for="cardholder-name" class="block mb-2 text-sm font-bold">Cardholder's Name</label>
                                 <div class="flex items-center py-1 border-2 border-[#4A2EB6] w-full overflow-hidden ">

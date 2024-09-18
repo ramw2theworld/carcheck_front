@@ -1,32 +1,56 @@
 <script lang="ts" setup>
-const isTableVisible = ref(true)
+import { computed, onMounted, ref } from 'vue';
+
+const isTableVisible = ref(true);
+const totalRegistrations = ref(0);
+const totalOdometerReading = ref(0);
+const first_date = ref("");
+const last_date = ref("");
+
 const toggleTableVisibility = () => {
-  isTableVisible.value = !isTableVisible.value
+  isTableVisible.value = !isTableVisible.value;
+}
+const carRegistrationSearchStore = useCarRegistrationSearchStore();
+onMounted(async () => {
+  await carRegistrationSearchStore.fetchMOTHistory();
+});
+const motHistory = computed(() => carRegistrationSearchStore.MOTHistory);
+
+function formatDate(dateString) {
+  // const date = new Date(dateString);
+  // const month = (date.getMonth() + 1).toString().padStart(2, '0'); // months are 0-indexed
+  // const year = date.getFullYear();
+  // return `${month}/${year}`;
+
+  // const [day, month, year] = dateString.split('/'); // Split the date based on "/"
+  // return `${month}/${year}`;
+  return dateString;
 }
 
-const chartData = [
-  { label: "01/2022", value: 12371 },
-  { label: "02/2022", value: 30000 },
-  { label: "03/2022", value: 30000 },
-  { label: "04/2022", value: 30000 },
-  { label: "05/2022", value: 23523 },
-  { label: "06/2022", value: 64645 },
-  { label: "07/2022", value: 34555 },
-  { label: "08/2022", value: 34543 },
-  { label: "09/2022", value: 92335 },
-  { label: "03/2022", value: 30000 },
-  { label: "04/2022", value: 30000 },
-  { label: "05/2022", value: 23523 },
-  { label: "06/2022", value: 64645 },
-  { label: "07/2022", value: 34555 },
-  { label: "08/2022", value: 34543 },
-  { label: "09/2022", value: 92335 },
-];
+const chartData = computed(() => {
+  console.log("len: ", motHistory.value.length);
+  if(motHistory.value && motHistory.value.length > 0){
+    first_date.value = motHistory.value[0].TestDate;
+    last_date.value = motHistory.value[(motHistory.value.length-1)].TestDate;
+
+    totalRegistrations.value = motHistory.value.length;
+
+    // Calculate total odometer reading
+    totalOdometerReading.value = motHistory.value.reduce(
+      (sum, record) => sum + (record.OdometerReading || 0),
+      0
+    );
+
+    return motHistory.value.map(record => ({
+      label: formatDate(record.TestDate),
+      value: record.OdometerReading
+    }));
+  }
+  return [];
+});
 
 function getChartHeight() {
-
   const screenWidth = window.innerWidth;
-
   if (screenWidth >= 1024) {
     return 25;
   } else if (screenWidth >= 768) {
@@ -34,8 +58,40 @@ function getChartHeight() {
   } else {
     return 50;
   }
-
 }
+
+// const chartData = [
+//   { label: "01/2022", value: 12371 },
+//   { label: "02/2022", value: 30000 },
+//   { label: "03/2022", value: 30000 },
+//   { label: "04/2022", value: 30000 },
+//   { label: "05/2022", value: 23523 },
+//   { label: "06/2022", value: 64645 },
+//   { label: "07/2022", value: 34555 },
+//   { label: "08/2022", value: 34543 },
+//   { label: "09/2022", value: 92335 },
+//   { label: "03/2022", value: 30000 },
+//   { label: "04/2022", value: 30000 },
+//   { label: "05/2022", value: 23523 },
+//   { label: "06/2022", value: 64645 },
+//   { label: "07/2022", value: 34555 },
+//   { label: "08/2022", value: 34543 },
+//   { label: "09/2022", value: 92335 },
+// ];
+
+// function getChartHeight() {
+
+//   const screenWidth = window.innerWidth;
+
+//   if (screenWidth >= 1024) {
+//     return 25;
+//   } else if (screenWidth >= 768) {
+//     return 40;
+//   } else {
+//     return 50;
+//   }
+
+// }
 </script>
 
 <template>
@@ -110,12 +166,12 @@ function getChartHeight() {
 
         <div>
           <h3 class="text-2xl">
-            8273273
+            {{ totalOdometerReading }}
           </h3>
           <small>
             Last registration:
             <b>
-              15/06/2012
+              {{ first_date }}
             </b>
           </small>
         </div>
@@ -123,9 +179,9 @@ function getChartHeight() {
         <!-- ---------------------------------------------------- -->
 
         <div class="flex flex-col">
-          <small>Total registration: <b>10</b></small>
-          <small>Odometer: <b>In miles</b></small>
-          <small>First registration: <b>12/02/1233</b></small>
+          <small>Total registration: <b>{{ totalRegistrations }}</b></small>
+          <small>Odometer: <b>{{ totalOdometerReading }}</b></small>
+          <small>First registration: <b>{{ first_date }}</b></small>
         </div>
 
         <!-- ---------------------------------------------------- -->
