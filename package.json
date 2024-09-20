@@ -21,6 +21,7 @@
     "@types/swiper": "^6.0.0",
     "chart.js": "^4.4.4",
     "chartjs-gauge": "^0.3.0",
+    "date-fns": "^4.1.0",
     "flowbite": "^2.3.0",
     "nuxt": "^3.10.3",
     "pinia": "^2.1.7",

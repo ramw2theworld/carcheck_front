@@ -23,6 +23,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
             smmtDetails: null,
             performance: null,
             vbrand_logo: null,
+            getFullReportText: "Get full report"
         }
     },
     getters: {
@@ -175,6 +176,10 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
             }
             return this.MOTHistory;
         },
+
+        async fetchFullReportText() {
+            return this.getFullReportText;
+        },
         
         // Search and store vehicle registration details
         async searchCarRegNumber(car_reg_number) {
@@ -290,7 +295,6 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
             }
         },
         async setMOTHistory(combinedPayload) {
-            debugger
             let code = systematicFourCharCode('MOTHistory');
             if (combinedPayload.MotHistory) {
                 const data = JSON.stringify(combinedPayload.MotHistory.RecordList);
@@ -298,8 +302,11 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                 localStorage.setItem(code, JSON.stringify(encryptedData));
             }
         },
+        async setFullReportText(text) {
+            this.getFullReportText = text;
+        },
     },
     persist: {
-        paths: ["reg_number"],
+        paths: ["reg_number", "getFullReportText"],
     },
 });

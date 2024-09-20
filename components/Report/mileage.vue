@@ -28,7 +28,7 @@ function formatDate(dateString) {
 }
 
 const chartData = computed(() => {
-  console.log("len: ", motHistory.value.length);
+  // console.log("len: ", motHistory.value.length);
   if(motHistory.value && motHistory.value.length > 0){
     first_date.value = motHistory.value[0].TestDate;
     last_date.value = motHistory.value[(motHistory.value.length-1)].TestDate;
@@ -59,39 +59,6 @@ function getChartHeight() {
     return 50;
   }
 }
-
-// const chartData = [
-//   { label: "01/2022", value: 12371 },
-//   { label: "02/2022", value: 30000 },
-//   { label: "03/2022", value: 30000 },
-//   { label: "04/2022", value: 30000 },
-//   { label: "05/2022", value: 23523 },
-//   { label: "06/2022", value: 64645 },
-//   { label: "07/2022", value: 34555 },
-//   { label: "08/2022", value: 34543 },
-//   { label: "09/2022", value: 92335 },
-//   { label: "03/2022", value: 30000 },
-//   { label: "04/2022", value: 30000 },
-//   { label: "05/2022", value: 23523 },
-//   { label: "06/2022", value: 64645 },
-//   { label: "07/2022", value: 34555 },
-//   { label: "08/2022", value: 34543 },
-//   { label: "09/2022", value: 92335 },
-// ];
-
-// function getChartHeight() {
-
-//   const screenWidth = window.innerWidth;
-
-//   if (screenWidth >= 1024) {
-//     return 25;
-//   } else if (screenWidth >= 768) {
-//     return 40;
-//   } else {
-//     return 50;
-//   }
-
-// }
 </script>
 
 <template>
