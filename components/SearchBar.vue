@@ -21,6 +21,7 @@ const placeholderText = ref("xxxx xxx");
 
 
 const errors = ref([]);
+const errorMessage = ref("");
 const searchTxt = ref(null);
 const MIN_LENGTH = 5;
 const MAX_LENGTH = 10;
@@ -66,9 +67,16 @@ const searchForCarReg = async () => {
     searchTxt.value = null;
     router.push(`/report`);
   } catch (error) {
+    debugger
     searchTxt.value = null;
     console.log("search error: ", error);
-    errors.value = error.response?.data?.errors || ["Something went wrong while checking car number. Please verify Registration Number."];
+
+    if(error?.data?.message){
+      errorMessage.value = error.data.message;
+    }
+    else{
+      errors.value = error.response?.data?.errors || ["Something went wrong while checking car number. Please verify Registration Number."];
+    }
   }
 }
 </script>
@@ -89,10 +97,13 @@ const searchForCarReg = async () => {
       </button>
 
     </div>
-    <div v-if="errors && errors.length" class="alert alert-danger">
-      <ul>
+    <div v-if="errors && errors.length && Array.isArray(errors)" class="alert alert-danger">
+      <ul v-if="Array.isArray(errors)">
         <li v-for="error in errors" :key="error">{{ error }}</li>
       </ul>
+    </div>
+    <div class="alert alert-danger" v-if="errorMessage">
+      <p>{{ errorMessage }}</p>
     </div>
   </div>
 </template>
