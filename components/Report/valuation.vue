@@ -81,9 +81,7 @@ function getChartHeight() {
       </div>
 
       <small>Unlock all valuation details on the full report</small>
-      <button class="bg-[#FF7400] text-white text-xl w-72 rounded-lg py-2">
-        Get full report
-      </button>
+      <button class="bg-[#FF7400] text-white text-xl w-72 rounded-lg py-2">Get full report</button>
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="8" cy="8" r="8" fill="#BDBDBD" />
         <rect x="6.66602" y="6.22229" width="2.66666" height="7.1111" rx="1.33333" fill="white" />

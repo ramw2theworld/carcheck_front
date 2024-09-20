@@ -43,13 +43,14 @@ const handleLoginSubmit = async () => {
 
                 if(hasSubscription.active){
                     console.log("subs: ", hasSubscription);
-                    if(subscription.plan.plan_code === "48h-export-subscription"){
-                        navigateTo('/vehicle/export-report');
-                    }else if(subscription.plan.plan_code === "48h-basic-subscription"){
-                        navigateTo('/vehicle/basic-report');
-                    }else{
-                        navigateTo('/vehicle/single-offer-report');
-                    }
+                    // if(subscription.plan.plan_code === "48h-export-subscription"){
+                    //     navigateTo('/vehicle/export-report');
+                    // }else if(subscription.plan.plan_code === "48h-basic-subscription"){
+                    //     navigateTo('/vehicle/basic-report');
+                    // }else{
+                    //     navigateTo('/vehicle/single-offer-report');
+                    // }
+                    navigateTo('/report');
                 }else{
                     navigateTo('/payment/plans');
                 }

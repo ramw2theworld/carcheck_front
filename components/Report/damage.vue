@@ -96,8 +96,10 @@ const toggleTableVisibility = () => {
           </tbody>
         </table>
         <div class="bg-[#EF343A] w-full flex items-center justify-center py-2">
-          <h3 class="text-xl font-semibold">Lorem ipsum dolor sit amet. <a href="#" class="underline">check the full
-              report</a></h3>
+          <h3 class="text-xl font-semibold">Lorem ipsum dolor sit amet. 
+            <Includes-get-full-report get-full-report="check the full
+              report"></Includes-get-full-report>
+          </h3>
         </div>
       </div>
       <div class="hidden h-full w-1/3 md:flex justify-center">

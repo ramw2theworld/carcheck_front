@@ -241,8 +241,10 @@ const currentDateTime = () => {
             </li>
           </ul>
         </div>
-        <button @click.prevent="downloadReport" class="bg-[#FF7400] w-full rounded text-xl py-2 font-bold text-white">{{ reportText }}</button>
-        <p class="font-light">Gain full access now for £0.00</p>
+        <Includes-get-full-report get-full-report="Get full report" width="w-full"></Includes-get-full-report>
+        <!-- <button @click.prevent="downloadReport"
+          class="bg-[#FF7400] w-full rounded text-xl py-2 font-bold text-white">{{ reportText }}</button> -->
+          <p class="font-light">Gain full access now for £0.00</p>
       </div>
     </div>
   </report-wrapper>

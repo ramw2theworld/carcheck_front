@@ -155,7 +155,7 @@ function getChartHeight() {
 
         <div class="flex flex-col items-center justify-start flex-1 space-y-1">
           <p>Lorem ipsum dolor sit amet.</p>
-          <button class="bg-[#FF7400] text-white text-xl w-72 rounded-lg py-2">Get full report</button>
+          <Includes-get-full-report get-full-report="Get full report"></Includes-get-full-report>
         </div>
       </div>
       <div class="pt-10 border-t">

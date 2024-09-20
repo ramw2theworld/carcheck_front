@@ -18,6 +18,17 @@ onMounted(() => {
     console.log("vbrand_logo: ", vbrand_logo.value);
 });
 
+const props = defineProps({
+  getFullReport: {
+    type: String,
+    default: 'Get full report',
+  },
+  width: {
+    type: String,
+    default: 'w-72',
+  },
+});
+
 const reportDate = () => {
     const date = new Date();
     const day = String(date.getDate()).padStart(2, '0');
@@ -76,7 +87,7 @@ const downloadReport = async () => {
         }
         else{
             carRegistrationSearchStore.setFullReportText("Get full report");
-            navigateTo('/payment/plan');
+            navigateTo('/payment/plans');
         }
 
         
@@ -97,10 +108,10 @@ watch(
 );
 </script>
 <template>
-    <button 
+    <button
         @click.prevent="downloadReport"
-        class="bg-[#FF7400] text-white text-xl w-72 rounded-lg py-2">
-        {{carRegistrationSearchStore.getFullReportText}}
+        :class="['bg-[#FF7400] text-white text-xl rounded-lg py-2', width]">
+        {{ getFullReport }}
     </button>
     {{ errorMessage }}
 </template>
