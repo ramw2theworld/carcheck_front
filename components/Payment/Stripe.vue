@@ -120,7 +120,6 @@ async function handleCheckoutClick() {
         if(plan.getSelectedPlan){
             let selectedPlan = plan.getSelectedPlan;
             if(selectedPlan.plan_code === "single-offer"){
-                debugger
             }else{
                 await createSubscription(selectedPlan);
             }

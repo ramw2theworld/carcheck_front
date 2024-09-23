@@ -1,15 +1,40 @@
 <script lang="ts" setup>
 const isTableVisible = ref(true)
+const carRegistrationSearchStore = useCarRegistrationSearchStore();
+import Hashed from '@/components/Includes/Hashed.vue';
+
+const subscriptionStore = useSubscriptionStore();
+const hasSubscription = computed(() => subscriptionStore.hasSubscription);
+
 const toggleTableVisibility = () => {
-  isTableVisible.value = !isTableVisible.value
+  isTableVisible.value = !isTableVisible.value;
 }
 
-const co2label = ref(226)
+const MOTVed = computed(() => carRegistrationSearchStore.motVed);
+console.log("motVed:: ", MOTVed.value);
 
+onMounted(async () => {
+  await carRegistrationSearchStore.fetchVehicleMotVed();
+  const emissions = MOTVed.value?.VedCo2Emissions || 0;
+  setco2label(emissions);
+})
+
+
+const co2label = ref(226)
 const getClass = (min: number, max: number) => {
   const isActive = co2label.value >= min && co2label.value <= max
   return isActive ? 'border-4 border-black py-6' : 'py-7'
 }
+
+const co2Bands = [
+  { label: "A", min: 0, max: 100, color: "#31B554", co2Value: 100 },
+  { label: "B-C", min: 101, max: 120, color: "#55BB50", co2Value: 120 },
+  { label: "D-E", min: 121, max: 140, color: "#92D33E", co2Value: 140 },
+  { label: "F-G", min: 141, max: 165, color: "#BFC522", co2Value: 165 },
+  { label: "H-I", min: 166, max: 185, color: "#FAAD1C", co2Value: 185 },
+  { label: "J-K", min: 186, max: 225, color: "#F77725", co2Value: 225 },
+  { label: "L", min: 226, max: Infinity, color: "#E01E20", co2Value: 226 },
+];
 
 const getLabelPosition = () => {
   if (co2label.value >= 0 && co2label.value <= 100) return 'calc(6.89%)'
@@ -79,23 +104,38 @@ function setco2label(value: number) {
           <tbody>
             <tr>
               <th>Vehicle class</th>
-              <td>White</td>
+              <td v-if="hasSubscription?.active">Honda</td>
+              <td v-else>
+                <Hashed />
+              </td>
             </tr>
             <tr>
               <th>Band</th>
-              <td>Type</td>
+              <td v-if="hasSubscription?.active">Honda</td>
+              <td v-else>
+                <Hashed />
+              </td>
             </tr>
             <tr>
               <th>Single payment (12 months)</th>
-              <td>Honda</td>
+              <td v-if="hasSubscription?.active">Honda</td>
+              <td v-else>
+                <Hashed />
+              </td>
             </tr>
             <tr>
               <th>Single six month payment</th>
-              <td>Honda</td>
+              <td v-if="hasSubscription?.active">Honda</td>
+              <td v-else>
+                <Hashed />
+              </td>
             </tr>
             <tr>
               <th>Total payable by 12 monthly instalments</th>
-              <td>Honda</td>
+              <td v-if="hasSubscription?.active">Honda</td>
+              <td v-else>
+                <Hashed />
+              </td>
             </tr>
           </tbody>
         </table>
@@ -114,82 +154,16 @@ function setco2label(value: number) {
         </div>
         <div class="grid grid-cols-7 gap-0  relative w-[70rem]">
           <!-- A -->
-          <div :class="getClass(0, 100)" class="bg-[#31B554] flex flex-col items-center text-center space-y-3 text-2xl"
-            @click="setco2label(100)">
-            <div class="text-white font-bold border-b w-full">A</div>
-            <div class="text-white">0</div>
+          <div v-for="band in co2Bands" :key="band.label" :class="getClass(band.min, band.max)"
+            :style="{ backgroundColor: band.color }" class="flex flex-col items-center text-center space-y-3 text-2xl"
+            @click="setco2label(band.co2Value)">
+            <div class="text-white font-bold border-b w-full">{{ band.label }}</div>
+            <div class="text-white">{{ band.min }}</div>
             <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M1 1L6 6" stroke="#292929" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
               <path d="M6 6L11 1" stroke="#292929" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
-            <div class="text-white">100</div>
-          </div>
-
-          <!-- B-C -->
-          <div :class="getClass(101, 120)"
-            class="bg-[#55BB50] flex flex-col items-center text-center space-y-3 text-2xl" @click="setco2label(101)">
-            <div class="text-white font-bold border-b w-full">B-C</div>
-            <div class="text-white">101</div>
-            <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M1 1L6 6" stroke="#292929" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M6 6L11 1" stroke="#292929" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <div class="text-white">120</div>
-          </div>
-
-          <!-- D-E -->
-          <div :class="getClass(121, 140)"
-            class="bg-[#92D33E] flex flex-col items-center text-center space-y-3 text-2xl" @click="setco2label(121)">
-            <div class="text-white font-bold border-b w-full">D-E</div>
-            <div class="text-white">121</div>
-            <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M1 1L6 6" stroke="#292929" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M6 6L11 1" stroke="#292929" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <div class="text-white">140</div>
-          </div>
-
-          <!-- F-G -->
-          <div :class="getClass(141, 165)"
-            class="bg-[#BFC522] flex flex-col items-center text-center space-y-3 text-2xl" @click="setco2label(141)">
-            <div class="text-white font-bold border-b w-full">F-G</div>
-            <div class="text-white">141</div>
-            <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M1 1L6 6" stroke="#292929" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M6 6L11 1" stroke="#292929" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <div class="text-white">165</div>
-          </div>
-
-          <!-- H-I -->
-          <div :class="getClass(166, 185)"
-            class="bg-[#FAAD1C] flex flex-col items-center text-center space-y-3 text-2xl" @click="setco2label(166)">
-            <div class="text-white font-bold border-b w-full">H-I</div>
-            <div class="text-white">166</div>
-            <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M1 1L6 6" stroke="#292929" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M6 6L11 1" stroke="#292929" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <div class="text-white">185</div>
-          </div>
-
-          <!-- J-K -->
-          <div :class="getClass(186, 225)"
-            class="bg-[#F77725] flex flex-col items-center text-center space-y-3 text-2xl" @click="setco2label(186)">
-            <div class="text-white font-bold border-b w-full">J-K</div>
-            <div class="text-white">186</div>
-            <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M1 1L6 6" stroke="#292929" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M6 6L11 1" stroke="#292929" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <div class="text-white">225</div>
-          </div>
-
-          <!-- L -->
-          <div :class="getClass(226, Infinity)"
-            class="bg-[#E01E20] flex flex-col items-center text-center space-y-3 text-2xl" @click="setco2label(226)">
-            <div class="text-white font-bold border-b w-full">L</div>
-            <div class="text-white">226+</div>
+            <div class="text-white">{{ band.max === Infinity ? band.co2Value + "+" : band.max }}</div>
           </div>
         </div>
       </div>
@@ -220,11 +194,13 @@ function setco2label(value: number) {
           <tbody>
             <tr>
               <th>CO2 Emissions</th>
-              <td>127 g/km</td>
+              <td v-if="MOTVed.value?.VedCo2Emissions">{{ MOTVed.value?.VedCo2Emissions }}</td>
+              <td v-else><Hashed /></td>
             </tr>
             <tr>
               <th>CO2 Label</th>
-              <td>D</td>
+              <td v-if="MOTVed.value?.VedCo2Band">{{ MOTVed.value?.VedCo2Band }}</td>
+              <td v-else><Hashed /></td>
             </tr>
           </tbody>
         </table>

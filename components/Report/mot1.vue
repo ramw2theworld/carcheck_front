@@ -17,7 +17,6 @@ const motHistory = computed(() => carRegistrationSearchStore.MOTHistory);
 onMounted(async () => {
   try{
     await carRegistrationSearchStore.fetchMOTHistory();
-    console.log('motHistory fetched:', motHistory.value);
   }catch(error){
     console.error('Error fetching MOTHistory:', error);
   }

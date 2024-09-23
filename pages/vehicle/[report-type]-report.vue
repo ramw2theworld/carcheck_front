@@ -14,7 +14,7 @@ const errorMessage = ref(null);
 const reportText = ref("Download Report")
 
 onMounted(() => {
-    console.log("vbrand_logo: ", vbrand_logo.value);
+    // console.log("vbrand_logo: ", vbrand_logo.value);
 });
 
 const downloadReport = async () => {

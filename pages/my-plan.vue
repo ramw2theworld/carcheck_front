@@ -22,7 +22,6 @@ onMounted(async () => {
     try {
         isLoading.value = true;
         let subscription = await subscriptionStore.fetchUserSubscription(email.value);
-        debugger
         if(subscription){
             currentSubscription.value = subscription;
         }else{

@@ -1,5 +1,16 @@
 <script lang="ts" setup>
+import { onMounted } from 'vue';
+const tokenStore = useTokenStore();
+const authStore = useAuthStore();
 
+onMounted(async () => {
+  if (tokenStore.isTokenExpired) {
+    await tokenStore.refreshToken();
+    if (tokenStore.isTokenExpired) {
+      authStore.logout();
+    }
+  }
+});
 </script>
 
 <template>

@@ -31,7 +31,6 @@ const handleLoginSubmit = async () => {
         let response = await auth.makeLogin(form);
         if(response.success){
             if(response.payload){
-                debugger
                 let payload = response.payload;
                 let hasSubscription = payload.hasSubscription;
                 let subscription = payload.subscription;
@@ -59,7 +58,6 @@ const handleLoginSubmit = async () => {
             errorMessage.value = "Something went wrong. Please verify your credential and try again.";
         }
     } catch (error) {
-        debugger
         console.log("login error: ", error);
         if(error?.data?.message)
             errors.value = error.data?.errors

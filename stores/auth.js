@@ -17,8 +17,12 @@ export const useAuthStore = defineStore('auth', {
         async makeLogin(form) {
             try {
                 const response = await apiService.post('login', form);
-                if(response.payload){
-                    this.setCommonSetter(response.payload);
+                if(response && response.payload){
+                    let res = response.payload;
+                    const tokenStore = useTokenStore();
+                    tokenStore.setToken(res.access_token, res.refresh_token);
+                    // this.setCommonSetter(res);
+                    this.setUser(res.user);
                     return response;
                 }
             } catch (error) {

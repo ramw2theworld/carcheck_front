@@ -15,7 +15,7 @@ const errorMessage = ref(null);
 const reportText = ref("")
 
 onMounted(() => {
-    console.log("vbrand_logo: ", vbrand_logo.value);
+    // console.log("vbrand_logo: ", vbrand_logo.value);
 });
 
 const props = defineProps({
@@ -101,7 +101,7 @@ watch(
   () => carRegistrationSearchStore.getFullReportText,
   (textVal) => {
     if (textVal) {
-      console.log('Full report text updated:', textVal);
+        return textVal;
     }
   },
   { immediate: true }

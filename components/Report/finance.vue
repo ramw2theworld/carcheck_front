@@ -1,64 +1,18 @@
 <script lang="ts" setup>
+import { useSubscriptionStore } from '@/stores/subscription';
+import Hashed from '@/components/Includes/Hashed.vue';
+
 const isTableVisible = ref(true)
 const toggleTableVisibility = () => {
   isTableVisible.value = !isTableVisible.value
 }
 
-const carRegistrationSearchStore = useCarRegistrationSearchStore();
-const motHistory = computed(() => carRegistrationSearchStore.MOTHistory);
+const subscriptionStore = useSubscriptionStore();
+const hasSubscription = computed(()=> subscriptionStore.hasSubscription)
 
-const previousMOT = computed(() => {
-  return motHistory.value && motHistory.value.length > 1 ? motHistory.value[1] : null;
+onMounted(()=>{
+  console.log("subscri: ", subscriptionStore.hasSubscription); 
 });
-
-onMounted(async () => {
-  try {
-    await carRegistrationSearchStore.fetchMOTHistory();
-    console.log('motHistory fetched:', motHistory.value);
-
-    if (motHistory.value && motHistory.value.length > 0) {
-      expiryDate.value = motHistory.value[0].ExpiryDate;
-      lastMotDate.value = motHistory.value[0].TestDate;
-      totalMotChecks.value = motHistory.value.length;
-      mostRecentMOT.value = motHistory.value[index];
-
-      let maxDifference = 0;
-
-      motHistory.value.forEach((item, index) => {
-        if (item.TestResult !== "Pass") {
-          totalFailedItems.value += 1;
-        }
-        
-        // calculate dates difference
-        if (index < motHistory.value.length - 1) {
-          const currentDate = parse(item.TestDate, 'dd/MM/yyyy', new Date());
-          const nextDate = parse(motHistory.value[index + 1].TestDate, 'dd/MM/yyyy', new Date());
-          const difference = differenceInCalendarDays(currentDate, nextDate);
-
-          if (difference > maxDifference) {
-            maxDifference = difference;
-          }
-        }
-      });
-      longestPeriodBetweenTests.value = maxDifference;
-      calculateLongestPeriodBetweenTests();
-    }
-  } catch (error) {
-    console.error('Error fetching MOTHistory:', error);
-  }
-
-});
-
-watch(
-  () => motHistory.value,
-  (motValue) => {
-    if (motValue && motValue.length > 0) {
-      console.log('MOTHistory updated:', motValue);
-      calculateLongestPeriodBetweenTests(); // Recalculate the longest period when MOT history changes
-    }
-  },
-  { immediate: true }
-);
 </script>
 
 
@@ -138,38 +92,46 @@ watch(
         <tbody>
           <tr>
             <th>Agreement Date</th>
-            <td>White</td>
+            <td v-if="hasSubscription?.active">White</td>
+            <td v-else><Hashed /></td>
           </tr>
           <tr>
             <th>Agreement Type</th>
-            <td>Type</td>
+            <td v-if="hasSubscription?.active">Type</td>
+            <td v-else><Hashed /></td>
           </tr>
           <tr>
             <th>Term (months)</th>
-            <td>Honda</td>
+            <td v-if="hasSubscription?.active">Honda</td>
+            <td v-else><Hashed /></td>
           </tr>
           <tr>
             <th>Agreement Number</th>
-            <td>White</td>
+            <td v-if="hasSubscription?.active">White</td>
+            <td v-else><Hashed /></td>
           </tr>
           <tr>
             <th>Finance Company</th>
-            <td>Type</td>
+            <td v-if="hasSubscription?.active">Type</td>
+            <td v-else><Hashed /></td>
           </tr>
           <tr>
             <th>Contact Number</th>
-            <td>Honda</td>
+            <td v-if="hasSubscription?.active">Honda</td>
+            <td v-else><Hashed /></td>
           </tr>
           <tr>
             <th>Vehicle Description</th>
-            <td>Honda</td>
+            <td v-if="hasSubscription?.active">Honda</td>
+            <td v-else><Hashed /></td>
           </tr>
         </tbody>
       </table>
       <div class="bg-[#FF7400] w-full flex items-center justify-center py-2">
-        <h3 class="text-xl font-semibold">Lorem ipsum dolor sit amet. 
+        <h3 class="text-xl font-semibold">Lorem ipsum dolor sit amet.
           <a href="#" class="underline">Check the full
-            report</a></h3>
+            report</a>
+        </h3>
       </div>
     </div>
   </report-wrapper>

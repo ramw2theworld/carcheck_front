@@ -33,7 +33,6 @@ onMounted(async () => {
 const downloadReport = async () => {
     reportText.value = "Downloading...";
     if (tokenStore.getToken && tokenStore.getStatus) {
-        debugger
         let subscription = await subscriptionStore.getUserSubscription();
         let hasSubscription = await subscriptionStore.getHasSubscription();
 

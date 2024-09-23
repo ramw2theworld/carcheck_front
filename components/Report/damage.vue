@@ -1,8 +1,18 @@
 <script lang="ts" setup>
+import { useSubscriptionStore } from '@/stores/subscription';
+import Hashed from '@/components/Includes/Hashed.vue';
 const isTableVisible = ref(true)
 const toggleTableVisibility = () => {
   isTableVisible.value = !isTableVisible.value
 }
+
+const subscriptionStore = useSubscriptionStore();
+const hasSubscription = computed(()=> subscriptionStore.hasSubscription);
+
+onMounted(()=>{
+  console.log("subscri: ", subscriptionStore.hasSubscription); 
+});
+
 </script>
 
 <template>
@@ -61,15 +71,18 @@ const toggleTableVisibility = () => {
           <tbody>
             <tr>
               <th>Date</th>
-              <td>White</td>
+              <td v-if="hasSubscription?.active">White</td>
+              <td v-else><Hashed /></td>  
             </tr>
             <tr>
               <th>Category</th>
-              <td>Type</td>
+              <td v-if="hasSubscription?.active">Type</td>
+              <td v-else><Hashed /></td> 
             </tr>
             <tr>
               <th>Type</th>
-              <td>Honda</td>
+              <td v-if="hasSubscription?.active">Honda</td>
+              <td v-else><Hashed /></td> 
             </tr>
           </tbody>
         </table>
@@ -83,15 +96,18 @@ const toggleTableVisibility = () => {
           <tbody>
             <tr>
               <th>Date</th>
-              <td>White</td>
+              <td v-if="hasSubscription?.active">White</td>
+              <td v-else><Hashed /></td> 
             </tr>
             <tr>
               <th>Category</th>
-              <td>Type</td>
+              <td v-if="hasSubscription?.active">Type</td>
+              <td v-else><Hashed /></td> 
             </tr>
             <tr>
               <th>Type</th>
-              <td>Honda</td>
+              <td v-if="hasSubscription?.active">Honda</td>
+              <td v-else><Hashed /></td> 
             </tr>
           </tbody>
         </table>

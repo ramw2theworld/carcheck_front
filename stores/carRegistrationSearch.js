@@ -58,7 +58,6 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                 const decrypted = await decryptData(`${code}`, JSON.parse(encryptedData));
                 // Ensure vbrand_logo is updated in state
                 this.$patch({ vbrand_logo: JSON.parse(decrypted) });
-                console.log("Decrypted vehicle logo:", this.vbrand_logo);
             } catch (error) {
                 console.error("Failed to decrypt Vehicle logo: ", error);
             }
@@ -114,6 +113,8 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     console.error("Failed to decrypt Vehicle MotVed: ", error);
                 }
             }
+            console.log("motVED: ", this.motVed);
+            return this.motVed;
         },
         async fetchVehicleGeneralInfo() {
             let code = systematicFourCharCode('VehicleGeneralInfo');

@@ -55,19 +55,20 @@ watch(errors, () => {
 });
 
 const searchForCarReg = async () => {
+  errorMessage.value = "";
   searchTxt.value = "Processing...";
   try {
     errors.value = [];
     if (processedCarNumber.value.length < MIN_LENGTH || processedCarNumber.value.length > MAX_LENGTH) {
       errors.value.push(`Vehicle number is not valid.`);
       searchTxt.value = null;
+      errorMessage.value="";
       return;
     }
     await carRegistrationSearch.searchCarRegNumber(processedCarNumber.value);
     searchTxt.value = null;
     router.push(`/report`);
   } catch (error) {
-    debugger
     searchTxt.value = null;
     console.log("search error: ", error);
 
@@ -77,6 +78,11 @@ const searchForCarReg = async () => {
     else{
       errors.value = error.response?.data?.errors || ["Something went wrong while checking car number. Please verify Registration Number."];
     }
+
+    setTimeout(() => {
+      errorMessage.value="";
+      errors=[];
+    }, 3000);
   }
 }
 </script>
