@@ -74,19 +74,19 @@ watch(vehicleRegistration, (newValue) => {
             </tr>
             <tr>
               <th>Fuel Type</th>
-              <td>{{ smmtDetail.FuelType }}</td>
+              <td>{{ smmtDetail?.FuelType }}</td>
             </tr>
             <tr>
               <th>Make</th>
-              <td>{{ vehicleRegistration.Make }}</td>
+              <td>{{ vehicleRegistration?.Make }}</td>
             </tr>
             <tr>
               <th>Model</th>
-              <td>{{ vehicleRegistration.Model }}</td>
+              <td>{{ vehicleRegistration?.Model }}</td>
             </tr>
             <tr>
               <th>First registered</th>
-              <td>{{ dateFirstRegistered }}</td>
+              <td>{{ dateFirstRegistered??"12/01/2024" }}</td>
             </tr>
           </tbody>
         </table>

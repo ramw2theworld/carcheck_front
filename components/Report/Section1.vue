@@ -4,7 +4,10 @@ const reportText = ref("Get full report");
 const tokenStore = useTokenStore();
 const authStore = useAuthStore();
 const subscriptionStore = useSubscriptionStore();
+import Hashed from '@/components/Includes/Hashed.vue';
+
 const reg_number = ref(null);
+const numberOfLooksUp = ref(null);
 
 import ApiService from '~/services/apiService';
 const apiService = new ApiService();
@@ -33,7 +36,6 @@ onMounted(async () => {
 const downloadReport = async () => {
     reportText.value = "Downloading...";
     if (tokenStore.getToken && tokenStore.getStatus) {
-        debugger
         let subscription = await subscriptionStore.getUserSubscription();
         let hasSubscription = await subscriptionStore.getHasSubscription();
 
@@ -103,21 +105,22 @@ const currentDateTime = () => {
 
         <img :src="vbrand_logo" v-if="vbrand_logo" alt="">
         <img src="/images/png/report/image 2.png" v-else alt="">
-        <h3 class="font-bold">{{ smmtDetail.ModelVariant??"HONDA CIVIC TYPE-R GT I-VTEC" }}</h3>
+        <h3 class="font-bold">{{ smmtDetail?.ModelVariant??"HONDA CIVIC TYPE-R GT I-VTEC" }}</h3>
         <div class="bg-[#FFA500] h-[42px] flex items-center justify-center rounded border w-full">
-          <H4 class="text-xl w-1/2 rounded border py-[2px] text-center font-bold">{{ reg_number }}</H4>
+          <H4 class="text-xl w-1/2 rounded border py-[2px] text-center font-bold">{{ reg_number??"XXXX XXX" }}</H4>
         </div>
         <div class="flex items-center justify-center">
           <label class="font-extralight" for="">
-            Report date:
+            Report date: &nbsp;
           </label>
           <p class="font-bold">{{ currentDateTime() }}</p>
         </div>
         <div class="flex items-center justify-center">
           <label class="font-extralight" for="">
-            Number of look ups:
+            Number of look ups: &nbsp;
           </label>
-          <p class="font-bold">12</p>
+          <p class="font-bold" v-if="hasSubscription?.active && numberOfLooksUp">{{ numberOfLooksUp }}</p>
+          <Hashed />
         </div>
       </div>
 
@@ -241,8 +244,10 @@ const currentDateTime = () => {
             </li>
           </ul>
         </div>
-        <button @click.prevent="downloadReport" class="bg-[#FF7400] w-full rounded text-xl py-2 font-bold text-white">{{ reportText }}</button>
-        <p class="font-light">Gain full access now for £0.00</p>
+        <Includes-get-full-report get-full-report="Get full report" width="w-full"></Includes-get-full-report>
+        <!-- <button @click.prevent="downloadReport"
+          class="bg-[#FF7400] w-full rounded text-xl py-2 font-bold text-white">{{ reportText }}</button> -->
+          <p class="font-light">Gain full access now for £0.00</p>
       </div>
     </div>
   </report-wrapper>

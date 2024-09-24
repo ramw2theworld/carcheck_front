@@ -1,9 +1,34 @@
 <script lang="ts" setup>
-const isTableVisible = ref(true)
+const isTableVisible = ref(true);
+const numberOfPreviousKeepers = ref(0);
+const plateChangesCount = ref(0);
+const theftReports = ref(0);
+
+const carRegistrationSearch = useCarRegistrationSearchStore();
 const toggleTableVisibility = () => {
   isTableVisible.value = !isTableVisible.value
 }
+
+const vehicleHistory = computed(() => carRegistrationSearch.vehicleHistory);
+
+onMounted(async () => {
+  if (!vehicleHistory.value) {
+    await carRegistrationSearch.fetchVehicleHistory();
+  }
+});
+
+
+watch(vehicleHistory, (newHistory) => {
+  if (newHistory) {
+    plateChangesCount.value = newHistory.PlateChangeCount || 0;
+    numberOfPreviousKeepers.value = newHistory.NumberOfPreviousKeepers || 0;
+    theftReports.value = newHistory.TheftReports || 0;
+  }
+});
+debugger
+console.log("vehicle history: ", vehicleHistory.value);
 </script>
+
 
 
 <template>
@@ -60,7 +85,9 @@ const toggleTableVisibility = () => {
       <div class="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-x-5 gap-y-5 lg:gap-y-0">
         <div class="bg-[#EEEEEE] rounded flex items-center overflow-hidden h-[10.5rem]">
           <div class="w-1/2 flex flex-col items-center">
-            <h2 class="text-7xl font-bold text-[#FFA500]">03</h2>
+            <h2 class="text-7xl font-bold text-[#FFA500]">
+              {{ numberOfPreviousKeepers > 9 ? numberOfPreviousKeepers : '0' + numberOfPreviousKeepers }}
+            </h2>
             <p class="text-2xl font-light"> PREVIOUS <br /> OWNERS</p>
           </div>
           <div class="w-1/2 flex items-center justify-center">
@@ -93,7 +120,9 @@ const toggleTableVisibility = () => {
         </div>
         <div class="bg-[#EEEEEE] rounded flex items-center overflow-hidden h-[10.5rem]">
           <div class="w-1/2 flex flex-col items-center">
-            <h2 class="text-7xl font-bold text-[#EF343A]">03</h2>
+            <h2 class="text-7xl font-bold text-[#EF343A]">
+              {{ theftReports > 9 ? theftReports : '0' + theftReports }}
+            </h2>
             <p class="text-2xl font-light"> THEFT <br /> REPORT</p>
           </div>
           <div class="w-1/2 flex items-center justify-center">
@@ -120,7 +149,9 @@ const toggleTableVisibility = () => {
         </div>
         <div class="bg-[#EEEEEE] rounded flex items-center overflow-hidden h-[10.5rem]">
           <div class="w-1/2 flex flex-col items-center">
-            <h2 class="text-7xl font-bold text-[#FF7400]">03</h2>
+            <h2 class="text-7xl font-bold text-[#FF7400]">
+              {{ plateChangesCount > 9 ? plateChangesCount : '0' + plateChangesCount }}
+            </h2>
             <p class="text-2xl font-light">PLATE <br /> CHANGE</p>
           </div>
           <div class="w-1/2">
@@ -171,7 +202,7 @@ const toggleTableVisibility = () => {
       </div>
       <div class="flex flex-col lg:flex-row items-center justify-between">
         <p class="text-2xl font-extralight">Read more about this car’s risks by unlocking the full report</p>
-        <button class="bg-[#FF7400] text-white text-xl w-72 rounded-lg py-2">Get full report</button>
+        <Includes-get-full-report get-full-report="Get full report"></Includes-get-full-report>
       </div>
     </div>
   </report-wrapper>

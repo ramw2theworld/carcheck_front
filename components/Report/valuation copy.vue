@@ -1,56 +1,25 @@
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue';
-
 const isTableVisible = ref(true);
-const totalRegistrations = ref(0);
-const totalOdometerReading = ref(0);
-const first_date = ref("");
-const last_date = ref("");
-
 const toggleTableVisibility = () => {
   isTableVisible.value = !isTableVisible.value;
-}
-const carRegistrationSearchStore = useCarRegistrationSearchStore();
-onMounted(async () => {
-  await carRegistrationSearchStore.fetchMOTHistory();
-});
-const motHistory = computed(() => carRegistrationSearchStore.MOTHistory);
+};
 
-function formatDate(dateString) {
-  // const date = new Date(dateString);
-  // const month = (date.getMonth() + 1).toString().padStart(2, '0'); // months are 0-indexed
-  // const year = date.getFullYear();
-  // return `${month}/${year}`;
-
-  // const [day, month, year] = dateString.split('/'); // Split the date based on "/"
-  // return `${month}/${year}`;
-  return dateString;
-}
-
-const chartData = computed(() => {
-  // console.log("len: ", motHistory.value.length);
-  if(motHistory.value && motHistory.value.length > 0){
-    first_date.value = motHistory.value[0].TestDate;
-    last_date.value = motHistory.value[(motHistory.value.length-1)].TestDate;
-
-    totalRegistrations.value = motHistory.value.length;
-
-    // Calculate total odometer reading
-    totalOdometerReading.value = motHistory.value.reduce(
-      (sum, record) => sum + (record.OdometerReading || 0),
-      0
-    );
-
-    return motHistory.value.map(record => ({
-      label: formatDate(record.TestDate),
-      value: record.OdometerReading
-    }));
-  }
-  return [];
-});
+const chartData = [
+  { label: "OTR(On The Road)", value: 30000 },
+  { label: "asdqw", value: 12371 },
+  { label: "asd", value: 23444 },
+  { label: "asxx", value: 30000 },
+  { label: "asxsd", value: 23523 },
+  { label: "qwdasd", value: 64645 },
+  { label: "xasa", value: 34555 },
+  { label: "asdasd", value: 34543 },
+  { label: "axasa", value: 52335 },
+];
 
 function getChartHeight() {
+
   const screenWidth = window.innerWidth;
+
   if (screenWidth >= 1024) {
     return 25;
   } else if (screenWidth >= 768) {
@@ -58,12 +27,13 @@ function getChartHeight() {
   } else {
     return 50;
   }
+
 }
 </script>
-
 <template>
-  <report-wrapper class="pt-7 text-black">
-    <div @click="toggleTableVisibility" class="cursor-pointer text-black flex items-center justify-between">
+  <report-wrapper>
+    <div @click="toggleTableVisibility"
+      class="cursor-pointer text-black flex flex-col md:flex-row items-center justify-between">
       <div class="flex items-center space-x-4">
         <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
           <g clip-path="url(#clip0_230_6081)">
@@ -94,7 +64,7 @@ function getChartHeight() {
         </svg>
 
         <p class="text-2xl font-bold flex items-center justify-center">
-          MILEAGE
+          VALUATION DETAILS
         </p>
         <span>
           <svg v-if="isTableVisible" width="12" height="7" viewBox="0 0 12 7" fill="none"
@@ -107,63 +77,24 @@ function getChartHeight() {
             <path d="M1 6L6 1" stroke="#292929" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
             <path d="M6 1L11 6" stroke="#292929" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
-
         </span>
       </div>
 
+      <small>Unlock all valuation details on the full report</small>
+      <button class="bg-[#FF7400] text-white text-xl w-72 rounded-lg py-2">
+        Get full report
+      </button>
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="8" cy="8" r="8" fill="#BDBDBD" />
         <rect x="6.66602" y="6.22229" width="2.66666" height="7.1111" rx="1.33333" fill="white" />
         <rect x="6.66602" y="2.66663" width="2.66667" height="2.66667" rx="1.33333" fill="white" />
       </svg>
     </div>
+    <div v-show="isTableVisible" class="text-black my-10 w-full">
 
-    <div v-show="isTableVisible" class="space-y-3">
-      <div class="flex flex-col md:flex-row md:space-x-12 lg:px-8 mt-11 pb-3">
-        <div>
-          <h4 class="text-xl font-bold hidden lg:solid">
-            Current <br /> Mileage
-          </h4>
-          <h4 class="text-xl font-bold solid lg:hidden">
-            Current Mileage
-          </h4>
-        </div>
-
-        <!-- ---------------------------------------------------- -->
-
-        <div>
-          <h3 class="text-2xl">
-            {{ totalOdometerReading }}
-          </h3>
-          <small>
-            Last registration:
-            <b>
-              {{ first_date }}
-            </b>
-          </small>
-        </div>
-
-        <!-- ---------------------------------------------------- -->
-
-        <div class="flex flex-col">
-          <small>Total registration: <b>{{ totalRegistrations }}</b></small>
-          <small>Odometer: <b>{{ totalOdometerReading }}</b></small>
-          <small>First registration: <b>{{ first_date }}</b></small>
-        </div>
-
-        <!-- ---------------------------------------------------- -->
-
-        <div class="flex flex-col items-center justify-start flex-1 space-y-1">
-          <p>Lorem ipsum dolor sit amet.</p>
-          <Includes-get-full-report get-full-report="Get full report"></Includes-get-full-report>
-        </div>
-      </div>
-      <div class="pt-10 border-t">
-        <client-only>
-          <chart-line :data="chartData" :height="getChartHeight()" width="100%" />
-        </client-only>
-      </div>
+      <ClientOnly>
+        <chart-bar :data="chartData" :height="getChartHeight()" width="100%" />
+      </ClientOnly>
     </div>
   </report-wrapper>
-
 </template>

@@ -1,4 +1,29 @@
 <script lang="ts" setup>
+import { onMounted } from 'vue';
+
+const tokenStore = useTokenStore();
+const authStore = useAuthStore();
+
+onMounted(async () => {
+  if (tokenStore.isTokenExpired) {
+    await tokenStore.refreshToken();
+    if (tokenStore.isTokenExpired) {
+      authStore.logout();
+    }
+  }
+});
+
+definePageMeta({
+  title: 'Report',
+  meta: [
+    {
+      hid: 'Car report generated.', name: 'Download all data of the car', content: 'Download all data of the car'
+    }
+
+  ],
+  middleware: ['check-reg-number'],
+});
+
 </script>
 
 <template>

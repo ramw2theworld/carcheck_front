@@ -1,8 +1,18 @@
 <script lang="ts" setup>
+import { useSubscriptionStore } from '@/stores/subscription';
+import Hashed from '@/components/Includes/Hashed.vue';
 const isTableVisible = ref(true)
 const toggleTableVisibility = () => {
   isTableVisible.value = !isTableVisible.value
 }
+
+const subscriptionStore = useSubscriptionStore();
+const hasSubscription = computed(()=> subscriptionStore.hasSubscription);
+
+onMounted(()=>{
+  console.log("subscri: ", subscriptionStore.hasSubscription); 
+});
+
 </script>
 
 <template>
@@ -61,15 +71,18 @@ const toggleTableVisibility = () => {
           <tbody>
             <tr>
               <th>Date</th>
-              <td>White</td>
+              <td v-if="hasSubscription?.active">White</td>
+              <td v-else><Hashed /></td>  
             </tr>
             <tr>
               <th>Category</th>
-              <td>Type</td>
+              <td v-if="hasSubscription?.active">Type</td>
+              <td v-else><Hashed /></td> 
             </tr>
             <tr>
               <th>Type</th>
-              <td>Honda</td>
+              <td v-if="hasSubscription?.active">Honda</td>
+              <td v-else><Hashed /></td> 
             </tr>
           </tbody>
         </table>
@@ -83,21 +96,26 @@ const toggleTableVisibility = () => {
           <tbody>
             <tr>
               <th>Date</th>
-              <td>White</td>
+              <td v-if="hasSubscription?.active">White</td>
+              <td v-else><Hashed /></td> 
             </tr>
             <tr>
               <th>Category</th>
-              <td>Type</td>
+              <td v-if="hasSubscription?.active">Type</td>
+              <td v-else><Hashed /></td> 
             </tr>
             <tr>
               <th>Type</th>
-              <td>Honda</td>
+              <td v-if="hasSubscription?.active">Honda</td>
+              <td v-else><Hashed /></td> 
             </tr>
           </tbody>
         </table>
         <div class="bg-[#EF343A] w-full flex items-center justify-center py-2">
-          <h3 class="text-xl font-semibold">Lorem ipsum dolor sit amet. <a href="#" class="underline">check the full
-              report</a></h3>
+          <h3 class="text-xl font-semibold">Lorem ipsum dolor sit amet. 
+            <Includes-get-full-report get-full-report="check the full
+              report"></Includes-get-full-report>
+          </h3>
         </div>
       </div>
       <div class="hidden h-full w-1/3 md:flex justify-center">

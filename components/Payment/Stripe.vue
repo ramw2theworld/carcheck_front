@@ -120,7 +120,6 @@ async function handleCheckoutClick() {
         if(plan.getSelectedPlan){
             let selectedPlan = plan.getSelectedPlan;
             if(selectedPlan.plan_code === "single-offer"){
-                debugger
             }else{
                 await createSubscription(selectedPlan);
             }
@@ -156,13 +155,14 @@ async function createSubscription(selectedPlan) {
             await subscriptionStore.setCurrentSubscription(payload.subscription);
         }
 
-        if (selectedPlan.plan_code === '48h-basic-subscription') {
-            navigateTo('/vehicle/basic-report');
-        } else if (selectedPlan.plan_code === '48h-export-subscription') {
-            navigateTo('/vehicle/export-report');
-        } else {
-            navigateTo('/vehicle/single-offer-report');
-        }
+        // if (selectedPlan.plan_code === '48h-basic-subscription') {
+        //     navigateTo('/vehicle/basic-report');
+        // } else if (selectedPlan.plan_code === '48h-export-subscription') {
+        //     navigateTo('/vehicle/export-report');
+        // } else {
+        //     navigateTo('/vehicle/single-offer-report');
+        // }
+        navigateTo('/report');
         
     } catch (error) {
         console.error("Error creating subscription: ", error);

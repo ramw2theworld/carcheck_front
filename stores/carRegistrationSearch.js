@@ -16,6 +16,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
             technicalDetails: null,
             classificationDetails: null,
             vehicleHistory: null,
+            vehicleValuationsList: null,
             dimensions: null,
             general: null,
             vehicleRegistration: null,
@@ -23,6 +24,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
             smmtDetails: null,
             performance: null,
             vbrand_logo: null,
+            getFullReportText: "Get full report"
         }
     },
     getters: {
@@ -57,7 +59,6 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                 const decrypted = await decryptData(`${code}`, JSON.parse(encryptedData));
                 // Ensure vbrand_logo is updated in state
                 this.$patch({ vbrand_logo: JSON.parse(decrypted) });
-                console.log("Decrypted vehicle logo:", this.vbrand_logo);
             } catch (error) {
                 console.error("Failed to decrypt Vehicle logo: ", error);
             }
@@ -113,6 +114,8 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     console.error("Failed to decrypt Vehicle MotVed: ", error);
                 }
             }
+            console.log("motVED: ", this.motVed);
+            return this.motVed;
         },
         async fetchVehicleGeneralInfo() {
             let code = systematicFourCharCode('VehicleGeneralInfo');
@@ -161,6 +164,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     console.error("Failed to decrypt Vehicle History: ", error);
                 }
             }
+            return this.vehicleHistory;
         },
         async fetchMOTHistory() {
             let code = systematicFourCharCode('MOTHistory');
@@ -174,6 +178,24 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                 }
             }
             return this.MOTHistory;
+        },
+
+        async fetchValuationList() {
+            let code = systematicFourCharCode('VehicleValuationsList');
+            const encryptedData = localStorage.getItem(code);
+            if (encryptedData) {
+                try {
+                    const decrypted = await decryptData(`${code}`, JSON.parse(encryptedData));
+                    this.vehicleValuationsList = JSON.parse(decrypted);
+                } catch (error) {
+                    console.error("Failed to decrypt Vehicle MOT History: ", error);
+                }
+            }
+            return this.vehicleValuationsList;
+        },
+
+        async fetchFullReportText() {
+            return this.getFullReportText;
         },
         
         // Search and store vehicle registration details
@@ -199,6 +221,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     await this.setClassificationDetails(combinedPayload);
                     await this.setVehicleHistory(combinedPayload);
                     await this.setMOTHistory(combinedPayload);
+                    await this.setVehicleValuationList(combinedPayload);
 
                     localStorage.setItem('reg_number', this.reg_number);
                 }
@@ -290,7 +313,6 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
             }
         },
         async setMOTHistory(combinedPayload) {
-            debugger
             let code = systematicFourCharCode('MOTHistory');
             if (combinedPayload.MotHistory) {
                 const data = JSON.stringify(combinedPayload.MotHistory.RecordList);
@@ -298,8 +320,19 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                 localStorage.setItem(code, JSON.stringify(encryptedData));
             }
         },
+        async setFullReportText(text) {
+            this.getFullReportText = text;
+        },
+        async setVehicleValuationList(combinedPayload) {
+            let code = systematicFourCharCode('vehicleValuationsList');
+            if (combinedPayload.VehicleStatus && combinedPayload.ValuationList) {
+                const data = JSON.stringify(combinedPayload.ValuationList);
+                const encryptedData = await encryptData(code, data);
+                localStorage.setItem(code, JSON.stringify(encryptedData));
+            }
+        },
     },
     persist: {
-        paths: ["reg_number"],
+        paths: ["reg_number", "getFullReportText"],
     },
 });

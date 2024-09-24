@@ -1,8 +1,18 @@
 <script lang="ts" setup>
+import { useSubscriptionStore } from '@/stores/subscription';
+import Hashed from '@/components/Includes/Hashed.vue';
+
 const isTableVisible = ref(true)
 const toggleTableVisibility = () => {
   isTableVisible.value = !isTableVisible.value
 }
+
+const subscriptionStore = useSubscriptionStore();
+const hasSubscription = computed(()=> subscriptionStore.hasSubscription)
+
+onMounted(()=>{
+  console.log("subscri: ", subscriptionStore.hasSubscription); 
+});
 </script>
 
 
@@ -82,37 +92,46 @@ const toggleTableVisibility = () => {
         <tbody>
           <tr>
             <th>Agreement Date</th>
-            <td>White</td>
+            <td v-if="hasSubscription?.active">White</td>
+            <td v-else><Hashed /></td>
           </tr>
           <tr>
             <th>Agreement Type</th>
-            <td>Type</td>
+            <td v-if="hasSubscription?.active">Type</td>
+            <td v-else><Hashed /></td>
           </tr>
           <tr>
             <th>Term (months)</th>
-            <td>Honda</td>
+            <td v-if="hasSubscription?.active">Honda</td>
+            <td v-else><Hashed /></td>
           </tr>
           <tr>
             <th>Agreement Number</th>
-            <td>White</td>
+            <td v-if="hasSubscription?.active">White</td>
+            <td v-else><Hashed /></td>
           </tr>
           <tr>
             <th>Finance Company</th>
-            <td>Type</td>
+            <td v-if="hasSubscription?.active">Type</td>
+            <td v-else><Hashed /></td>
           </tr>
           <tr>
             <th>Contact Number</th>
-            <td>Honda</td>
+            <td v-if="hasSubscription?.active">Honda</td>
+            <td v-else><Hashed /></td>
           </tr>
           <tr>
             <th>Vehicle Description</th>
-            <td>Honda</td>
+            <td v-if="hasSubscription?.active">Honda</td>
+            <td v-else><Hashed /></td>
           </tr>
         </tbody>
       </table>
       <div class="bg-[#FF7400] w-full flex items-center justify-center py-2">
-        <h3 class="text-xl font-semibold">Lorem ipsum dolor sit amet. <a href="#" class="underline">check the full
-            report</a></h3>
+        <h3 class="text-xl font-semibold">Lorem ipsum dolor sit amet.
+          <a href="#" class="underline">Check the full
+            report</a>
+        </h3>
       </div>
     </div>
   </report-wrapper>

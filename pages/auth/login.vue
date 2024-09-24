@@ -31,7 +31,6 @@ const handleLoginSubmit = async () => {
         let response = await auth.makeLogin(form);
         if(response.success){
             if(response.payload){
-                debugger
                 let payload = response.payload;
                 let hasSubscription = payload.hasSubscription;
                 let subscription = payload.subscription;
@@ -43,13 +42,14 @@ const handleLoginSubmit = async () => {
 
                 if(hasSubscription.active){
                     console.log("subs: ", hasSubscription);
-                    if(subscription.plan.plan_code === "48h-export-subscription"){
-                        navigateTo('/vehicle/export-report');
-                    }else if(subscription.plan.plan_code === "48h-basic-subscription"){
-                        navigateTo('/vehicle/basic-report');
-                    }else{
-                        navigateTo('/vehicle/single-offer-report');
-                    }
+                    // if(subscription.plan.plan_code === "48h-export-subscription"){
+                    //     navigateTo('/vehicle/export-report');
+                    // }else if(subscription.plan.plan_code === "48h-basic-subscription"){
+                    //     navigateTo('/vehicle/basic-report');
+                    // }else{
+                    //     navigateTo('/vehicle/single-offer-report');
+                    // }
+                    navigateTo('/report');
                 }else{
                     navigateTo('/payment/plans');
                 }
@@ -58,7 +58,6 @@ const handleLoginSubmit = async () => {
             errorMessage.value = "Something went wrong. Please verify your credential and try again.";
         }
     } catch (error) {
-        debugger
         console.log("login error: ", error);
         if(error?.data?.message)
             errors.value = error.data?.errors

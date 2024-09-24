@@ -7,8 +7,15 @@ const isLoading = ref(false);
 
 
 definePageMeta({
-  layout: 'admin'
+  layout: 'admin',
+  title: 'Dashboard',
+  meta: [
+    { hid: 'User dashboard to fetch all cars searched', name: 'User dashboard to fetch all cars searched', content: 'User dashboard to fetch all cars searched' }
+
+  ],
+  middleware: ['admin'],
 });
+
 const pagination = reactive({
   total: 0,
   currentPage: 1,

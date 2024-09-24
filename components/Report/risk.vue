@@ -1,8 +1,16 @@
 <script lang="ts" setup>
-const isTableVisible = ref(true)
+const isTableVisible = ref(true);
+const carRegistrationSearch = useCarRegistrationSearchStore();
+
 const toggleTableVisibility = () => {
   isTableVisible.value = !isTableVisible.value
 }
+onMounted(async () => {
+  await carRegistrationSearch.fetchVehicleHistory();
+});
+
+const vehicleHistory = computed(() => carRegistrationSearch.vehicleHistory)
+
 </script>
 
 
@@ -91,7 +99,7 @@ const toggleTableVisibility = () => {
       </div>
       <div class="flex flex-col lg:flex-row items-center justify-between">
         <p class="text-2xl font-extralight">Read more about this car’s risks by unlocking the full report</p>
-        <button class="bg-[#FF7400] text-white text-xl w-72 rounded-lg py-2">Get full report</button>
+        <Includes-get-full-report get-full-report="Get full report"></Includes-get-full-report>
       </div>
     </div>
   </report-wrapper>

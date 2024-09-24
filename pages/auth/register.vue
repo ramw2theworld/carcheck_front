@@ -35,14 +35,12 @@ const handleRegisterSubmit = async () => {
             return;
         }
         const response = await auth.createNewUser(form);
-        debugger;
         successMessage.value = response.message;
         setTimeout(() => {
             successMessage.value = '';
             navigateTo('/auth/login');
         }, 3000);
     } catch (error) {
-        debugger
         console.error('Register error:', error.data);
         errorMessage.value = error.data?.message || 'An error occurred while registering user.';
         errors.value = error.data?.errors || {};

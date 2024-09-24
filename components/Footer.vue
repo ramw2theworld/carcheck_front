@@ -67,7 +67,7 @@
                       </button>
                     </div>
                     <p class="mt-2 text-sm font-thin">Subscribe to our newsletter to get our latest news.</p>
-                    <button class="rounded bg-orange-500 text-white px-4 py-2 mt-4">Start Checking</button>
+                    <button class="rounded bg-orange-500 text-white px-4 py-2 mt-4" @click.prevent="startCheckin()">Start Checking</button>
                   </div>
                 </div>
             <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
@@ -124,4 +124,7 @@
     </footer>
 </template>
 <script setup lang="ts">
+const startCheckin = () =>{
+  navigateTo('/payment/plans');
+};
 </script>
