@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import { onMounted, computed, ref, watch } from 'vue';
+import { useSubscriptionStore } from '@/stores/subscription';
+import Hashed from '../Includes/Hashed.vue';
 
 const isTableVisible = ref(true)
 const dateFirstRegistered = ref("");
@@ -7,6 +9,10 @@ const dateFirstRegistered = ref("");
 const carRegistrationSearchStore = useCarRegistrationSearchStore();
 const smmtDetail = computed(() => carRegistrationSearchStore.smmtDetails);
 const vehicleRegistration = computed(() => carRegistrationSearchStore.vehicleRegistration);
+
+const subscriptionStore = useSubscriptionStore();
+const hasSubscription = computed(()=> subscriptionStore.hasSubscription);
+
 onMounted(async () => {
   await carRegistrationSearchStore.fetchSmmtDetails();
   await carRegistrationSearchStore.fetchVehicleRegistration();
@@ -82,11 +88,17 @@ watch(vehicleRegistration, (newValue) => {
             </tr>
             <tr>
               <th>Model</th>
-              <td>{{ vehicleRegistration?.Model }}</td>
+              <td>
+                <span v-if="vehicleRegistration && hasSubscription?.active" >{{ vehicleRegistration?.Model }}</span>
+                <Hashed v-else></Hashed>
+              </td>
             </tr>
             <tr>
               <th>First registered</th>
-              <td>{{ dateFirstRegistered??"12/01/2024" }}</td>
+              <td>
+                <span v-if="dateFirstRegistered && hasSubscription?.active" >{{ dateFirstRegistered }}</span>
+                <Hashed v-else></Hashed>
+              </td>
             </tr>
           </tbody>
         </table>

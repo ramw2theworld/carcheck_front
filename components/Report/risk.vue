@@ -1,6 +1,11 @@
 <script lang="ts" setup>
 const isTableVisible = ref(true);
+const writeOffCount = ref(0);
+const highRiskRecords = ref(0);
+const financeRecords = ref(0);
 const carRegistrationSearch = useCarRegistrationSearchStore();
+import Hashed from '../Includes/Hashed.vue';
+import { useSubscriptionStore } from '@/stores/subscription';
 
 const toggleTableVisibility = () => {
   isTableVisible.value = !isTableVisible.value
@@ -8,9 +13,25 @@ const toggleTableVisibility = () => {
 onMounted(async () => {
   await carRegistrationSearch.fetchVehicleHistory();
 });
+const subscriptionStore = useSubscriptionStore();
+const hasSubscription = computed(()=> subscriptionStore.hasSubscription);
 
 const vehicleHistory = computed(() => carRegistrationSearch.vehicleHistory)
+watch(vehicleHistory, (newHistory) => {
+  if (newHistory) {
+    if (newHistory.VicCount && newHistory.VicCount) {
+      writeOffCount.value = newHistory.VicCount || 0;
+    }
 
+    if (newHistory && newHistory.PlateChangeCount) {
+      highRiskRecords.value = newHistory.PlateChangeCount || 0;
+    }
+
+    if (newHistory.V5CCertificateCount && newHistory.V5CCertificateCount) {
+      financeRecords.value = newHistory.V5CCertificateCount || 0;
+    }
+  }
+});
 </script>
 
 
@@ -66,7 +87,10 @@ const vehicleHistory = computed(() => carRegistrationSearch.vehicleHistory)
             </svg>
           </div>
           <div class="w-1/2">
-            <h2 class="text-7xl font-bold text-[#FFA500]">03</h2>
+            <h2 class="text-7xl font-bold text-[#FFA500]">
+              <span v-if="hasSubscription?.active">{{ writeOffCount }}</span>
+              <hashed contain="zero" v-else></hashed>
+            </h2>
             <p class="text-3xl font-light"> WRITE-OFF <br /> RECORD</p>
           </div>
         </div>
@@ -79,7 +103,10 @@ const vehicleHistory = computed(() => carRegistrationSearch.vehicleHistory)
             </svg>
           </div>
           <div class="w-1/2">
-            <h2 class="text-7xl font-bold text-[#EF343A]">03</h2>
+            <h2 class="text-7xl font-bold text-[#EF343A]">
+                <span v-if="hasSubscription?.active">{{ highRiskRecords }}</span>
+                <hashed contain="zero" v-else></hashed>
+            </h2>
             <p class="text-3xl font-light"> HIGH RISK <br /> RECORD</p>
           </div>
         </div>
@@ -92,7 +119,10 @@ const vehicleHistory = computed(() => carRegistrationSearch.vehicleHistory)
             </svg>
           </div>
           <div class="w-1/2">
-            <h2 class="text-7xl font-bold text-[#FF7400]">03</h2>
+            <h2 class="text-7xl font-bold text-[#FF7400]">
+              <span v-if="hasSubscription?.active">{{ financeRecords }}</span>
+                <hashed contain="zero" v-else></hashed>
+            </h2>
             <p class="text-3xl font-light">FINANCE <br /> RECORD</p>
           </div>
         </div>
