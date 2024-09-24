@@ -16,6 +16,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
             technicalDetails: null,
             classificationDetails: null,
             vehicleHistory: null,
+            vehicleValuationsList: null,
             dimensions: null,
             general: null,
             vehicleRegistration: null,
@@ -163,6 +164,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     console.error("Failed to decrypt Vehicle History: ", error);
                 }
             }
+            return this.vehicleHistory;
         },
         async fetchMOTHistory() {
             let code = systematicFourCharCode('MOTHistory');
@@ -176,6 +178,20 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                 }
             }
             return this.MOTHistory;
+        },
+
+        async fetchValuationList() {
+            let code = systematicFourCharCode('VehicleValuationsList');
+            const encryptedData = localStorage.getItem(code);
+            if (encryptedData) {
+                try {
+                    const decrypted = await decryptData(`${code}`, JSON.parse(encryptedData));
+                    this.vehicleValuationsList = JSON.parse(decrypted);
+                } catch (error) {
+                    console.error("Failed to decrypt Vehicle MOT History: ", error);
+                }
+            }
+            return this.vehicleValuationsList;
         },
 
         async fetchFullReportText() {
@@ -205,6 +221,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     await this.setClassificationDetails(combinedPayload);
                     await this.setVehicleHistory(combinedPayload);
                     await this.setMOTHistory(combinedPayload);
+                    await this.setVehicleValuationList(combinedPayload);
 
                     localStorage.setItem('reg_number', this.reg_number);
                 }
@@ -305,6 +322,14 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
         },
         async setFullReportText(text) {
             this.getFullReportText = text;
+        },
+        async setVehicleValuationList(combinedPayload) {
+            let code = systematicFourCharCode('vehicleValuationsList');
+            if (combinedPayload.VehicleStatus && combinedPayload.ValuationList) {
+                const data = JSON.stringify(combinedPayload.ValuationList);
+                const encryptedData = await encryptData(code, data);
+                localStorage.setItem(code, JSON.stringify(encryptedData));
+            }
         },
     },
     persist: {

@@ -45,8 +45,8 @@ export const useAuthStore = defineStore('auth', {
         async logout() {
             const tokenStore = useTokenStore();
             try {
-                await apiService.post('logout', null, tokenStore.token);
-                
+                let logout = await apiService.post('logout', null, tokenStore.token);
+                debugger
                 this.removeUser();
                 tokenStore.removeToken();
                 const subscription = useSubscriptionStore();

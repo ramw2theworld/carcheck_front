@@ -82,7 +82,7 @@ const searchForCarReg = async () => {
     setTimeout(() => {
       errorMessage.value="";
       errors=[];
-    }, 3000);
+    }, 5000);
   }
 }
 </script>

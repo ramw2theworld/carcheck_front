@@ -1,8 +1,16 @@
 <script lang="ts" setup>
-const isTableVisible = ref(true)
+const isTableVisible = ref(true);
+const carRegistrationSearch = useCarRegistrationSearchStore();
+
 const toggleTableVisibility = () => {
   isTableVisible.value = !isTableVisible.value
 }
+onMounted(async () => {
+  await carRegistrationSearch.fetchVehicleHistory();
+});
+
+const vehicleHistory = computed(() => carRegistrationSearch.vehicleHistory)
+
 </script>
 
 
