@@ -1,8 +1,12 @@
 <script lang="ts" setup>
+import hashed from "@/components/Includes/Hashed.vue";
+import { useSubscriptionStore } from '@/stores/subscription';
+
 const isTableVisible = ref(true);
 const numberOfPreviousKeepers = ref(0);
 const plateChangesCount = ref(0);
 const theftReports = ref(0);
+
 
 const carRegistrationSearch = useCarRegistrationSearchStore();
 const toggleTableVisibility = () => {
@@ -10,6 +14,8 @@ const toggleTableVisibility = () => {
 }
 
 const vehicleHistory = computed(() => carRegistrationSearch.vehicleHistory);
+const subscriptionStore = useSubscriptionStore();
+const hasSubscription = computed(()=> subscriptionStore.hasSubscription);
 
 onMounted(async () => {
   if (!vehicleHistory.value) {
@@ -25,8 +31,6 @@ watch(vehicleHistory, (newHistory) => {
     theftReports.value = newHistory.TheftReports || 0;
   }
 });
-debugger
-console.log("vehicle history: ", vehicleHistory.value);
 </script>
 
 
@@ -86,7 +90,8 @@ console.log("vehicle history: ", vehicleHistory.value);
         <div class="bg-[#EEEEEE] rounded flex items-center overflow-hidden h-[10.5rem]">
           <div class="w-1/2 flex flex-col items-center">
             <h2 class="text-7xl font-bold text-[#FFA500]">
-              {{ numberOfPreviousKeepers > 9 ? numberOfPreviousKeepers : '0' + numberOfPreviousKeepers }}
+              <span v-if="hasSubscription?.active" >{{ numberOfPreviousKeepers > 9 ? numberOfPreviousKeepers : '0' + numberOfPreviousKeepers }}</span>
+              <hashed contain="zero" v-else></hashed>
             </h2>
             <p class="text-2xl font-light"> PREVIOUS <br /> OWNERS</p>
           </div>
@@ -121,7 +126,8 @@ console.log("vehicle history: ", vehicleHistory.value);
         <div class="bg-[#EEEEEE] rounded flex items-center overflow-hidden h-[10.5rem]">
           <div class="w-1/2 flex flex-col items-center">
             <h2 class="text-7xl font-bold text-[#EF343A]">
-              {{ theftReports > 9 ? theftReports : '0' + theftReports }}
+              <span v-if="hasSubscription?.active" >{{ theftReports > 9 ? theftReports : '0' + theftReports }}</span>
+              <hashed contain="zero" v-else></hashed>
             </h2>
             <p class="text-2xl font-light"> THEFT <br /> REPORT</p>
           </div>
@@ -150,7 +156,8 @@ console.log("vehicle history: ", vehicleHistory.value);
         <div class="bg-[#EEEEEE] rounded flex items-center overflow-hidden h-[10.5rem]">
           <div class="w-1/2 flex flex-col items-center">
             <h2 class="text-7xl font-bold text-[#FF7400]">
-              {{ plateChangesCount > 9 ? plateChangesCount : '0' + plateChangesCount }}
+              <span v-if="hasSubscription?.active" >{{ plateChangesCount > 9 ? plateChangesCount : '0' + plateChangesCount }}</span>
+              <hashed contain="zero" v-else></hashed>
             </h2>
             <p class="text-2xl font-light">PLATE <br /> CHANGE</p>
           </div>

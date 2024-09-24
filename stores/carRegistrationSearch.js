@@ -114,7 +114,6 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     console.error("Failed to decrypt Vehicle MotVed: ", error);
                 }
             }
-            console.log("motVED: ", this.motVed);
             return this.motVed;
         },
         async fetchVehicleGeneralInfo() {

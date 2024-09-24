@@ -11,7 +11,6 @@ const subscriptionStore = useSubscriptionStore();
 const hasSubscription = computed(()=> subscriptionStore.hasSubscription)
 
 onMounted(()=>{
-  console.log("subscri: ", subscriptionStore.hasSubscription); 
 });
 </script>
 

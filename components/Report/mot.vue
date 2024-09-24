@@ -10,6 +10,7 @@ import { format, differenceInCalendarDays, parse } from 'date-fns'; // Importing
 const modules = [Autoplay, Pagination, Navigation];
 
 const totalMotChecks = ref(0);
+const failPercentage = ref(0);
 const lastMotDate = ref(null);
 const expiryDate = ref(null);
 const totalAdviceItems = ref(0);
@@ -61,9 +62,13 @@ onMounted(async () => {
       longestPeriodBetweenTests.value = maxDifference;
       calculateLongestPeriodBetweenTests();
     }
+
+    calculateGauageMeterReading(motHistory);
   } catch (error) {
     console.error('Error fetching MOTHistory:', error);
   }
+
+
 
 });
 
@@ -71,7 +76,6 @@ watch(
   () => motHistory.value,
   (motValue) => {
     if (motValue && motValue.length > 0) {
-      console.log('MOTHistory updated:', motValue);
       calculateLongestPeriodBetweenTests(); // Recalculate the longest period when MOT history changes
     }
   },
@@ -94,6 +98,18 @@ function calculateLongestPeriodBetweenTests() {
 
     longestPeriodBetweenTests.value = maxDifference;
   }
+}
+
+// calculate gauge meter fail and pass percentage
+function calculateGauageMeterReading(motHistory) {
+  if (motHistory.value.length > 0) {
+    failPercentage.value = (totalFailedItems.value / motHistory.value.length) * 100;
+  } else {
+    failPercentage.value = 0; 
+  }
+  console.log("fail: ", failPercentage.value);
+  debugger
+
 }
 
 // swiper setup
@@ -241,7 +257,7 @@ function calculateDaysSinceLastTest(currentMOT, previousMOT) {
     <div v-show="isTableVisible" class="text-black space-y-4 w-full">
       <div class="flex flex-col lg:flex-row items-center justify-center">
         <div class="w-full md:w-7/12 lg:w-1/3 relative">
-          <chart-gauge failRate="70" height="30" width="100%" />
+          <chart-gauge failRate="{{failPercentage}}" height="30" width="100%" />
         </div>
         <div class="flex-1 lg:pl-10">
           <table class="w-full text-black mt-6">
