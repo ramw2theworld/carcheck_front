@@ -39,6 +39,8 @@ onMounted(async () => {
       expiryDate.value = motHistory.value[0].ExpiryDate;
       lastMotDate.value = motHistory.value[0].TestDate;
       totalMotChecks.value = motHistory.value.length;
+
+      let index = 0; // Define the index, assuming you want the most recent MOT record
       mostRecentMOT.value = motHistory.value[index];
 
       let maxDifference = 0;
@@ -47,7 +49,7 @@ onMounted(async () => {
         if (item.TestResult !== "Pass") {
           totalFailedItems.value += 1;
         }
-        
+
         // calculate dates difference
         if (index < motHistory.value.length - 1) {
           const currentDate = parse(item.TestDate, 'dd/MM/yyyy', new Date());
@@ -59,6 +61,7 @@ onMounted(async () => {
           }
         }
       });
+
       longestPeriodBetweenTests.value = maxDifference;
       calculateLongestPeriodBetweenTests();
     }
@@ -67,22 +70,19 @@ onMounted(async () => {
   } catch (error) {
     console.error('Error fetching MOTHistory:', error);
   }
-
-
-
 });
 
 watch(
   () => motHistory.value,
   (motValue) => {
     if (motValue && motValue.length > 0) {
-      calculateLongestPeriodBetweenTests(); // Recalculate the longest period when MOT history changes
+      calculateLongestPeriodBetweenTests(); 
     }
   },
   { immediate: true }
 );
 
-// Function to calculate the longest period between tests
+// calculate the longest period between tests
 function calculateLongestPeriodBetweenTests() {
   if (motHistory.value.length > 1) {
     const dates = motHistory.value.map((record) => parse(record.TestDate, 'dd/MM/yyyy', new Date()));
@@ -108,8 +108,6 @@ function calculateGauageMeterReading(motHistory) {
     failPercentage.value = 0; 
   }
   console.log("fail: ", failPercentage.value);
-  debugger
-
 }
 
 // swiper setup
