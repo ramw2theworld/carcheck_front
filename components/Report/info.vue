@@ -89,15 +89,15 @@ watch(vehicleRegistration, (newValue) => {
             <tr>
               <th>Model</th>
               <td>
-                <span v-if="vehicleRegistration && hasSubscription?.active" >{{ vehicleRegistration?.Model }}</span>
-                <Hashed v-else></Hashed>
+                <span v-if="vehicleRegistration" >{{ vehicleRegistration?.Model }}</span>
+                <!-- <Hashed v-else></Hashed> -->
               </td>
             </tr>
             <tr>
               <th>First registered</th>
               <td>
-                <span v-if="dateFirstRegistered && hasSubscription?.active" >{{ dateFirstRegistered }}</span>
-                <Hashed v-else></Hashed>
+                <span v-if="dateFirstRegistered" >{{ dateFirstRegistered }}</span>
+                <!-- <Hashed v-else></Hashed> -->
               </td>
             </tr>
           </tbody>

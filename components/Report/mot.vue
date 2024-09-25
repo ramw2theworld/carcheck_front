@@ -279,7 +279,9 @@ const displayedMOTHistory = computed(() => {
     <div v-show="isTableVisible" class="text-black space-y-4 w-full">
       <div class="flex flex-col lg:flex-row items-center justify-center">
         <div class="w-full md:w-7/12 lg:w-1/3 relative">
+          {{ failPercentage }}
           <chart-gauge v-if="failPercentage" :failRate="failPercentage" height="30" width="100%" />
+          <chart-gauge :failRate="0" height="30" width="100%" />
         </div>
         <div class="flex-1 lg:pl-10">
           <table class="w-full text-black mt-6">

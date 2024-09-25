@@ -8,21 +8,22 @@ const toggleTableVisibility = () => {
 
 const carRegistrationSearchStore = useCarRegistrationSearchStore();
 const valuationLists = computed(() => carRegistrationSearchStore.vehicleValuationsList);
-const chartData = ref([]); // Initialize as an empty array
-const isClient = ref(false); // To track whether we're on the client side
+const chartData = ref([]); 
+const isClient = ref(false); 
 
 onMounted(async () => {
+  debugger
   isClient.value = true;
   await carRegistrationSearchStore.fetchValuationList();
   if (valuationLists.value) {
     mapValuationToChart();
-    console.log("chartData after mapValuationToChart:", chartData.value); // Check here
-
+    console.log("chartData after mapValuationToChart:", chartData.value);
   }
 });
 
 function mapValuationToChart() {
-  const valuations = valuationLists.value || {}; // Handle if valuations are undefined
+  debugger
+  const valuations = valuationLists.value || {};
   chartData.value = [
     { label: "OTR (On The Road)", value: Number(valuations.OTR) || 0 },
     { label: "Dealer Forecourt", value: Number(valuations.DealerForecourt) || 0 },
@@ -93,17 +94,13 @@ const chartDatax = [
 
     <div v-show="isTableVisible" class="text-black my-10 w-full">
       {{ chartData }}
-      <hr>
-      {{ chartDatax }}
-      <chart-bar :data="chartDatax" :height="getChartHeight()" width="100%" />
+      <!-- <chart-bar :data="chartDatax" :height="getChartHeight()" width="100%" /> -->
 
       <div v-if="isClient && chartData.value && chartData.value.length > 0">
-        {{ chartData }}
-        <!-- Display chart only after chartData is populated -->
-        <chart-bar :data="chartData.value" :height="getChartHeight()" width="100%" />
+        <chart-bar v-if="chartData" :data="chartData" :height="getChartHeight()" width="100%" />
       </div>
       <div v-else>
-        <p>Loading chart data...</p>
+        <chart-bar :data="chartDatax" :height="getChartHeight()" width="100%" />
       </div>
     </div>
   </report-wrapper>

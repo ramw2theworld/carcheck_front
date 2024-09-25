@@ -17,13 +17,6 @@ onMounted(async () => {
 const motHistory = computed(() => carRegistrationSearchStore.MOTHistory);
 
 function formatDate(dateString) {
-  // const date = new Date(dateString);
-  // const month = (date.getMonth() + 1).toString().padStart(2, '0'); // months are 0-indexed
-  // const year = date.getFullYear();
-  // return `${month}/${year}`;
-
-  // const [day, month, year] = dateString.split('/'); // Split the date based on "/"
-  // return `${month}/${year}`;
   return dateString;
 }
 
@@ -46,6 +39,8 @@ const chartData = computed(() => {
       value: record.OdometerReading
     }));
   }
+  console.log("dddd: ", motHistory.value);
+
   return [];
 });
 
@@ -159,8 +154,9 @@ function getChartHeight() {
         </div>
       </div>
       <div class="pt-10 border-t">
+        {{ chartData }}
         <client-only>
-          <chart-line :data="chartData" :height="getChartHeight()" width="100%" />
+          <chart-line v-if="chartData" :data="chartData" :height="getChartHeight()" width="100%" />
         </client-only>
       </div>
     </div>
