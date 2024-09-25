@@ -16,7 +16,9 @@ onMounted(async () => {
 const subscriptionStore = useSubscriptionStore();
 const hasSubscription = computed(()=> subscriptionStore.hasSubscription);
 
-const vehicleHistory = computed(() => carRegistrationSearch.vehicleHistory)
+const vehicleHistory = computed(() => carRegistrationSearch.vehicleHistory);
+console.log(vehicleHistory.value);
+
 watch(vehicleHistory, (newHistory) => {
   if (newHistory) {
     if (newHistory.VicCount && newHistory.VicCount) {
@@ -32,6 +34,7 @@ watch(vehicleHistory, (newHistory) => {
     }
   }
 });
+
 </script>
 
 

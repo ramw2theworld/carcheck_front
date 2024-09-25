@@ -9,8 +9,12 @@ import { format, differenceInCalendarDays, parse } from 'date-fns'; // Importing
 
 const modules = [Autoplay, Pagination, Navigation];
 
+import { useSubscriptionStore } from '@/stores/subscription';
+const subscriptionStore = useSubscriptionStore();
+const hasSubscription = computed(()=> subscriptionStore.hasSubscription);
+
 const totalMotChecks = ref(0);
-const failPercentage = ref(0);
+const failPercentage = ref(null);
 const lastMotDate = ref(null);
 const expiryDate = ref(null);
 const totalAdviceItems = ref(0);
@@ -34,7 +38,7 @@ const previousMOT = computed(() => {
 onMounted(async () => {
   try {
     await carRegistrationSearchStore.fetchMOTHistory();
-
+    console.log("motHis: ", motHistory.value);
     if (motHistory.value && motHistory.value.length > 0) {
       expiryDate.value = motHistory.value[0].ExpiryDate;
       lastMotDate.value = motHistory.value[0].TestDate;
@@ -102,12 +106,21 @@ function calculateLongestPeriodBetweenTests() {
 
 // calculate gauge meter fail and pass percentage
 function calculateGauageMeterReading(motHistory) {
+  let failCount = 0;
+  let passCount = 0;
+
   if (motHistory.value.length > 0) {
-    failPercentage.value = (totalFailedItems.value / motHistory.value.length) * 100;
-  } else {
-    failPercentage.value = 0; 
+    motHistory.value.forEach(item => {
+      if (item.TestResult === "Pass") {
+        passCount += 1;
+      } else {
+        failCount += 1;
+      }
+    });
   }
-  console.log("fail: ", failPercentage.value);
+  let calculated = failCount / motHistory.value.length;
+  failPercentage.value = Number((calculated * 100).toFixed());
+  console.log("cal: ", failPercentage.value);
 }
 
 // swiper setup
@@ -201,6 +214,17 @@ function calculateDaysSinceLastTest(currentMOT, previousMOT) {
   if (!previousMOT) return 0;
   return differenceInCalendarDays(new Date(currentMOT.TestDate), new Date(previousMOT.TestDate));
 }
+
+
+const displayedMOTHistory = computed(() => {
+  if (hasSubscription.value.active) {
+    return motHistory.value;
+  } else {
+    return motHistory.value.slice(0, 5);
+  }
+});
+
+
 </script>
 
 <template>
@@ -235,7 +259,7 @@ function calculateDaysSinceLastTest(currentMOT, previousMOT) {
       <div class="flex flex-1 items-center justify-center space-x-4">
         <div>
           <p>Total MOT checks</p>
-          <small><span class="font-extralight">Last MOT:</span> 23/02/2024</small>
+          <small><span class="font-extralight">Last MOT:</span> {{ mostRecentMOT?mostRecentMOT['TestDate']:'' }}</small>
         </div>
         <h3 class="text-3xl">{{ totalMotChecks }}</h3>
       </div>
@@ -255,7 +279,7 @@ function calculateDaysSinceLastTest(currentMOT, previousMOT) {
     <div v-show="isTableVisible" class="text-black space-y-4 w-full">
       <div class="flex flex-col lg:flex-row items-center justify-center">
         <div class="w-full md:w-7/12 lg:w-1/3 relative">
-          <chart-gauge failRate="{{failPercentage}}" height="30" width="100%" />
+          <chart-gauge v-if="failPercentage" :failRate="failPercentage" height="30" width="100%" />
         </div>
         <div class="flex-1 lg:pl-10">
           <table class="w-full text-black mt-6">
