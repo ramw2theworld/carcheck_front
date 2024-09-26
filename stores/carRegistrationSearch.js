@@ -1,7 +1,9 @@
 import ApiService from '../services/apiService';
+
 import { defineStore } from 'pinia';
 import { decryptData, encryptData } from '~/composables/useCrypto';
 import { systematicFourCharCode } from '~/composables/useGenerateLocalstorageCode';
+import { useTokenStore } from '~/stores/token';
 
 const apiService = new ApiService();
 
@@ -24,7 +26,11 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
             smmtDetails: null,
             performance: null,
             vbrand_logo: null,
-            getFullReportText: "Get full report"
+            getFullReportText: "Get full report",
+            stolenRecord: null,
+            writeOff: null,
+            riskRecords: null,
+            financeRecords: null,
         }
     },
     getters: {
@@ -101,7 +107,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     console.error("Failed to decrypt Vehicle Registration:", error);
                 }
             }
-            return this.vehicleRegistration
+            return this.vehicleRegistration;
         },
         async fetchVehicleMotVed() {
             let code = systematicFourCharCode('VehicleMotVed');
@@ -127,6 +133,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     console.error("Failed to decrypt Vehicle General Information: ", error);
                 }
             }
+            return this.general;
         },
         async fetchPerformance() {
             let code = systematicFourCharCode('Performance');
@@ -178,7 +185,6 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
             }
             return this.MOTHistory;
         },
-
         async fetchValuationList() {
             let code = systematicFourCharCode('VehicleValuationsList');
             const encryptedData = localStorage.getItem(code);
@@ -192,22 +198,85 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
             }
             return this.vehicleValuationsList;
         },
-
         async fetchFullReportText() {
             return this.getFullReportText;
+        },
+        async fetchStolenRecords() {
+            let code = systematicFourCharCode('vehicleStolenRecords');
+            const encryptedData = localStorage.getItem(code);
+            if (encryptedData) {
+                try {
+                    const decrypted = await decryptData(`${code}`, JSON.parse(encryptedData));
+                    this.stolenRecord = JSON.parse(decrypted);
+                } catch (error) {
+                    console.error("Failed to decrypt Vehicle Stolen data: ", error);
+                }
+            }else {
+                console.log("No data found for stolen records.");
+            }
+            
+            return this.stolenRecord;
+        },
+        async fetchWriteOffRecords() {
+            let code = systematicFourCharCode('vehicleWriteOffRecords');
+            const encryptedData = localStorage.getItem(code);
+            if (encryptedData) {
+                try {
+                    const decrypted = await decryptData(`${code}`, JSON.parse(encryptedData));
+                    this.writeOff = JSON.parse(decrypted);
+                } catch (error) {
+                    console.error("Failed to decrypt Vehicle write-off data: ", error);
+                }
+            }else{
+                console.log("No data found for stolen records.");
+            }
+            console.log("write: ", this.writeOff);
+            return this.writeOff;
+        },
+        async fetchRiskRecords() {
+            let code = systematicFourCharCode('vehicleRiskRecords');
+            const encryptedData = localStorage.getItem(code);
+            if (encryptedData) {
+                try {
+                    const decrypted = await decryptData(`${code}`, JSON.parse(encryptedData));
+                    this.riskRecords = JSON.parse(decrypted);
+                } catch (error) {
+                    console.error("Failed to decrypt Vehicle risk data: ", error);
+                }
+            }
+            
+            return this.riskRecords;
+        },
+        async fetchFinanceRecords() {
+            let code = systematicFourCharCode('vehicleFinanceRecords');
+            const encryptedData = localStorage.getItem(code);
+            if (encryptedData) {
+                try {
+                    const decrypted = await decryptData(`${code}`, JSON.parse(encryptedData));
+                    this.financeRecords = JSON.parse(decrypted);
+                } catch (error) {
+                    console.error("Failed to decrypt Vehicle risk data: ", error);
+                }
+            }
+            
+            return this.financeRecords;
         },
         
         // Search and store vehicle registration details
         async searchCarRegNumber(car_reg_number) {
             try {
+                const tokenStore = useTokenStore();
+                const token = tokenStore.getToken;
                 this.reg_number = car_reg_number;
 
-                const response = await apiService.get(`v1/car-check/${car_reg_number}`);
+                const response = token
+                    ? await apiService.get(`v1/car-check/${car_reg_number}`, token)
+                    : await apiService.get(`v1/car-check/${car_reg_number}`);
+
                 if (response.payload && Array.isArray(response.payload)) {
                     let combinedPayload = response.payload.reduce((acc, item) => {
                         return { ...acc, ...item };
                     }, {});
-
                     // Update store state with fetched data
                     await this.setVehicleImageUrl(combinedPayload);
                     await this.setVehicleLogo(combinedPayload);
@@ -221,7 +290,10 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     await this.setVehicleHistory(combinedPayload);
                     await this.setMOTHistory(combinedPayload);
                     await this.setVehicleValuationList(combinedPayload);
-
+                    await this.setStolenRecord(combinedPayload);
+                    await this.setWriteOffRecords(combinedPayload);
+                    await this.setFinanceRecords(combinedPayload);
+                    await this.setRiskRecords(combinedPayload);
                     localStorage.setItem('reg_number', this.reg_number);
                 }
             } catch (error) {
@@ -330,6 +402,64 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                 localStorage.setItem(code, JSON.stringify(encryptedData));
             }
         },
+        async setStolenRecord(combinedPayload){
+            let stolenData = {};
+            let code = systematicFourCharCode('vehicleStolenRecords');
+            
+            if (combinedPayload.Stolen || (combinedPayload.StolenMiaftrRecordCount > 0)) {
+                stolenData['Stolen'] = combinedPayload['Stolen'];
+                stolenData['StolenInfoSource'] = combinedPayload['StolenInfoSource'];
+                stolenData['StolenStatus'] = combinedPayload['StolenStatus'];
+                stolenData['StolenPoliceForce'] = combinedPayload['StolenPoliceForce'];
+                stolenData['StolenDate'] = combinedPayload['StolenDate'];
+                stolenData['StolenMiaftrRecordCount'] = combinedPayload['StolenMiaftrRecordCount'];
+                stolenData['StolenMiaftrRecordList'] = combinedPayload['StolenMiaftrRecordList'];
+                
+                const data = JSON.stringify(stolenData);
+                const encryptedData = await encryptData(code, data);
+                console.log("Stolen Data Before Saving:", stolenData);
+
+                localStorage.setItem(code, JSON.stringify(encryptedData));
+            }
+        },
+        async setWriteOffRecords(combinedPayload){
+            let writtenOffData = {}
+            let code = systematicFourCharCode('vehicleWriteOffRecords');
+            if (combinedPayload.WrittenOff || (combinedPayload.WriteOffRecordCount > 0)) {
+                writtenOffData['WrittenOff'] = combinedPayload['WrittenOff'];
+                writtenOffData['WriteOffDate'] = combinedPayload['WriteOffDate'];
+                writtenOffData['WriteOffCategory'] = combinedPayload['WriteOffCategory'];
+                writtenOffData['WriteOffRecordList'] = combinedPayload['WriteOffRecordList'];
+                writtenOffData['WriteOffRecordCount'] = combinedPayload['WriteOffRecordCount'];
+
+                const data = JSON.stringify(writtenOffData);
+                const encryptedData = await encryptData(code, data);
+                localStorage.setItem(code, JSON.stringify(encryptedData));
+            }
+        },
+        async setFinanceRecords(combinedPayload){
+            let riskfData = {}
+            let code = systematicFourCharCode('vehicleFinanceRecords');
+            if (combinedPayload.FinanceRecordCount > 0) {
+                riskfData['FinanceRecordCount'] = combinedPayload['FinanceRecordCount'];
+                riskfData['FinanceRecordList'] = combinedPayload['FinanceRecordList'];
+                const data = JSON.stringify(riskfData);
+                const encryptedData = await encryptData(code, data);
+                localStorage.setItem(code, JSON.stringify(encryptedData));
+            }
+        },
+        async setRiskRecords(combinedPayload){
+            let riskfData = {}
+            let code = systematicFourCharCode('vehicleRiskRecords');
+            if (combinedPayload.HighRiskRecordCount > 0) {
+                riskfData['HighRiskRecordCount'] = combinedPayload['HighRiskRecordCount'];
+                riskfData['HighRiskRecordList'] = combinedPayload['HighRiskRecordList'];
+                const data = JSON.stringify(riskfData);
+                const encryptedData = await encryptData(code, data);
+                localStorage.setItem(code, JSON.stringify(encryptedData));
+            }
+        },
+        
     },
     persist: {
         paths: ["reg_number", "getFullReportText"],

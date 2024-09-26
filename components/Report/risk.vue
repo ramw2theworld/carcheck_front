@@ -3,35 +3,42 @@ const isTableVisible = ref(true);
 const writeOffCount = ref(0);
 const highRiskRecords = ref(0);
 const financeRecords = ref(0);
-const carRegistrationSearch = useCarRegistrationSearchStore();
 import Hashed from '../Includes/Hashed.vue';
 import { useSubscriptionStore } from '@/stores/subscription';
+
+const carRegistrationSearch = useCarRegistrationSearchStore();
+const subscriptionStore = useSubscriptionStore();
 
 const toggleTableVisibility = () => {
   isTableVisible.value = !isTableVisible.value
 }
 onMounted(async () => {
   await carRegistrationSearch.fetchVehicleHistory();
+  await carRegistrationSearch.fetchWriteOffRecords();
+  await carRegistrationSearch.fetchRiskRecords();
+  await carRegistrationSearch.fetchFinanceRecords();
 });
-const subscriptionStore = useSubscriptionStore();
-const hasSubscription = computed(()=> subscriptionStore.hasSubscription);
 
+const hasSubscription = computed(()=> subscriptionStore.hasSubscription);
 const vehicleHistory = computed(() => carRegistrationSearch.vehicleHistory);
-console.log(vehicleHistory.value);
+const writeOff = computed(() => carRegistrationSearch.writeOff);
+const riskRecords = computed(() => carRegistrationSearch.riskRecords);
+const finances = computed(() => carRegistrationSearch.financeRecords);
+console.log("writeOff: ", writeOff.value);
 
 watch(vehicleHistory, (newHistory) => {
   if (newHistory) {
-    if (newHistory.VicCount && newHistory.VicCount) {
-      writeOffCount.value = newHistory.VicCount || 0;
-    }
+    // if (newHistory.VicCount && newHistory.VicCount) {
+    //   writeOffCount.value = newHistory.VicCount || 0;
+    // }
 
-    if (newHistory && newHistory.PlateChangeCount) {
-      highRiskRecords.value = newHistory.PlateChangeCount || 0;
-    }
+    // if (newHistory && newHistory.PlateChangeCount) {
+    //   highRiskRecords.value = newHistory.PlateChangeCount || 0;
+    // }
 
-    if (newHistory.V5CCertificateCount && newHistory.V5CCertificateCount) {
-      financeRecords.value = newHistory.V5CCertificateCount || 0;
-    }
+    // if (newHistory.V5CCertificateCount && newHistory.V5CCertificateCount) {
+    //   financeRecords.value = newHistory.V5CCertificateCount || 0;
+    // }
   }
 });
 
@@ -91,7 +98,7 @@ watch(vehicleHistory, (newHistory) => {
           </div>
           <div class="w-1/2">
             <h2 class="text-7xl font-bold text-[#FFA500]">
-              <span v-if="hasSubscription?.active">{{ writeOffCount }}</span>
+              <span v-if="hasSubscription?.active">{{ writeOff?writeOff['WriteOffRecordCount']:0 }}</span>
               <hashed contain="zero" v-else></hashed>
             </h2>
             <p class="text-3xl font-light"> WRITE-OFF <br /> RECORD</p>
@@ -107,7 +114,7 @@ watch(vehicleHistory, (newHistory) => {
           </div>
           <div class="w-1/2">
             <h2 class="text-7xl font-bold text-[#EF343A]">
-                <span v-if="hasSubscription?.active">{{ highRiskRecords }}</span>
+                <span v-if="hasSubscription?.active">{{ riskRecords?riskRecords['HighRiskRecordCount']:0 }}</span>
                 <hashed contain="zero" v-else></hashed>
             </h2>
             <p class="text-3xl font-light"> HIGH RISK <br /> RECORD</p>
@@ -123,8 +130,8 @@ watch(vehicleHistory, (newHistory) => {
           </div>
           <div class="w-1/2">
             <h2 class="text-7xl font-bold text-[#FF7400]">
-              <span v-if="hasSubscription?.active">{{ financeRecords }}</span>
-                <hashed contain="zero" v-else></hashed>
+              <span v-if="hasSubscription?.active">{{ finances?finances['FinanceRecordCount']:0 }}</span>
+                <hashed contain="zero" type="X" v-else></hashed>
             </h2>
             <p class="text-3xl font-light">FINANCE <br /> RECORD</p>
           </div>

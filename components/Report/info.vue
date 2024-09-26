@@ -12,7 +12,6 @@ const vehicleRegistration = computed(() => carRegistrationSearchStore.vehicleReg
 
 const subscriptionStore = useSubscriptionStore();
 const hasSubscription = computed(()=> subscriptionStore.hasSubscription);
-
 onMounted(async () => {
   await carRegistrationSearchStore.fetchSmmtDetails();
   await carRegistrationSearchStore.fetchVehicleRegistration();
@@ -21,6 +20,7 @@ onMounted(async () => {
 const toggleTableVisibility = () => {
   isTableVisible.value = !isTableVisible.value
 }
+
 watch(vehicleRegistration, (newValue) => {
   if (newValue && newValue.DateFirstRegistered) {
     const registeredDate = newValue.DateFirstRegistered;
@@ -76,7 +76,7 @@ watch(vehicleRegistration, (newValue) => {
           <tbody>
             <tr>
               <th>Colour</th>
-              <td>White</td>
+              <td>{{ vehicleRegistration?.Colour }}</td>
             </tr>
             <tr>
               <th>Fuel Type</th>
@@ -90,14 +90,15 @@ watch(vehicleRegistration, (newValue) => {
               <th>Model</th>
               <td>
                 <span v-if="vehicleRegistration" >{{ vehicleRegistration?.Model }}</span>
-                <!-- <Hashed v-else></Hashed> -->
+                <Hashed v-else></Hashed>
               </td>
             </tr>
             <tr>
               <th>First registered</th>
               <td>
                 <span v-if="dateFirstRegistered" >{{ dateFirstRegistered }}</span>
-                <!-- <Hashed v-else></Hashed> -->
+                <span>{{ '2002-12-09' }}</span>
+
               </td>
             </tr>
           </tbody>

@@ -109,7 +109,7 @@ function calculateGauageMeterReading(motHistory) {
   let failCount = 0;
   let passCount = 0;
 
-  if (motHistory.value.length > 0) {
+  if (motHistory.value && motHistory.value.length > 0) {
     motHistory.value.forEach(item => {
       if (item.TestResult === "Pass") {
         passCount += 1;
@@ -117,10 +117,11 @@ function calculateGauageMeterReading(motHistory) {
         failCount += 1;
       }
     });
+
+    let calculated = failCount / motHistory.value.length;
+    failPercentage.value = Number((calculated * 100).toFixed());
+    console.log("cal: ", failPercentage.value);
   }
-  let calculated = failCount / motHistory.value.length;
-  failPercentage.value = Number((calculated * 100).toFixed());
-  console.log("cal: ", failPercentage.value);
 }
 
 // swiper setup
@@ -281,7 +282,7 @@ const displayedMOTHistory = computed(() => {
         <div class="w-full md:w-7/12 lg:w-1/3 relative">
           {{ failPercentage }}
           <chart-gauge v-if="failPercentage" :failRate="failPercentage" height="30" width="100%" />
-          <chart-gauge :failRate="0" height="30" width="100%" />
+          <chart-gauge v-else :failRate="0" height="30" width="100%" />
         </div>
         <div class="flex-1 lg:pl-10">
           <table class="w-full text-black mt-6">

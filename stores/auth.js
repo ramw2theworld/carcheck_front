@@ -44,9 +44,9 @@ export const useAuthStore = defineStore('auth', {
 
         async logout() {
             const tokenStore = useTokenStore();
+            const carRegistrationSearchStore = useCarRegistrationSearchStore();
             try {
                 let logout = await apiService.post('logout', null, tokenStore.token);
-                debugger
                 this.removeUser();
                 tokenStore.removeToken();
                 const subscription = useSubscriptionStore();
@@ -58,6 +58,17 @@ export const useAuthStore = defineStore('auth', {
                 });
                 localStorage.clear();
                 sessionStorage.clear();
+
+                if ('caches' in window) {
+                    caches.keys().then((names) => {
+                        names.forEach(name => caches.delete(name));
+                    });
+                }
+                // clear pinia storage
+                carRegistrationSearchStore.$reset();
+                this.$reset();
+
+                window.location.reload(true);
 
                 navigateTo('/auth/login');
             } catch (error) {

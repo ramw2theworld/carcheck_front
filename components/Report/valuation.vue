@@ -8,11 +8,14 @@ const toggleTableVisibility = () => {
 
 const carRegistrationSearchStore = useCarRegistrationSearchStore();
 const valuationLists = computed(() => carRegistrationSearchStore.vehicleValuationsList);
+
+const subscriptionStore = useSubscriptionStore();
+const hasSubscription = computed(()=> subscriptionStore.hasSubscription);
+
 const chartData = ref([]); 
 const isClient = ref(false); 
 
 onMounted(async () => {
-  debugger
   isClient.value = true;
   await carRegistrationSearchStore.fetchValuationList();
   if (valuationLists.value) {
@@ -22,7 +25,6 @@ onMounted(async () => {
 });
 
 function mapValuationToChart() {
-  debugger
   const valuations = valuationLists.value || {};
   chartData.value = [
     { label: "OTR (On The Road)", value: Number(valuations.OTR) || 0 },
@@ -97,7 +99,7 @@ const chartDatax = [
       <!-- <chart-bar :data="chartDatax" :height="getChartHeight()" width="100%" /> -->
 
       <div v-if="isClient && chartData.value && chartData.value.length > 0">
-        <chart-bar v-if="chartData" :data="chartData" :height="getChartHeight()" width="100%" />
+        <chart-bar v-if="chartData" :data="chartData" :hasSubscription="hasSubscription" :height="getChartHeight()" width="100%" />
       </div>
       <div v-else>
         <chart-bar :data="chartDatax" :height="getChartHeight()" width="100%" />

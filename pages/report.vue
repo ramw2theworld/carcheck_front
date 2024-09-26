@@ -7,11 +7,10 @@ const authStore = useAuthStore();
 const refreshToken = computed(() => tokenStore.refreshToken);
 
 onMounted(async () => {
-  if (tokenStore.isTokenExpired) {
-    if (tokenStore.isTokenExpired) {
-      authStore.logout();
-    }
-  }
+  // if (tokenStore.isTokenExpired) {
+  //   debugger
+  //     authStore.logout();
+  // }
 });
 
 definePageMeta({
