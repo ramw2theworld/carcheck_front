@@ -40,8 +40,6 @@ const chartData = computed(() => {
       value: record.OdometerReading
     }));
   }
-  console.log("dddd: ", motHistory.value);
-
   return [];
 });
 

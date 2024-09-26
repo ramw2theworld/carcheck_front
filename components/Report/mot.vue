@@ -38,7 +38,6 @@ const previousMOT = computed(() => {
 onMounted(async () => {
   try {
     await carRegistrationSearchStore.fetchMOTHistory();
-    console.log("motHis: ", motHistory.value);
     if (motHistory.value && motHistory.value.length > 0) {
       expiryDate.value = motHistory.value[0].ExpiryDate;
       lastMotDate.value = motHistory.value[0].TestDate;
@@ -120,7 +119,6 @@ function calculateGauageMeterReading(motHistory) {
 
     let calculated = failCount / motHistory.value.length;
     failPercentage.value = Number((calculated * 100).toFixed());
-    console.log("cal: ", failPercentage.value);
   }
 }
 

@@ -1,18 +1,60 @@
 <script lang="ts" setup>
+import { ref, computed, onMounted } from 'vue';
 import { useSubscriptionStore } from '@/stores/subscription';
 import Hashed from '@/components/Includes/Hashed.vue';
-const isTableVisible = ref(true)
+
+// Toggle table visibility
+const isTableVisible = ref(true);
 const toggleTableVisibility = () => {
-  isTableVisible.value = !isTableVisible.value
-}
+  isTableVisible.value = !isTableVisible.value;
+};
 
+// Subscription check
 const subscriptionStore = useSubscriptionStore();
-const hasSubscription = computed(()=> subscriptionStore.hasSubscription);
+const hasSubscription = computed(() => subscriptionStore.hasSubscription);
 
-onMounted(()=>{
+// Car registration store
+const carRegistrationSearchStore = useCarRegistrationSearchStore();
+const MOTHistory = ref([]); // Initialize MOTHistory as an empty array
+
+// Fetch MOTHistory on mounted
+onMounted(async () => {
+  try {
+    // Await the result of fetchMOTHistory
+    const motHistoryResult = await carRegistrationSearchStore.fetchMOTHistory();
+    debugger
+    MOTHistory.value = motHistoryResult || []; // Ensure it's always an array
+  } catch (error) {
+    console.error("Error fetching MOT History:", error);
+  }
 });
 
+// Filter failed tests
+console.log("mot history: ", MOTHistory.value)
+const failedTests = computed(() => {
+  // Ensure MOTHistory is an array before filtering
+  return Array.isArray(MOTHistory.value)
+    ? MOTHistory.value.filter(entry => entry.TestResult === 'Fail')
+    : [];
+});
+
+// Helper function to get failure category (from FailureReasonList)
+function getFailureCategory(failureList) {
+  if (failureList && failureList.length > 0) {
+    return failureList.map(failure => failure).join(", ");
+  }
+  return "No failure category";
+}
+
+// Helper function to get failure type (from AnnotationDetailsList or custom)
+function getFailureType(annotationList) {
+  if (annotationList && annotationList.length > 0) {
+    return annotationList.map(annotation => annotation.Type).join(", ");
+  }
+  return "No specific type";
+}
 </script>
+
 
 <template>
   <report-wrapper class="py-11">
@@ -61,57 +103,40 @@ onMounted(()=>{
     </div>
     <div v-show="isTableVisible" class="flex flex-row w-full pt-4 space-x-8">
       <div class="lg:w-2/3">
-        <table class="w-full text-black">
-          <thead>
-            <tr class="header-row">
-              <th colspan="2">DAMAGE 01</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th>Date</th>
-              <td v-if="hasSubscription?.active">White</td>
-              <td v-else><Hashed /></td>  
-            </tr>
-            <tr>
-              <th>Category</th>
-              <td v-if="hasSubscription?.active">Type</td>
-              <td v-else><Hashed /></td> 
-            </tr>
-            <tr>
-              <th>Type</th>
-              <td v-if="hasSubscription?.active">Honda</td>
-              <td v-else><Hashed /></td> 
-            </tr>
-          </tbody>
-        </table>
-
-        <table class="w-full text-black mt-8">
-          <thead>
-            <tr class="header-row">
-              <th colspan="2">DAMAGE 02</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th>Date</th>
-              <td v-if="hasSubscription?.active">White</td>
-              <td v-else><Hashed /></td> 
-            </tr>
-            <tr>
-              <th>Category</th>
-              <td v-if="hasSubscription?.active">Type</td>
-              <td v-else><Hashed /></td> 
-            </tr>
-            <tr>
-              <th>Type</th>
-              <td v-if="hasSubscription?.active">Honda</td>
-              <td v-else><Hashed /></td> 
-            </tr>
-          </tbody>
-        </table>
+        <template v-for="(test, index) in failedTests" :key="index">
+          <table class="w-full text-black mt-8">
+            <thead>
+              <tr class="header-row">
+                <th colspan="2">DAMAGE {{ index + 1 }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Date</th>
+                <td v-if="hasSubscription?.active">{{ test.TestDate }}</td>
+                <td v-else>
+                  <Hashed />
+                </td>
+              </tr>
+              <tr>
+                <th>Category</th>
+                <td v-if="hasSubscription?.active">{{ getFailureCategory(test.FailureReasonList) }}</td>
+                <td v-else>
+                  <Hashed />
+                </td>
+              </tr>
+              <tr>
+                <th>Type</th>
+                <td v-if="hasSubscription?.active">{{ getFailureType(test.AnnotationDetailsList) }}</td>
+                <td v-else>
+                  <Hashed />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </template>
         <div class="bg-[#EF343A] w-full flex items-center justify-center py-2">
-          <h3 class="text-xl font-semibold">Lorem ipsum dolor sit amet. 
+          <h3 class="text-xl font-semibold">Lorem ipsum dolor sit amet.
             <Includes-get-full-report get-full-report="check the full
               report"></Includes-get-full-report>
           </h3>
