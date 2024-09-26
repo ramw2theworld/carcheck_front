@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted, watch } from "vue";
-
 const isTableVisible = ref(true);
 const toggleTableVisibility = () => {
   isTableVisible.value = !isTableVisible.value;
@@ -14,13 +13,21 @@ const hasSubscription = computed(()=> subscriptionStore.hasSubscription);
 
 const chartData = ref([]); 
 const isClient = ref(false); 
+const chartLoaded = ref(false);
 
 onMounted(async () => {
   isClient.value = true;
   await carRegistrationSearchStore.fetchValuationList();
+  console.log("valuee: ", valuationLists.value);
   if (valuationLists.value) {
     mapValuationToChart();
     console.log("chartData after mapValuationToChart:", chartData.value);
+  }
+});
+
+watch(chartData, (newValue) => {
+  if (newValue.length > 0) {
+    chartLoaded.value = true; 
   }
 });
 
@@ -38,7 +45,6 @@ function mapValuationToChart() {
     { label: "Trade Poor", value: Number(valuations.TradePoor) || 0 },
   ];
 
-  console.log("Mapped chartData: ", chartData.value);
 }
 
 function getChartHeight() {
@@ -95,14 +101,11 @@ const chartDatax = [
     </div>
 
     <div v-show="isTableVisible" class="text-black my-10 w-full">
-      {{ chartData }}
-      <!-- <chart-bar :data="chartDatax" :height="getChartHeight()" width="100%" /> -->
-
       <div v-if="isClient && chartData.value && chartData.value.length > 0">
         <chart-bar v-if="chartData" :data="chartData" :hasSubscription="hasSubscription" :height="getChartHeight()" width="100%" />
       </div>
       <div v-else>
-        <chart-bar :data="chartDatax" :height="getChartHeight()" width="100%" />
+        <chart-bar v-if="chartLoaded" :data="chartData" :height="getChartHeight()" width="100%" />
       </div>
     </div>
   </report-wrapper>

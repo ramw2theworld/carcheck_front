@@ -196,6 +196,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     console.error("Failed to decrypt Vehicle MOT History: ", error);
                 }
             }
+            console.log("valu: ", this.vehicleValuationsList)
             return this.vehicleValuationsList;
         },
         async fetchFullReportText() {
