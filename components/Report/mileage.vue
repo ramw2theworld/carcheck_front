@@ -6,6 +6,7 @@ const totalRegistrations = ref(0);
 const totalOdometerReading = ref(0);
 const first_date = ref("");
 const last_date = ref("");
+const chartLoaded = ref(false);
 
 const toggleTableVisibility = () => {
   isTableVisible.value = !isTableVisible.value;
@@ -42,6 +43,12 @@ const chartData = computed(() => {
   console.log("dddd: ", motHistory.value);
 
   return [];
+});
+
+watch(chartData, (newValue) => {
+  if (newValue.length > 0) {
+    chartLoaded.value = true; 
+  }
 });
 
 function getChartHeight() {
@@ -154,9 +161,8 @@ function getChartHeight() {
         </div>
       </div>
       <div class="pt-10 border-t">
-        {{ chartData }}
         <client-only>
-          <chart-line v-if="chartData" :data="chartData" :height="getChartHeight()" width="100%" />
+          <chart-line v-if="chartLoaded" :data="chartData" :height="getChartHeight()" width="100%" />
         </client-only>
       </div>
     </div>
