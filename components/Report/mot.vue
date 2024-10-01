@@ -1,17 +1,15 @@
 <script lang="ts" setup>
-// Swiper dependencies
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/vue';
-import { format, differenceInCalendarDays, parse } from 'date-fns'; // Importing date-fns for date manipulation
-
+import { format, differenceInCalendarDays, parse } from 'date-fns';
 const modules = [Autoplay, Pagination, Navigation];
 
 import { useSubscriptionStore } from '@/stores/subscription';
 const subscriptionStore = useSubscriptionStore();
-const hasSubscription = computed(()=> subscriptionStore.hasSubscription);
+const hasSubscription = computed(() => subscriptionStore.hasSubscription);
 
 const totalMotChecks = ref(0);
 const failPercentage = ref(null);
@@ -20,8 +18,9 @@ const expiryDate = ref(null);
 const totalAdviceItems = ref(0);
 const totalFailedItems = ref(0);
 const longestPeriodBetweenTests = ref(0);
-const longestPeriodOffBetweenTest = ref(0);
 const mostRecentMOT = ref(null);
+const clickedMotHistory = ref(0);
+const longestPeriodBetTests = ref(0);
 
 const isTableVisible = ref(true);
 const toggleTableVisibility = () => {
@@ -31,11 +30,8 @@ const toggleTableVisibility = () => {
 const carRegistrationSearchStore = useCarRegistrationSearchStore();
 const motHistory = computed(() => carRegistrationSearchStore.MOTHistory);
 
-const previousMOT = computed(() => {
-  return motHistory.value && motHistory.value.length > 1 ? motHistory.value[1] : null;
-});
-
 onMounted(async () => {
+  console.log("advie: ", motHistory.value)
   try {
     await carRegistrationSearchStore.fetchMOTHistory();
     if (motHistory.value && motHistory.value.length > 0) {
@@ -43,142 +39,41 @@ onMounted(async () => {
       lastMotDate.value = motHistory.value[0].TestDate;
       totalMotChecks.value = motHistory.value.length;
 
-      let index = 0; // Define the index, assuming you want the most recent MOT record
-      mostRecentMOT.value = motHistory.value[index];
-
-      let maxDifference = 0;
-
-      motHistory.value.forEach((item, index) => {
-        if (item.TestResult !== "Pass") {
-          totalFailedItems.value += 1;
-        }
-
-        // calculate dates difference
-        if (index < motHistory.value.length - 1) {
-          const currentDate = parse(item.TestDate, 'dd/MM/yyyy', new Date());
-          const nextDate = parse(motHistory.value[index + 1].TestDate, 'dd/MM/yyyy', new Date());
-          const difference = differenceInCalendarDays(currentDate, nextDate);
-
-          if (difference > maxDifference) {
-            maxDifference = difference;
-          }
-        }
-      });
-
-      longestPeriodBetweenTests.value = maxDifference;
-      calculateLongestPeriodBetweenTests();
+      mostRecentMOT.value = motHistory.value[0];
+      calculateLongestPeriodBetTests(motHistory.value)
     }
-
-    calculateGauageMeterReading(motHistory);
   } catch (error) {
     console.error('Error fetching MOTHistory:', error);
   }
 });
 
-watch(
-  () => motHistory.value,
-  (motValue) => {
-    if (motValue && motValue.length > 0) {
-      calculateLongestPeriodBetweenTests(); 
-    }
-  },
-  { immediate: true }
-);
+// Return all MOT records
+const displayedMOTHistory = computed(() => {
+  return motHistory.value;
+});
+console.log("knock: ", displayedMOTHistory.value);
 
-// calculate the longest period between tests
-function calculateLongestPeriodBetweenTests() {
-  if (motHistory.value.length > 1) {
-    const dates = motHistory.value.map((record) => parse(record.TestDate, 'dd/MM/yyyy', new Date()));
-
-    let maxDifference = 0;
-
-    for (let i = 1; i < dates.length; i++) {
-      const diff = differenceInCalendarDays(dates[i], dates[i - 1]);
-      if (diff > maxDifference) {
-        maxDifference = diff;
-      }
-    }
-
-    longestPeriodBetweenTests.value = maxDifference;
-  }
+// Lock the first 2 records if there are more than 5 MOTs
+function isMOThistoryLocked(index: number) {
+  const unlockThreshold = 2;
+  return index < unlockThreshold;
 }
-
-// calculate gauge meter fail and pass percentage
-function calculateGauageMeterReading(motHistory) {
-  let failCount = 0;
-  let passCount = 0;
-
-  if (motHistory.value && motHistory.value.length > 0) {
-    motHistory.value.forEach(item => {
-      if (item.TestResult === "Pass") {
-        passCount += 1;
-      } else {
-        failCount += 1;
-      }
-    });
-
-    let calculated = failCount / motHistory.value.length;
-    failPercentage.value = Number((calculated * 100).toFixed());
-  }
-}
-
-// swiper setup
-
-const breakpoints = {
-  0: {
-    slidesPerView: 6,
-    spaceBetween: 20,
-  },
-  426: {
-    slidesPerView: 8,
-    spaceBetween: 20,
-  },
-  768: {
-    slidesPerView: 13,
-    spaceBetween: 20,
-  },
-  1025: {
-    slidesPerView: 20,
-    spaceBetween: 20,
-  },
-  1441: {
-    slidesPerView: 20,
-    spaceBetween: 20,
-  },
-  2561: {
-    slidesPerView: 30,
-    spaceBetween: 20,
-  },
-};
 
 const navigationOptions = {
   nextEl: '.swiper-button-custom-next',
   prevEl: '.swiper-button-custom-prev',
 };
 
-let swiperInstance: { slideTo: (arg0: number, arg1: number) => void } | null = null;
+let swiperInstance = null;
 let motHistoryIndex = ref(0);
 
-const onSwiper = (swiper: { slideTo: (arg0: number, arg1: number) => void }) => {
+const onSwiper = (swiper) => {
   swiperInstance = swiper;
-
-  const navigationNext = document.querySelector('.swiper-button-custom-next');
-  const navigationPrev = document.querySelector('.swiper-button-custom-prev');
-
-  if (navigationNext && navigationPrev) {
-    navigationNext.addEventListener('click', () => {
-      motHistoryIndex.value = motHistoryIndex.value++;
-    });
-
-    navigationPrev.addEventListener('click', () => {
-      motHistoryIndex.value = motHistoryIndex.value--;
-    });
-    swiper.slideTo(motHistoryIndex.value, 800);
-  }
+  swiper.slideTo(motHistoryIndex.value, 800);
 };
 
 const nextSlide = () => {
-  if (motHistoryIndex.value < 100) {
+  if (motHistoryIndex.value < motHistory.value.length - 1) {
     motHistoryIndex.value++;
   }
   if (swiperInstance) {
@@ -196,33 +91,37 @@ const prevSlide = () => {
 };
 
 function handleSliderIndexClick(index: number) {
+  clickedMotHistory.value = index;
   mostRecentMOT.value = motHistory.value[index];
 }
 
-function isMOThistoryLocked(index: number) {
-  return index % 2 === 0;
+function calculateLongestPeriodBetTests(motHistories) {
+  motHistories.forEach((item, index) => {
+    const testDate = parse(item.TestDate, 'dd/MM/yyyy', new Date());
+
+    let currentDate;
+    if (index === 0) {
+      currentDate = new Date();
+    } else {
+      currentDate = parse(motHistories[index - 1].TestDate, 'dd/MM/yyyy', new Date());
+    }
+
+    const daysDifference = differenceInCalendarDays(currentDate, testDate);
+    console.log("diff: ", daysDifference);
+    if(daysDifference > longestPeriodBetTests.value){
+      longestPeriodBetTests.value = daysDifference;
+    }
+  });
 }
 
-// Helper functions for calculating mileage and days since last pass
-function calculateMileageSinceLastPass(currentMOT, previousMOT) {
-  if (!previousMOT) return 0;
-  return currentMOT.OdometerReading - previousMOT.OdometerReading;
+// Helper function for calculating days since last test and current date 
+function calculateDaysSinceLastTest(currentMOT) {
+  const testDate = parse(currentMOT.TestDate, 'dd/MM/yyyy', new Date());
+  const currentDate = new Date();
+  const daysDifference = differenceInCalendarDays(currentDate, testDate);
+
+  return daysDifference;
 }
-
-function calculateDaysSinceLastTest(currentMOT, previousMOT) {
-  if (!previousMOT) return 0;
-  return differenceInCalendarDays(new Date(currentMOT.TestDate), new Date(previousMOT.TestDate));
-}
-
-
-const displayedMOTHistory = computed(() => {
-  if (hasSubscription.value.active) {
-    return motHistory.value;
-  } else {
-    return motHistory.value.slice(0, 5);
-  }
-});
-
 
 </script>
 
@@ -230,7 +129,6 @@ const displayedMOTHistory = computed(() => {
   <report-wrapper>
     <div @click="toggleTableVisibility"
       class="cursor-pointer text-black flex flex-col md:flex-row items-center justify-between">
-      <!-- ------------------------------- -->
       <div class="flex items-center space-x-4">
         <svg width="23" height="28" viewBox="0 0 23 28" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -311,7 +209,7 @@ const displayedMOTHistory = computed(() => {
               </tr>
               <tr>
                 <th>Longest period off test</th>
-                <td>109 Days</td>
+                <td>{{ longestPeriodBetTests }} Days</td>
               </tr>
             </tbody>
           </table>
@@ -329,7 +227,7 @@ const displayedMOTHistory = computed(() => {
           </button>
         </div>
         <div class="w-[90%]">
-          <swiper :centeredSlides="false" :breakpoints="breakpoints" :autoplay="false" @swiper="onSwiper"
+          <swiper :centeredSlides="false" :slidesPerView="7" :autoplay="false" @swiper="onSwiper"
             :navigation="navigationOptions" :modules="modules" class="mySwiper selection:py-6">
             <swiper-slide v-for="(_, index) in totalMotChecks" :key="index" @click.prevent="handleSliderIndexClick(index)" class="cursor-pointer">
 
@@ -379,7 +277,7 @@ const displayedMOTHistory = computed(() => {
                   </svg>
                   <small>Previous MOT</small>
                 </button>
-                <p>MOT #{{ motHistoryIndex + 1 }}</p>
+                <p>MOT #{{ clickedMotHistory + 1 }}</p>
                 <button @click="nextSlide" class="font-extralight flex items-center space-x-2">
                   <small>Next MOT</small>
                   <svg width="5" height="9" viewBox="0 0 5 9" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -411,11 +309,11 @@ const displayedMOTHistory = computed(() => {
           </tr>
           <tr>
             <th>Mileage since last pass</th>
-            <td>{{ calculateMileageSinceLastPass(mostRecentMOT, previousMOT) }} miles</td>
+            <td>{{ mostRecentMOT.MileageSinceLastPass }} miles</td>
           </tr>
           <tr>
             <th>Days since last test</th>
-            <td>{{ calculateDaysSinceLastTest(mostRecentMOT, previousMOT) }} days</td>
+            <td>{{ calculateDaysSinceLastTest(mostRecentMOT) }} days</td>
           </tr>
           <tr>
             <th>Major failures</th>
@@ -452,7 +350,6 @@ th {
 td {
   padding: 0.68rem 1.5rem;
   font-weight: 100;
-
 }
 
 tr:nth-child(even) {
