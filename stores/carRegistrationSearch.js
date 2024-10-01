@@ -257,7 +257,6 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     console.error("Failed to decrypt Vehicle risk data: ", error);
                 }
             }
-            
             return this.financeRecords;
         },
         
@@ -437,12 +436,12 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
             }
         },
         async setFinanceRecords(combinedPayload){
-            let riskfData = {}
+            let financeRecords = {}
             let code = systematicFourCharCode('vehicleFinanceRecords');
             if (combinedPayload.FinanceRecordCount > 0) {
-                riskfData['FinanceRecordCount'] = combinedPayload['FinanceRecordCount'];
-                riskfData['FinanceRecordList'] = combinedPayload['FinanceRecordList'];
-                const data = JSON.stringify(riskfData);
+                financeRecords['FinanceRecordCount'] = combinedPayload['FinanceRecordCount'];
+                financeRecords['FinanceRecordList'] = combinedPayload['FinanceRecordList'];
+                const data = JSON.stringify(financeRecords);
                 const encryptedData = await encryptData(code, data);
                 localStorage.setItem(code, JSON.stringify(encryptedData));
             }

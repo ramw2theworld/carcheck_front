@@ -21,6 +21,7 @@ const longestPeriodBetweenTests = ref(0);
 const mostRecentMOT = ref(null);
 const clickedMotHistory = ref(0);
 const longestPeriodBetTests = ref(0);
+const slidesPerView = ref(0);
 
 const isTableVisible = ref(true);
 const toggleTableVisibility = () => {
@@ -31,7 +32,6 @@ const carRegistrationSearchStore = useCarRegistrationSearchStore();
 const motHistory = computed(() => carRegistrationSearchStore.MOTHistory);
 
 onMounted(async () => {
-  console.log("advie: ", motHistory.value)
   try {
     await carRegistrationSearchStore.fetchMOTHistory();
     if (motHistory.value && motHistory.value.length > 0) {
@@ -41,6 +41,7 @@ onMounted(async () => {
 
       mostRecentMOT.value = motHistory.value[0];
       calculateLongestPeriodBetTests(motHistory.value)
+      slidesPerView.value = motHistory.value.length;
     }
   } catch (error) {
     console.error('Error fetching MOTHistory:', error);
@@ -51,12 +52,10 @@ onMounted(async () => {
 const displayedMOTHistory = computed(() => {
   return motHistory.value;
 });
-console.log("knock: ", displayedMOTHistory.value);
 
-// Lock the first 2 records if there are more than 5 MOTs
 function isMOThistoryLocked(index: number) {
-  const unlockThreshold = 2;
-  return index < unlockThreshold;
+  const unlockThreshold = 5;
+  return index > unlockThreshold;
 }
 
 const navigationOptions = {
@@ -107,7 +106,7 @@ function calculateLongestPeriodBetTests(motHistories) {
     }
 
     const daysDifference = differenceInCalendarDays(currentDate, testDate);
-    console.log("diff: ", daysDifference);
+
     if(daysDifference > longestPeriodBetTests.value){
       longestPeriodBetTests.value = daysDifference;
     }
@@ -227,10 +226,9 @@ function calculateDaysSinceLastTest(currentMOT) {
           </button>
         </div>
         <div class="w-[90%]">
-          <swiper :centeredSlides="false" :slidesPerView="7" :autoplay="false" @swiper="onSwiper"
+          <swiper :centeredSlides="false" :slidesPerView="slidesPerView" :autoplay="false" @swiper="onSwiper"
             :navigation="navigationOptions" :modules="modules" class="mySwiper selection:py-6">
             <swiper-slide v-for="(_, index) in totalMotChecks" :key="index" @click.prevent="handleSliderIndexClick(index)" class="cursor-pointer">
-
               <span v-if="isMOThistoryLocked(index)"
                 class="h-8 w-8 items-center justify-center flex rounded bg-[#FFA500]">
                 <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
