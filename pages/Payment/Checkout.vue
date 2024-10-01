@@ -1,17 +1,21 @@
-<template>
-    <div class="payment-form">
-      <Stripe />
-    </div>
-  </template>
-  
-  <script setup>
+<script setup>
 import { ref } from 'vue';
 import { useStripe } from '@/composables/useStripe';
 import Stripe from '~/components/Payment/Stripe.vue';
 
+import { useSubscriptionStore } from '@/stores/subscription';
+const subscriptionStore = useSubscriptionStore();
+const hasSubscription = computed(()=> subscriptionStore.hasSubscription);
+
 const { processPayment } = useStripe();
 const isProcessing = ref(false);
 const errorMessage = ref('');
+
+onMounted(() => {
+  if (hasSubscription.value?.active) {
+    navigateTo('/');
+  }
+});
 
 const handlePayment = async () => {
   isProcessing.value = true;
@@ -31,4 +35,9 @@ const handlePayment = async () => {
   }
 };
 </script>
-  
+
+<template>
+  <div class="payment-form">
+    <Stripe />
+  </div>
+</template>

@@ -70,7 +70,7 @@ export const useAuthStore = defineStore('auth', {
 
                 window.location.reload(true);
 
-                navigateTo('/auth/login');
+                // navigateTo('/auth/login');
             } catch (error) {
                 throw error;
             }

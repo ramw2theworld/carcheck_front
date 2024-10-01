@@ -27,6 +27,7 @@ let cardNumberElement: StripeCardNumberElement;
 let cardExpiryElement: StripeCardExpiryElement;
 let cardCvcElement: StripeCardCvcElement;
 const errorMessage = ref<string | null>(null);
+const successMessage = ref<string | null>(null);
 const formValidationMessage = ref<string | null>(null);
 const customerId = ref('');
 const paymentMethodId = ref('');
@@ -162,7 +163,10 @@ async function createSubscription(selectedPlan) {
         // } else {
         //     navigateTo('/vehicle/single-offer-report');
         // }
-        navigateTo('/report');
+        setTimeout(() => {
+            successMessage.value = "Successfully paid.";
+            navigateTo('/report');
+        }, 3000);
         
     } catch (error) {
         console.error("Error creating subscription: ", error);
@@ -212,6 +216,9 @@ const planPrice = computed(() => {
                         <form @submit.prevent="handleCheckoutClick">
                             <div class="alert alert-danger" v-if="errorMessage">
                                 <span class="alert alert-danger">{{ errorMessage }}</span>
+                            </div>
+                            <div class="alert alert-success" v-if="successMessage">
+                                <span class="alert alert-success">{{ successMessage }}</span>
                             </div>
                             <div class="mb-4 w-full">
                                 <label for="cardholder-name" class="block mb-2 text-sm font-bold">Cardholder's Name</label>

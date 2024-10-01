@@ -22,7 +22,7 @@ onMounted(async () => {
   try {
     // Await the result of fetchMOTHistory
     const motHistoryResult = await carRegistrationSearchStore.fetchMOTHistory();
-    debugger
+    
     MOTHistory.value = motHistoryResult || []; // Ensure it's always an array
   } catch (error) {
     console.error("Error fetching MOT History:", error);
@@ -103,7 +103,8 @@ function getFailureType(annotationList) {
     </div>
     <div v-show="isTableVisible" class="flex flex-row w-full pt-4 space-x-8">
       <div class="lg:w-2/3">
-        <template v-for="(test, index) in failedTests" :key="index">
+        {{ failedTests.length }}
+        <template v-for="(test, index) in failedTests" :key="index" v-if="failedTests.length > 0">
           <table class="w-full text-black mt-8">
             <thead>
               <tr class="header-row">
@@ -134,6 +135,9 @@ function getFailureType(annotationList) {
               </tr>
             </tbody>
           </table>
+        </template>
+        <template v-else>
+          <p>No damage history found.</p>
         </template>
         <div class="bg-[#EF343A] w-full flex items-center justify-center py-2">
           <h3 class="text-xl font-semibold">Lorem ipsum dolor sit amet.

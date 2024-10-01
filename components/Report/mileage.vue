@@ -15,29 +15,32 @@ const carRegistrationSearchStore = useCarRegistrationSearchStore();
 onMounted(async () => {
   await carRegistrationSearchStore.fetchMOTHistory();
 });
-const motHistory = computed(() => carRegistrationSearchStore.MOTHistory);
+
+// Reverse motHistory array
+const motHistory = computed(() => {
+  return carRegistrationSearchStore.MOTHistory?.slice().reverse() || [];
+});
 
 function formatDate(dateString) {
   return dateString;
 }
 
 const chartData = computed(() => {
-  // console.log("len: ", motHistory.value.length);
-  if(motHistory.value && motHistory.value.length > 0){
+  if (motHistory.value && motHistory.value.length > 0) {
     first_date.value = motHistory.value[0].TestDate;
-    last_date.value = motHistory.value[(motHistory.value.length-1)].TestDate;
+    last_date.value = motHistory.value[motHistory.value.length - 1].TestDate;
 
     totalRegistrations.value = motHistory.value.length;
 
     // Calculate total odometer reading
     totalOdometerReading.value = motHistory.value.reduce(
-      (sum, record) => sum + (record.OdometerReading || 0),
+      (sum, record) => sum + (record.MileageSinceLastPass || 0),
       0
     );
 
     return motHistory.value.map(record => ({
       label: formatDate(record.TestDate),
-      value: record.OdometerReading
+      value: record.MileageSinceLastPass
     }));
   }
   return [];
@@ -59,6 +62,8 @@ function getChartHeight() {
     return 50;
   }
 }
+
+console.log("mileage: ", chartData.value);
 </script>
 
 <template>
