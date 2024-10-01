@@ -16,8 +16,8 @@ definePageMeta({
 });
 
 const form = reactive({
-    email: "admin@admin.com",
-    password: "password01"
+    email: "",
+    password: ""
 });
 const errors = ref([]);
 const errorMessage = ref(null);
@@ -42,6 +42,12 @@ const handleLoginSubmit = async () => {
 
                 if(hasSubscription.active){
                     console.log("subs: ", hasSubscription);
+                    let reg_number = localStorage.getItem('reg_number')
+                    if(reg_number){
+                        navigateTo('/report');
+                    }else{
+                        navigateTo('/');
+                    }
                     // if(subscription.plan.plan_code === "48h-export-subscription"){
                     //     navigateTo('/vehicle/export-report');
                     // }else if(subscription.plan.plan_code === "48h-basic-subscription"){
@@ -49,7 +55,6 @@ const handleLoginSubmit = async () => {
                     // }else{
                     //     navigateTo('/vehicle/single-offer-report');
                     // }
-                    navigateTo('/report');
                 }else{
                     navigateTo('/payment/plans');
                 }
@@ -84,12 +89,12 @@ const navigateToRegister = async () => {
                     <form @submit.prevent="handleLoginSubmit">
                         <div class="mb-6">
                             <FormLabel for="email">Email</FormLabel>
-                            <FormInputText id="email" v-model="form.email" placeholder="user@email.com" type="text" />
+                            <FormInputText id="email" v-model="form.email" placeholder="Enter your email address" type="text" />
                             <span class="text-red-500" v-if="errors.email">{{ errors.email[0] }}</span>
                         </div>
                         <div class="mb-6">
                             <FormLabel for="password">Password</FormLabel>
-                            <FormInputText id="password" v-model="form.password" placeholder="password"
+                            <FormInputText id="password" v-model="form.password" placeholder="Enter password"
                                 type="password" />
 
                             <span class="text-red-500" v-if="errors.password">{{ errors.password[0] }}</span>

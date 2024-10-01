@@ -45,9 +45,16 @@ function setco2label(value: number) {
 
 onMounted(async () => {
   await carRegistrationSearchStore.fetchVehicleMotVed();
-  const emissions = (MOTVed.value?.VedCo2Emissions) && (hasSubscription?.active) || 227;
+  console.log("mot ved: ", MOTVed.value);
+  console.log("hassub:: ", hasSubscription.value);
+  const emissions = (hasSubscription.value?.active && MOTVed.value?.VedCo2Emissions) 
+                    ? MOTVed.value.VedCo2Emissions 
+                    : 227;
+  
+  console.log("emissions: ", emissions)
   setco2label(emissions);
 });
+
 </script>
 
 <template>
@@ -147,12 +154,12 @@ onMounted(async () => {
           <tbody>
             <tr>
               <th>CO2 Emissions</th>
-              <td v-if="hasSubscription?.active && MOTVed.value?.VedCo2Emissions">{{ MOTVed.value?.VedCo2Emissions }}</td>
+              <td v-if="hasSubscription?.active && MOTVed?.VedCo2Emissions">{{ MOTVed?.VedCo2Emissions }}</td>
               <td v-else><Hashed /></td>
             </tr>
             <tr>
               <th>CO2 Label</th>
-              <td v-if="hasSubscription?.active && MOTVed.value?.VedCo2Band">{{ MOTVed.value?.VedCo2Band }}</td>
+              <td v-if="hasSubscription?.active && MOTVed?.VedCo2Band">{{ MOTVed?.VedCo2Band }}</td>
               <td v-else><Hashed /></td>
             </tr>
           </tbody>

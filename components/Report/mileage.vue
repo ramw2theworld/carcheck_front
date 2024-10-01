@@ -6,6 +6,7 @@ const totalRegistrations = ref(0);
 const totalOdometerReading = ref(0);
 const first_date = ref("");
 const last_date = ref("");
+const chartLoaded = ref(false);
 
 const toggleTableVisibility = () => {
   isTableVisible.value = !isTableVisible.value;
@@ -14,39 +15,41 @@ const carRegistrationSearchStore = useCarRegistrationSearchStore();
 onMounted(async () => {
   await carRegistrationSearchStore.fetchMOTHistory();
 });
-const motHistory = computed(() => carRegistrationSearchStore.MOTHistory);
+
+// Reverse motHistory array
+const motHistory = computed(() => {
+  return carRegistrationSearchStore.MOTHistory?.slice().reverse() || [];
+});
 
 function formatDate(dateString) {
-  // const date = new Date(dateString);
-  // const month = (date.getMonth() + 1).toString().padStart(2, '0'); // months are 0-indexed
-  // const year = date.getFullYear();
-  // return `${month}/${year}`;
-
-  // const [day, month, year] = dateString.split('/'); // Split the date based on "/"
-  // return `${month}/${year}`;
   return dateString;
 }
 
 const chartData = computed(() => {
-  // console.log("len: ", motHistory.value.length);
-  if(motHistory.value && motHistory.value.length > 0){
+  if (motHistory.value && motHistory.value.length > 0) {
     first_date.value = motHistory.value[0].TestDate;
-    last_date.value = motHistory.value[(motHistory.value.length-1)].TestDate;
+    last_date.value = motHistory.value[motHistory.value.length - 1].TestDate;
 
     totalRegistrations.value = motHistory.value.length;
 
     // Calculate total odometer reading
     totalOdometerReading.value = motHistory.value.reduce(
-      (sum, record) => sum + (record.OdometerReading || 0),
+      (sum, record) => sum + (record.MileageSinceLastPass || 0),
       0
     );
 
     return motHistory.value.map(record => ({
       label: formatDate(record.TestDate),
-      value: record.OdometerReading
+      value: record.MileageSinceLastPass
     }));
   }
   return [];
+});
+
+watch(chartData, (newValue) => {
+  if (newValue.length > 0) {
+    chartLoaded.value = true; 
+  }
 });
 
 function getChartHeight() {
@@ -59,6 +62,8 @@ function getChartHeight() {
     return 50;
   }
 }
+
+console.log("mileage: ", chartData.value);
 </script>
 
 <template>
@@ -160,7 +165,7 @@ function getChartHeight() {
       </div>
       <div class="pt-10 border-t">
         <client-only>
-          <chart-line :data="chartData" :height="getChartHeight()" width="100%" />
+          <chart-line v-if="chartLoaded" :data="chartData" :height="getChartHeight()" width="100%" />
         </client-only>
       </div>
     </div>

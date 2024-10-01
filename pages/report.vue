@@ -4,13 +4,13 @@ import { onMounted } from 'vue';
 const tokenStore = useTokenStore();
 const authStore = useAuthStore();
 
+const refreshToken = computed(() => tokenStore.refreshToken);
+
 onMounted(async () => {
-  if (tokenStore.isTokenExpired) {
-    await tokenStore.refreshToken();
-    if (tokenStore.isTokenExpired) {
-      authStore.logout();
-    }
-  }
+  // if (tokenStore.isTokenExpired) {
+  //   debugger
+  //     authStore.logout();
+  // }
 });
 
 definePageMeta({
