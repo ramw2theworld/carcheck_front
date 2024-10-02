@@ -1,17 +1,36 @@
 <script lang="ts" setup>
 import { useSubscriptionStore } from '@/stores/subscription';
 import Hashed from '@/components/Includes/Hashed.vue';
+import { ref, computed, onMounted } from 'vue';
 
-const isTableVisible = ref(true)
+const isTableVisible = ref(true);
 const toggleTableVisibility = () => {
-  isTableVisible.value = !isTableVisible.value
-}
+  isTableVisible.value = !isTableVisible.value;
+};
 
 const subscriptionStore = useSubscriptionStore();
-const hasSubscription = computed(()=> subscriptionStore.hasSubscription)
+const hasSubscription = computed(() => subscriptionStore.hasSubscription);
 
-onMounted(()=>{
+const carRegistrationSearchStore = useCarRegistrationSearchStore();
+const financeRecords = computed(() => carRegistrationSearchStore.financeRecords);
+
+const finRecordList = ref([]);
+
+onMounted(async () => {
+  try {
+    await carRegistrationSearchStore.fetchFinanceRecords();
+    if (financeRecords.value && financeRecords.value['FinanceRecordCount'] > 0) {
+      finRecordList.value = financeRecords.value['FinanceRecordList'];
+    }
+  } catch (error) {
+    console.error('Error fetching finance records:', error);
+  }
 });
+
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toISOString().split('T')[0];
+};
 </script>
 
 
@@ -70,7 +89,7 @@ onMounted(()=>{
       <table class="w-full text-black mt-6">
         <thead>
           <tr class="header-row">
-            <th colspan="2">
+            <th colspan="7">
               <div class="flex items-center justify-between w-full">
                 <p>FINANCE CHECK</p>
                 <svg width="24" height="23" viewBox="0 0 24 23" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -87,42 +106,34 @@ onMounted(()=>{
 
             </th>
           </tr>
-        </thead>
-        <tbody>
           <tr>
             <th>Agreement Date</th>
-            <td v-if="hasSubscription?.active">White</td>
-            <td v-else><Hashed /></td>
-          </tr>
-          <tr>
             <th>Agreement Type</th>
-            <td v-if="hasSubscription?.active">Type</td>
-            <td v-else><Hashed /></td>
-          </tr>
-          <tr>
             <th>Term (months)</th>
-            <td v-if="hasSubscription?.active">Honda</td>
-            <td v-else><Hashed /></td>
-          </tr>
-          <tr>
             <th>Agreement Number</th>
-            <td v-if="hasSubscription?.active">White</td>
-            <td v-else><Hashed /></td>
-          </tr>
-          <tr>
             <th>Finance Company</th>
-            <td v-if="hasSubscription?.active">Type</td>
-            <td v-else><Hashed /></td>
-          </tr>
-          <tr>
             <th>Contact Number</th>
-            <td v-if="hasSubscription?.active">Honda</td>
-            <td v-else><Hashed /></td>
-          </tr>
-          <tr>
             <th>Vehicle Description</th>
-            <td v-if="hasSubscription?.active">Honda</td>
-            <td v-else><Hashed /></td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(finance, key) in finRecordList" :key="key" v-if="hasSubscription?.active">
+            <td >{{ formatDate(finance.AgreementDate) }}</td>
+            <td >{{ finance.AgreementType }}</td>
+            <td >{{ finance.AgreementTerm }}</td>
+            <td >{{ finance.AgreementNumber }}</td>
+            <td >{{ finance.FinanceCompany }}</td>
+            <td >{{ finance.ContactNumber }}</td>
+            <td >{{ finance.VehicleDescription }}</td>
+          </tr>
+          <tr v-else>
+            <td ><hashed /></td>
+            <td ><hashed /></td>
+            <td ><hashed /></td>
+            <td ><hashed /></td>
+            <td ><hashed /></td>
+            <td ><hashed /></td>
+            <td ><hashed /></td>
           </tr>
         </tbody>
       </table>
