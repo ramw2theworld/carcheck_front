@@ -7,6 +7,7 @@ const subscriptionStore = useSubscriptionStore();
 const hasSubscription = computed(() => subscriptionStore.hasSubscription);
 
 const MOTVed = computed(() => carRegistrationSearchStore.motVed);
+const vehicleRegistration = computed(() => carRegistrationSearchStore.vehicleRegistration);
 
 const co2label = ref(227);
 
@@ -45,8 +46,7 @@ function setco2label(value: number) {
 
 onMounted(async () => {
   await carRegistrationSearchStore.fetchVehicleMotVed();
-  console.log("mot ved: ", MOTVed.value);
-  console.log("hassub:: ", hasSubscription.value);
+  await carRegistrationSearchStore.fetchVehicleRegistration();
   const emissions = (hasSubscription.value?.active && MOTVed.value?.VedCo2Emissions) 
                     ? MOTVed.value.VedCo2Emissions 
                     : 227;
@@ -84,28 +84,23 @@ onMounted(async () => {
           <tbody>
             <tr>
               <th>Vehicle class</th>
-              <td v-if="hasSubscription?.active">Honda</td>
-              <td v-else><Hashed /></td>
+              <td>{{ vehicleRegistration?.VehicleClass || 'N/A' }}</td>
             </tr>
             <tr>
               <th>Band</th>
-              <td v-if="hasSubscription?.active">Honda</td>
-              <td v-else><Hashed /></td>
+              <td>{{ MOTVed?.VedCo2Band || 'N/A' }}</td>
             </tr>
             <tr>
               <th>Single payment (12 months)</th>
-              <td v-if="hasSubscription?.active">Honda</td>
-              <td v-else><Hashed /></td>
+              <td>{{ MOTVed?.VedRate?.Standard?.TwelveMonth || 'N/A' }}</td>
             </tr>
             <tr>
-              <th>Single six month payment</th>
-              <td v-if="hasSubscription?.active">Honda</td>
-              <td v-else><Hashed /></td>
+              <th>Single six-month payment</th>
+              <td>{{ MOTVed?.VedRate?.Standard?.SixMonth || 'N/A' }}</td>
             </tr>
             <tr>
               <th>Total payable by 12 monthly instalments</th>
-              <td v-if="hasSubscription?.active">Honda</td>
-              <td v-else><Hashed /></td>
+              <td>{{ MOTVed?.VedRate?.Standard?.SixMonth || 'N/A' }}</td>
             </tr>
           </tbody>
         </table>

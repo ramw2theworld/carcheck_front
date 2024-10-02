@@ -337,6 +337,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
             let code = systematicFourCharCode('VehicleRegistration');
             if (combinedPayload.VehicleRegistration) {
                 const data = JSON.stringify(combinedPayload.VehicleRegistration);
+                
                 const encryptedData = await encryptData(code, data);
                 localStorage.setItem(code, JSON.stringify(encryptedData));
             }
@@ -415,7 +416,6 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                 
                 const data = JSON.stringify(stolenData);
                 const encryptedData = await encryptData(code, data);
-                console.log("Stolen Data Before Saving:", stolenData);
 
                 localStorage.setItem(code, JSON.stringify(encryptedData));
             }
