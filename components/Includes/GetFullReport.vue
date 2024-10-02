@@ -89,7 +89,6 @@ const downloadReport = async () => {
             carRegistrationSearchStore.setFullReportText("Get full report");
             navigateTo('/payment/plans');
         }
-
         
     }else{
         carRegistrationSearchStore.setFullReportText("Get full report");
