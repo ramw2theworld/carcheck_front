@@ -103,7 +103,6 @@ function getFailureType(annotationList) {
     </div>
     <div v-show="isTableVisible" class="flex flex-row w-full pt-4 space-x-8">
       <div class="lg:w-2/3">
-        {{ failedTests.length }}
         <template v-for="(test, index) in failedTests" :key="index" v-if="failedTests.length > 0">
           <table class="w-full text-black mt-8">
             <thead>
