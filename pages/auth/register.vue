@@ -26,8 +26,10 @@ const form = reactive({
 const errors = ref({});
 const errorMessage = ref('');
 const successMessage = ref('');
+const registerButtonText = ref("Submit");
 
 const handleRegisterSubmit = async () => {
+    registerButtonText.value="Processing...";
     try {
         console.log("form: ", form);
         if (form.password !== form.password_confirmation) {
@@ -40,10 +42,14 @@ const handleRegisterSubmit = async () => {
             successMessage.value = '';
             navigateTo('/auth/login');
         }, 3000);
+        registerButtonText.value="Submit";
+
     } catch (error) {
         console.error('Register error:', error.data);
         errorMessage.value = error.data?.message || 'An error occurred while registering user.';
         errors.value = error.data?.errors || {};
+
+        registerButtonText.value="Submit";
     }
 }
 </script>
@@ -110,7 +116,7 @@ const handleRegisterSubmit = async () => {
                             <p class="text-danger text-red">{{ errorMessage }}</p>
                         </div>
 
-                        <ButtonPrimary>Submit</ButtonPrimary>
+                        <ButtonPrimary>{{ registerButtonText }}</ButtonPrimary>
                     </form>
                     <!-- <SocialLogin></SocialLogin> -->
 

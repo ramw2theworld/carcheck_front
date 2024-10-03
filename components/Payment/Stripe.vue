@@ -164,7 +164,7 @@ async function createSubscription(selectedPlan) {
         //     navigateTo('/vehicle/single-offer-report');
         // }
         setTimeout(() => {
-            successMessage.value = "Successfully paid.";
+            successMessage.value = "Payment done successfully.";
             navigateTo('/report');
         }, 3000);
         

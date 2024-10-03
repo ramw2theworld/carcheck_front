@@ -1,122 +1,126 @@
 <script setup>
+import { ref, reactive } from 'vue';
 const auth = useAuthStore();
 const token = useTokenStore();
 const { $event } = useNuxtApp();
 const subscriptionStore = useSubscriptionStore();
-const planStore = usePlanStore();
-
+const loginSubmit = ref("Submit");
+const isProcessing = ref(false);
+const errorMessage = ref(null);
 
 definePageMeta({
-  title: 'Login',
-  meta: [
-    { hid: 'Login for fetching Registration number details', name: 'Login for fetching Registration number details', content: 'Login for fetching Registration number details' }
-
-  ],
-  middleware: ['guest'],
+    title: 'Login',
+    meta: [
+        { hid: 'Login for fetching Registration number details', name: 'Login for fetching Registration number details', content: 'Login for fetching Registration number details' }
+    ],
+    middleware: ['guest'],
 });
 
 const form = reactive({
     email: "",
     password: ""
 });
-const errors = ref([]);
-const errorMessage = ref(null);
+
+const errors = reactive({
+    email: null,
+    password: null
+});
+
+// Validate form
+const validateForm = () => {
+    errors.email = null;
+    errors.password = null;
+
+    if (!form.email) {
+        errors.email = "Email is required";
+    }
+    if (!form.password) {
+        errors.password = "Password is required";
+    }
+
+    return !errors.email && !errors.password;
+};
 
 const handleLoginSubmit = async () => {
+    errorMessage.value = null;
+
+    if (!validateForm()) return;
+
+    isProcessing.value = true;
+    loginSubmit.value = "Processing...";
+
     try {
-        $event('user:loggedIn', {
-            "user": "jello josldfls sldfjsl dflskdfjl askdjflksajdf"
-        });
-
         let response = await auth.makeLogin(form);
-        if(response.success){
-            if(response.payload){
-                let payload = response.payload;
-                let hasSubscription = payload.hasSubscription;
-                let subscription = payload.subscription;
-                let user = payload.user;
+        if (response.success && response.payload) {
+            const { hasSubscription, subscription, user } = response.payload;
 
-                await subscriptionStore.setHasSubscription(hasSubscription);
-                await subscriptionStore.setCurrentSubscription(subscription);
-                await auth.setUser(user);
+            await subscriptionStore.setHasSubscription(hasSubscription);
+            await subscriptionStore.setCurrentSubscription(subscription);
+            await auth.setUser(user);
 
-                if(hasSubscription.active){
-                    console.log("subs: ", hasSubscription);
-                    let reg_number = localStorage.getItem('reg_number')
-                    if(reg_number){
-                        navigateTo('/report');
-                    }else{
-                        navigateTo('/');
-                    }
-                    // if(subscription.plan.plan_code === "48h-export-subscription"){
-                    //     navigateTo('/vehicle/export-report');
-                    // }else if(subscription.plan.plan_code === "48h-basic-subscription"){
-                    //     navigateTo('/vehicle/basic-report');
-                    // }else{
-                    //     navigateTo('/vehicle/single-offer-report');
-                    // }
-                }else{
-                    navigateTo('/payment/plans');
-                }
+            if (hasSubscription.active) {
+                const reg_number = localStorage.getItem('reg_number');
+                reg_number ? navigateTo('/report') : navigateTo('/');
+            } else {
+                navigateTo('/payment/plans');
             }
-        }else{
-            errorMessage.value = "Something went wrong. Please verify your credential and try again.";
+        } else {
+            throw new Error("Invalid login credentials");
         }
     } catch (error) {
-        console.log("login error: ", error);
-        if(error?.data?.message)
-            errors.value = error.data?.errors
-        else
-            errorMessage.value = error;
+        errorMessage.value = error?.data?.message || "An unexpected error occurred";
+    } finally {
+        loginSubmit.value = "Submit";
+        isProcessing.value = false;
     }
-}
-const removeToken = async () => {
-    token.removeToken();
-}
+};
 
-const navigateToRegister = async () => {
-    navigateTo('/auth/register');
-}
+// Navigation helpers
+const navigateToRegister = () => navigateTo('/auth/register');
+const navigateToForgotPassword = () => navigateTo('/auth/forgot-password');
 </script>
-
 <template>
-    <div>
-        <div class="min-h-screen flex items-center">
-            <div class="w-full">
-                <div class="card bg-white p-8 rounded-lg shadow-xl border-2 border-dark-500 border-solid py-4 md:w-3/4 mx-auto lg:w-1/3">
+    <div class="min-h-screen flex items-center">
+        <div class="w-full">
+            <div
+                class="card bg-white p-8 rounded-lg shadow-xl border-2 border-dark-500 border-solid py-4 md:w-3/4 mx-auto lg:w-1/3">
+                <h3 class="text-center text-2xl font-semibold">User Login</h3>
 
-                    <h3 class="text-center text-2xl font-semibold"> User Login</h3>
-                    <form @submit.prevent="handleLoginSubmit">
-                        <div class="mb-6">
-                            <FormLabel for="email">Email</FormLabel>
-                            <FormInputText id="email" v-model="form.email" placeholder="Enter your email address" type="text" />
-                            <span class="text-red-500" v-if="errors.email">{{ errors.email[0] }}</span>
+                <form @submit.prevent="handleLoginSubmit">
+                    <div class="row" v-if="errorMessage">
+                        <div class="alert alert-danger">
+                            {{ errorMessage }}
                         </div>
-                        <div class="mb-6">
-                            <FormLabel for="password">Password</FormLabel>
-                            <FormInputText id="password" v-model="form.password" placeholder="Enter password"
-                                type="password" />
+                    </div>
+                    <div class="mb-6">
+                        <FormLabel for="email">Email</FormLabel>
+                        <FormInputText id="email" v-model="form.email" placeholder="Enter your email address"
+                            type="text" />
+                        <span v-if="errors.email" class="text-red-500">{{ errors.email }}</span>
+                    </div>
 
-                            <span class="text-red-500" v-if="errors.password">{{ errors.password[0] }}</span>
+                    <div class="mb-6">
+                        <FormLabel for="password">Password</FormLabel>
+                        <FormInputText id="password" v-model="form.password" placeholder="Enter password"
+                            type="password" />
+                        <span v-if="errors.password" class="text-red-500">{{ errors.password }}</span>
+                    </div>
 
-                            <p><span class="text-red-500" v-if="errorMessage">{{ errorMessage }}</span></p>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <ButtonPrimary>Submit</ButtonPrimary>
-                            <span @click="navigateToRegister">
-                                <i class="fa fa-user"></i> Create new user
-                            </span>
-                        </div>
-                        <div class="flex justify-center items-center mt-4">
-                            <span @click="navigateToForgotPassword" class="text-blue-500 hover:text-blue-700 cursor-pointer">
-                                Forget Password
-                            </span>
-                        </div>
-                    </form>
-                    <!-- <SocialLogin></SocialLogin> -->
-                </div>
+                    <div class="flex justify-between items-center">
+                        <ButtonPrimary :disabled="isProcessing">{{ loginSubmit }}</ButtonPrimary>
+                        <span @click="navigateToRegister" class="cursor-pointer">
+                            <i class="fa fa-user"></i> Create new user
+                        </span>
+                    </div>
+
+                    <div class="flex justify-center items-center mt-4">
+                        <span @click="navigateToForgotPassword"
+                            class="text-blue-500 hover:text-blue-700 cursor-pointer">
+                            Forgot Password
+                        </span>
+                    </div>
+                </form>
             </div>
-
         </div>
     </div>
 </template>

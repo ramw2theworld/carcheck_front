@@ -76,9 +76,7 @@ export const useSubscriptionStore = defineStore('subscription', {
                 const response = await apiService.post('payment/subscription', {
                     email: email
                 });
-                console.log(response);
                 let subscription = response.payload;
-                // return response;
                 let code = systematicFourCharCode('currentSubscription')
                 if (subscription !=null || subscription !="undefined") {
                     const data = JSON.stringify(subscription);
