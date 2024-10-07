@@ -1,4 +1,19 @@
 <script setup>
+const addedMoreFeatures = reactive([]);
+const moreFeatures = async () => {
+  addedMoreFeatures.push(
+      { 
+        "id": 7, "title": "Finance History", "icon": "outstanding-finances.svg"
+      },
+      {
+        "id": 8, "title": "Tax Records", "icon": "tax-record-icon.svg"
+      },
+      {
+        "id": 9, "title": "Technical data", "icon": "technical-data.svg"
+      }
+    );
+  }
+
 </script>
 
 <template>
@@ -10,9 +25,9 @@
         <p class="text-[#0F1829] mt-5 lg:text-2xl md:text-2xl text-xl  font-thin">We can generate a <span class="font-bold">full history</span>
           report for <span class="font-bold">any car</span></p>
       <!--  features      -->
-        <Features></Features>
+        <Features :addedMoreFeatures="addedMoreFeatures"></Features>
         <div class="flex flex-row items-center justify-center mt-10 w-ful">
-          <button class="bg-none">
+          <button class="bg-none" @click="moreFeatures">
             <p class="text-[#FF7400] text-lg font-bold">And More ...</p>
           </button>
         </div>

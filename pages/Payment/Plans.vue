@@ -35,6 +35,7 @@ const getFeatureIcon = (iconName) => {
 
 onMounted(async () => {
     showLoader.value = true;
+    console.log("plans: ", planStore.fetchPlans());
     await planStore.fetchPlans();  
     plans.value = planStore.plans.map((item) => ({
         ...item,
@@ -79,7 +80,7 @@ onMounted(async () => {
                         <span class="text-sm font-thin">Per Month</span>
                     </div>
                 </div>
-                <h1 class="text-sm font-thin mt-8">Generate up to <span class="font-bold">{{ basic_features.length }}
+                <h1 class="text-sm font-thin mt-8">Generate up to <span class="font-bold">{{ plan.reports_count }}
                         reports</span></h1>
                 <button @click.stop="startChecking(plan)"
                     class="bg-[#ffac1c] text-lg text-white px-4 py-2 rounded mt-2 block w-64">Start Checking</button>
