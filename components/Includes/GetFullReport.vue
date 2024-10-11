@@ -173,7 +173,10 @@ watch(
 <template>
     <div class="w-full">
         <!-- Show email input if the user has no subscription -->
-        <form @submit.prevent="handleGetFullReport" v-if="!authStore.user && !hasSubscription?.active && !showPasswordField">
+        <form @submit.prevent="handleGetFullReport" v-if="!hasSubscription?.active && !showPasswordField">
+            <!-- storex: {{ authStore }} -->
+            <!-- hasSubscription: {{ hasSubscription }} -->
+            <!-- store: {{ showPasswordField }} -->
             <FormInputText id="email" v-model="form.email" placeholder="Enter your email address" type="text" />
             <button :class="['bg-[#FF7400] text-white text-xl rounded-lg py-2', width]">
                 {{ getFullReport }}
@@ -182,6 +185,7 @@ watch(
 
         <!-- Show password input and submit login if email is verified -->
         <form @submit.prevent="handleLoginSubmit" v-else-if="showPasswordField">
+            firefox for the nations
             <FormInputText id="password" v-model="form.password" placeholder="Enter your password" type="password" />
             <button :class="['bg-[#FF7400] text-white text-xl rounded-lg py-2', width]">
                 {{ getFullReport }}

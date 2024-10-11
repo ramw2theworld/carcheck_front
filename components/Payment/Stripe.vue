@@ -108,7 +108,6 @@ async function handleCheckoutClick() {
             billing_details: { name: cardholderName.value },
             plan: plan.getSelectedPlan,
         });
-        debugger
         
         if ((response as any).payload.paymentStatus !== 'succeeded') {
             const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment((response as any).payload.clientSecret, {
@@ -120,9 +119,6 @@ async function handleCheckoutClick() {
                 return;
             }
         }
-        debugger
-
-
         const customer_id = (response as any).payload.customerId;
         customerId.value = customer_id;
         paymentMethodId.value = paymentMethod.id;
@@ -132,7 +128,6 @@ async function handleCheckoutClick() {
             let selectedPlan = plan.getSelectedPlan;
             if(selectedPlan.plan_code === "single-offer"){
                 let payload = response.payload;
-                debugger
                 if (payload?.hasSubscription) {
                     await subscriptionStore.setHasSubscription(payload.hasSubscription);
                 }
@@ -251,7 +246,7 @@ const planPrice = computed(() => {
                                         <img src="/assets/svg/cardName.svg" alt="" />
                                     </div>
                                     <input v-model="cardholderName" type="text" id="cardholder-name"
-                                        placeholder="Erica Strawzen"
+                                        placeholder="John Strawzen"
                                         class="w-full px-3 py-2 uppercase focus:border-none focus:outline-none bg-transparent" />
                                 </div>
                             </div>

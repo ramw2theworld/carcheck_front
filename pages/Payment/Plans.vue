@@ -37,10 +37,12 @@ onMounted(async () => {
     showLoader.value = true;
     console.log("plans: ", planStore.fetchPlans());
     await planStore.fetchPlans();  
-    plans.value = planStore.plans.map((item) => ({
-        ...item,
-        price: (parseFloat(item.amount_premium) / 100).toFixed(2)
-    }));
+    plans.value = planStore.plans
+    .map(item => ({
+      ...item,
+      price: (parseFloat(item.amount_premium) / 100).toFixed(2)
+    }))
+    .filter(item => item.status === "active");
     showLoader.value = false;
 });
 </script>
