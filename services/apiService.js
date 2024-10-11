@@ -3,7 +3,7 @@ import { useTokenStore } from "../stores/token";
 
 export default class ApiService {
   constructor(baseURL) {
-    this.baseURL = baseURL || 'http://localhost/api';
+    this.baseURL = baseURL || 'https://dev-back.car-check.info/api';
   }
 
   async request(endpoint, method, data = null) {
