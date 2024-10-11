@@ -23,7 +23,7 @@ export const usePlanStore = defineStore('plan', {
                 if(response.data){
                     this.plans = response.data;
                 }
-
+                return response;
             } catch (error) {
                 console.error("Failed to fetch plans:", error);
                 throw error;

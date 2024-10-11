@@ -21,6 +21,7 @@ const loading = ref(false);
 const cardComplete = ref(false);
 const termsAccepted = ref(false);
 const cardholderName = ref('');
+const buttonProcess = ref('PROCESS');
 
 let elements: StripeElements;
 let cardNumberElement: StripeCardNumberElement;
@@ -67,21 +68,25 @@ onMounted(async () => {
     }
 });
 async function handleCheckoutClick() {
+    buttonProcess.value = "PROCESSING...";
     try {
         resetError();
         // Validate form inputs
         if (!cardholderName.value) {
             formValidationMessage.value = "Cardholder's name is required.";
+            buttonProcess.value = "PROCESS";
             return;
         }
         if (!termsAccepted.value) {
             formValidationMessage.value = "You must accept the terms and conditions.";
+            buttonProcess.value = "PROCESS";
             return;
         }
         loading.value = true;
         const stripe = await stripePromise;
         if (!stripe || !elements) {
             console.error('Stripe.js has not yet loaded.');
+            buttonProcess.value = "PROCESS";
             return;
         }
         const { error, paymentMethod } = await stripe.createPaymentMethod({
@@ -95,6 +100,7 @@ async function handleCheckoutClick() {
         if (error) {
             console.error(error);
             (errorMessage.value as any) = error.message;
+            buttonProcess.value = "PROCESS";
             return;
         }
         const response = await apiService.post('payment/token/create', {
@@ -102,39 +108,50 @@ async function handleCheckoutClick() {
             billing_details: { name: cardholderName.value },
             plan: plan.getSelectedPlan,
         });
-
+        
         if ((response as any).payload.paymentStatus !== 'succeeded') {
             const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment((response as any).payload.clientSecret, {
                 payment_method: paymentMethod.id,
             });
             if (confirmError) {
+                buttonProcess.value = "PROCESS";
                 (errorMessage.value as any) = confirmError.message;
                 return;
             }
         }
-
         const customer_id = (response as any).payload.customerId;
         customerId.value = customer_id;
         paymentMethodId.value = paymentMethod.id;
 
-        // const billing_details = { name: cardholderName.value }
+        // handling single offer plan
         if(plan.getSelectedPlan){
             let selectedPlan = plan.getSelectedPlan;
             if(selectedPlan.plan_code === "single-offer"){
+                let payload = response.payload;
+                if (payload?.hasSubscription) {
+                    await subscriptionStore.setHasSubscription(payload.hasSubscription);
+                }
+                setTimeout(() => {
+                    buttonProcess.value = "DONE!";
+                    successMessage.value = "Payment done successfully.";
+                    navigateTo('/report');
+                }, 3000);
             }else{
                 await createSubscription(selectedPlan);
             }
         }
     } catch (error) {
         console.error({ error });
+        buttonProcess.value = "PROCESS";
     } finally {
         loading.value = false;
+        buttonProcess.value = "PROCESS";
     }
 }
 
 async function createSubscription(selectedPlan) {
-    console.log("selected plan: ", selectedPlan);
     const user = auth.getCurrentUser;
+    buttonProcess.value = "ALMOST THERE!";
     try {
         const response = await apiService.post("payment/process", {
             customer_id: customerId.value,
@@ -164,11 +181,13 @@ async function createSubscription(selectedPlan) {
         //     navigateTo('/vehicle/single-offer-report');
         // }
         setTimeout(() => {
+            buttonProcess.value = "DONE!";
             successMessage.value = "Payment done successfully.";
             navigateTo('/report');
         }, 3000);
         
     } catch (error) {
+        buttonProcess.value = "FAILED!";
         console.error("Error creating subscription: ", error);
         if (error.data && error.data.success === false) {
             errorMessage.value = error.data.message;
@@ -227,7 +246,7 @@ const planPrice = computed(() => {
                                         <img src="/assets/svg/cardName.svg" alt="" />
                                     </div>
                                     <input v-model="cardholderName" type="text" id="cardholder-name"
-                                        placeholder="Erica Strawzen"
+                                        placeholder="John Strawzen"
                                         class="w-full px-3 py-2 uppercase focus:border-none focus:outline-none bg-transparent" />
                                 </div>
                             </div>
@@ -282,7 +301,7 @@ const planPrice = computed(() => {
                                 <button type="submit"
                                     class="px-3 py-2 text-sm font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 
                                     focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                    PROCESS
+                                    {{ buttonProcess }}
                                 </button>
 
 

@@ -18,6 +18,7 @@ export const useAuthStore = defineStore('auth', {
             try {
                 const response = await apiService.post('login', form);
                 if(response && response.payload){
+                    debugger
                     let res = response.payload;
                     const tokenStore = useTokenStore();
                     tokenStore.setToken(res.access_token, res.refresh_token);

@@ -34,7 +34,7 @@ const props = defineProps({
         default: 'w-72',
     },
 });
-
+console.log("check auth: ", authStore.user);
 // Helper function to format date
 const reportDate = () => {
     const date = new Date();
@@ -57,8 +57,10 @@ const downloadReport = async () => {
     try {
         const hasSubscription = await subscriptionStore.getHasSubscription();
         const subscription = await subscriptionStore.getUserSubscription();
+        const user = authStore.user;
+        debugger;
 
-        if (hasSubscription?.active && hasSubscription?.request_count > 0) {
+        if (hasSubscription?.active || hasSubscription?.request_count > 0 || user.request_count > 0) {
             let report_type = '';
             if (subscription?.plan?.plan_code === '48h-export-subscription') {
                 report_type = 'export';
@@ -76,9 +78,10 @@ const downloadReport = async () => {
                 },
                 { responseType: 'blob' }
             );
-
+            debugger
             if (response.success && response.payload) {
-                const downloadUrl = response.payload;
+                const payload = response.payload;
+                const downloadUrl = payload.report_link;
                 const link = document.createElement('a');
                 link.href = downloadUrl;
                 link.download = `report-${reportDate()}.pdf`;
@@ -95,8 +98,9 @@ const downloadReport = async () => {
             return navigateTo('/payment/plans');
         }
     } catch (error) {
+        debugger
         carRegistrationSearchStore.setFullReportText('Get full report');
-        errorMessage.value = error?.message || 'Error occurred during the subscription check.';
+        errorMessage.value = error?.data?.message || 'Error occurred during the subscription check.';
     }
 };
 
@@ -170,6 +174,9 @@ watch(
     <div class="w-full">
         <!-- Show email input if the user has no subscription -->
         <form @submit.prevent="handleGetFullReport" v-if="!hasSubscription?.active && !showPasswordField">
+            <!-- storex: {{ authStore }} -->
+            <!-- hasSubscription: {{ hasSubscription }} -->
+            <!-- store: {{ showPasswordField }} -->
             <FormInputText id="email" v-model="form.email" placeholder="Enter your email address" type="text" />
             <button :class="['bg-[#FF7400] text-white text-xl rounded-lg py-2', width]">
                 {{ getFullReport }}
@@ -178,6 +185,7 @@ watch(
 
         <!-- Show password input and submit login if email is verified -->
         <form @submit.prevent="handleLoginSubmit" v-else-if="showPasswordField">
+            firefox for the nations
             <FormInputText id="password" v-model="form.password" placeholder="Enter your password" type="password" />
             <button :class="['bg-[#FF7400] text-white text-xl rounded-lg py-2', width]">
                 {{ getFullReport }}
