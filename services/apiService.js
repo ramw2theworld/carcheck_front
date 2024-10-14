@@ -1,9 +1,20 @@
 // apiService.js
 import { useTokenStore } from "../stores/token";
-
+const app_env = import.meta.env.VITE_APP_ENV;
+const base_url = import.meta.env.VITE_LOCAL_BASE_URL;
+const test_base_url = import.meta.env.VITE_TEST_BASE_URL;
+const prod_url = import.meta.env.VITE_PROD_BASE_URL;
 export default class ApiService {
-  constructor(baseURL) {
-    this.baseURL = baseURL || 'https://dev-back.car-check.info/api';
+  constructor(baseURL=null) {
+    if(app_env === "local"){
+      this.baseURL = base_url || base_url || 'http://localhost/api';
+    }else if(app_env === "dev"){
+      this.baseURL = test_base_url || test_base_url || 'https://dev-back.car-check.info/api';
+    }else if(app_env === "prod"){
+      this.baseURL = prod_url || 'https://car-check.io';
+    }else{
+      this.baseURL = base_url || base_url || 'http://localhost/api';
+    }
   }
 
   async request(endpoint, method, data = null) {
