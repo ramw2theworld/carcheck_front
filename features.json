@@ -39,7 +39,7 @@
             "id": 3, "title": "Mileage History", "icon": "milage-history.svg"
         },
         {
-            "id": 4, "title": "Stolen Check", "icon": "theft-check.svg"
+            "id": 4, "title": "Valuation Check", "icon": "theft-check.svg"
         },
         {
             "id": 5, "title": "MOT Check", "icon": "warning.svg"
@@ -64,25 +64,22 @@
     ],
     "premium_features":[
         {
-            "id": 2, "title": "Owners History", "icon": "owner-history.svg"
+            "id": 1, "title": "Owners History", "icon": "owner-history.svg"
         },
         {
-            "id": 3, "title": "Mileage History", "icon": "milage-history.svg"
+            "id": 2, "title": "Mileage History", "icon": "milage-history.svg"
         },
         {
-            "id": 4, "title": "Car Features", "icon": "car-features.svg"
+            "id": 3, "title": "Theft Check", "icon": "theft-check.svg"
         },
         {
-            "id": 5, "title": "Theft Check", "icon": "theft-check.svg"
+            "id": 4, "title": "Finance History", "icon": "outstanding-finances.svg"
         },
         {
-            "id": 6, "title": "MOT History", "icon": "warning.svg"
+            "id": 5, "title": "Tax Records", "icon": "tax-record-icon.svg"
         },
         {
-            "id": 7, "title": "Finance History", "icon": "outstanding-finances.svg"
-        },
-        {
-            "id": 8, "title": "Tax Records", "icon": "tax-record-icon.svg"
+            "id": 6, "title": "Written off", "icon": "tax-record-icon.svg"
         }
     ]
 }}

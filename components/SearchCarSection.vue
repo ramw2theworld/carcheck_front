@@ -14,9 +14,6 @@ const moreFeatures = async () => {
     );
   }
   const baseURL = import.meta.env.VITE_BASE_URL;
-  const baseUrl = `${import.meta.env.VITE_BASE_URL}`
-console.log("bASEURL: ", baseURL)
-
 </script>
 
 <template>

@@ -13,7 +13,7 @@ const premium_features = reactive(featureData.features.premium_features);
 const showLoader = ref(false);
 
 const isMonthlyActive = ref(true);
-const selectedPlan = ref("48h-export-subscription");
+const selectedPlan = ref("premium-3x");
 const plans = ref([]);
 
 const toggleBilling = (type) => {
@@ -114,16 +114,15 @@ onMounted(async () => {
                 }" class="text-[#0F1829] text-sm ml-2">{{ b_feature.title }}</h3>
                     </div>
                 </div>
-
                 <!-- premium plan  -->
-                <div class="flex flex-col items-start justify-start mt-2 gap-2" v-if="plan.plan_code == 'single-offer'">
-                    <div v-for="b_feature in premium_features" :key="b_feature.id"
+                <div class="flex flex-col items-start justify-start mt-2 gap-2" v-if="plan.plan_code == 'premium-3x'">
+                    <div v-for="premium_feature in premium_features" :key="premium_feature.id"
                         class="flex flex-row items-center justify-start">
-                        <img :src="getFeatureIcon(b_feature.icon)" :alt="b_feature.title" class="w-6 orange-filter" />
+                        <img :src="getFeatureIcon(premium_feature.icon)" :alt="premium_feature.title" class="w-6 orange-filter" />
                         <h3 :class="{
                     'text-white': selectedPlan === plan.plan_code,
                     'text-[#0F1829]': selectedPlan !== plan.plan_code
-                }" class="text-[#0F1829] text-sm ml-2">{{ b_feature.title }}</h3>
+                }" class="text-[#0F1829] text-sm ml-2">{{ premium_feature.title }}</h3>
                     </div>
                 </div>
 
