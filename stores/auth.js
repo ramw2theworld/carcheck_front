@@ -18,10 +18,18 @@ export const useAuthStore = defineStore('auth', {
             try {
                 const response = await apiService.post('login', form);
                 if(response && response.payload){
-                    debugger
                     let res = response.payload;
                     const tokenStore = useTokenStore();
+                    const subscriptionStore = useSubscriptionStore();
+                    const hasSubscriptionStore = useSubscriptionStore();
+
                     tokenStore.setToken(res.access_token, res.refresh_token);
+                    if(res.subscription && res.subscription.plan){
+                        await subscriptionStore.setCurrentSubscription(res.subscription);
+                    }
+                    if(res.hasSubscription){
+                        await hasSubscriptionStore.setHasSubscription(res.hasSubscription);
+                    }
                     // this.setCommonSetter(res);
                     this.setUser(res.user);
                     return response;

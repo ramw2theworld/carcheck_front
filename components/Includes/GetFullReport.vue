@@ -9,6 +9,7 @@ const carRegistrationSearchStore = useCarRegistrationSearchStore();
 const tokenStore = useTokenStore();
 const subscriptionStore = useSubscriptionStore();
 const authStore = useAuthStore();
+const planStore = usePlanStore();
 
 // Computed properties and refs
 const vbrand_logo = computed(() => carRegistrationSearchStore.vbrand_logo);
@@ -34,7 +35,6 @@ const props = defineProps({
         default: 'w-72',
     },
 });
-console.log("check auth: ", authStore.user);
 // Helper function to format date
 const reportDate = () => {
     const date = new Date();
@@ -58,14 +58,42 @@ const downloadReport = async () => {
         const hasSubscription = await subscriptionStore.getHasSubscription();
         const subscription = await subscriptionStore.getUserSubscription();
         const user = authStore.user;
-        debugger;
+        let email = user?.email;
+        const userSubscription = await subscriptionStore.fetchUserSubscription(email);
 
+        await carRegistrationSearchStore.fetchVehicleDimension();
+        await carRegistrationSearchStore.fetchVehicleGeneralInfo();
+        await carRegistrationSearchStore.fetchPerformance();
+console.log("mot historyy: ", carRegistrationSearchStore.MOTHistory)
+        let car_data = [
+            { vehicleStatus : carRegistrationSearchStore.vehicleStatus },
+            { vehicleDetails : carRegistrationSearchStore.vehicleDetails },
+            { MOTHistory : carRegistrationSearchStore.MOTHistory },
+            { technicalDetails : carRegistrationSearchStore.technicalDetails },
+            { classificationDetails : carRegistrationSearchStore.classificationDetails },
+            { vehicleHistory : carRegistrationSearchStore.vehicleHistory },
+            { vehicleValuationsList : carRegistrationSearchStore.vehicleValuationsList },
+            { dimensions : carRegistrationSearchStore.dimensions },
+            { general : carRegistrationSearchStore.general },
+            { vehicleRegistration : carRegistrationSearchStore.vehicleRegistration },
+            { motVed : carRegistrationSearchStore.motVed },
+            { smmtDetails : carRegistrationSearchStore.smmtDetails },
+            { performance : carRegistrationSearchStore.performance },
+            { vbrand_logo : carRegistrationSearchStore.vbrand_logo },
+            { getFullReportText : carRegistrationSearchStore.getFullReportText },
+            { stolenRecord : carRegistrationSearchStore.stolenRecord },
+            { writeOff : carRegistrationSearchStore.writeOff },
+            { riskRecords : carRegistrationSearchStore.riskRecords },
+            { financeRecords : carRegistrationSearchStore.financeRecords }
+        ];
         if (hasSubscription?.active || hasSubscription?.request_count > 0 || user.request_count > 0) {
             let report_type = '';
-            if (subscription?.plan?.plan_code === '48h-export-subscription') {
-                report_type = 'export';
+            if (subscription?.plan?.plan_code === '48h-expert-subscription') {
+                report_type = 'expert';
             } else if (subscription?.plan?.plan_code === '48h-basic-subscription') {
                 report_type = 'basic';
+            } else if (subscription?.plan?.plan_code === 'premium-3x') {
+                report_type = subscription.plan.plan_code;
             } else {
                 report_type = 'single-offer';
             }
@@ -75,10 +103,10 @@ const downloadReport = async () => {
                 {
                     email: authStore.user?.email,
                     report_type: report_type,
+                    car_data: car_data
                 },
                 { responseType: 'blob' }
             );
-            debugger
             if (response.success && response.payload) {
                 const payload = response.payload;
                 const downloadUrl = payload.report_link;
@@ -98,7 +126,6 @@ const downloadReport = async () => {
             return navigateTo('/payment/plans');
         }
     } catch (error) {
-        debugger
         carRegistrationSearchStore.setFullReportText('Get full report');
         errorMessage.value = error?.data?.message || 'Error occurred during the subscription check.';
     }
@@ -108,7 +135,6 @@ const handleGetFullReport = async () => {
     try {
         const response = await apiService.post('users/check-email-exist', { email: form.email });
         if (response.success && response.payload) {
-            debugger
             let payload = response.payload;
             if(payload.user_type && payload.user_type=="newlyCreatedUser"){
                 const tokenStore = useTokenStore();
@@ -119,11 +145,9 @@ const handleGetFullReport = async () => {
                 showPasswordField.value = true;
             }
         } else {
-            debugger
             throw new Error('Failed to retrieve the report data.');
         }
     } catch (error) {
-        debugger
         errorMessage.value = error?.data?.message || 'Error occurred while verifying email.';
     }
 };
@@ -131,7 +155,6 @@ const handleGetFullReport = async () => {
 const handleLoginSubmit = async () => {
     try {
         const response = await authStore.makeLogin(form);
-        debugger
         if (!response.success){
             errorMessage.value = "Login failed."
         }else{
@@ -172,27 +195,20 @@ watch(
 
 <template>
     <div class="w-full">
-        <!-- Show email input if the user has no subscription -->
-        <form @submit.prevent="handleGetFullReport" v-if="!hasSubscription?.active && !showPasswordField">
-            <!-- storex: {{ authStore }} -->
-            <!-- hasSubscription: {{ hasSubscription }} -->
-            <!-- store: {{ showPasswordField }} -->
+    <form @submit.prevent="handleGetFullReport" v-if="(!authStore.user || Object.keys(authStore.user).length === 0) && !showPasswordField">
             <FormInputText id="email" v-model="form.email" placeholder="Enter your email address" type="text" />
             <button :class="['bg-[#FF7400] text-white text-xl rounded-lg py-2', width]">
                 {{ getFullReport }}
             </button>
         </form>
 
-        <!-- Show password input and submit login if email is verified -->
         <form @submit.prevent="handleLoginSubmit" v-else-if="showPasswordField">
-            firefox for the nations
             <FormInputText id="password" v-model="form.password" placeholder="Enter your password" type="password" />
             <button :class="['bg-[#FF7400] text-white text-xl rounded-lg py-2', width]">
                 {{ getFullReport }}
             </button>
         </form>
 
-        <!-- Show download button if the user is authenticated -->
         <button v-else @click.prevent="downloadReport"
             :class="['bg-[#FF7400] text-white text-xl rounded-lg py-2', width]">
             {{ getFullReport }}

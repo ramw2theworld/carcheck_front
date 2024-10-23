@@ -95,6 +95,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     console.error("Failed to decrypt Vehicle Dimensions:", error);
                 }
             }
+            return this.dimensions;
         },
         async fetchVehicleRegistration() {
             let code = systematicFourCharCode('VehicleRegistration');
@@ -146,6 +147,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     console.error("Failed to decrypt Vehicle Technical Performance: ", error);
                 }
             }
+            return this.performance;
         },
         async fetchClassificationDetails() {
             let code = systematicFourCharCode('VehicleClassificationDetails');

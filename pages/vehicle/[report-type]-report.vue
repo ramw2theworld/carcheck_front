@@ -18,20 +18,24 @@ onMounted(() => {
 });
 
 const downloadReport = async () => {
+    let selectedPlan = planStore.selectedPlan;
+    debugger
     reportText.value = "Downloading...";
     if (tokenStore.getToken && tokenStore.getStatus) {
         let subscription = await subscriptionStore.getUserSubscription();
         let hasSubscription = await subscriptionStore.getHasSubscription();
-
+        debugger
         if ((hasSubscription.request_count > 0) && hasSubscription.active) {
             try {
                 let report_type="";
                 if(subscription?.plan?.plan_code=="48h-export-subscription"){
-                    report_type = "export";
+                    report_type = "expert";
                 }else if(subscription?.plan?.plan_code=="48h-basic-subscription"){
                     report_type = "basic";
+                }else if(subscription?.plan?.plan_code=="premium-3x"){
+                    report_type = "premium-3x";
                 }else{
-                    report_type = "single-offer";
+                    report_type = "";
                 }
                 const response = await apiService.post('users/download-report', {
                     email: authStore.user?.email,

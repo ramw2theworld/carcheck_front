@@ -51,7 +51,6 @@ onMounted(async () => {
                     ? MOTVed.value.VedCo2Emissions 
                     : 227;
   
-  console.log("emissions: ", emissions)
   setco2label(emissions);
 });
 
