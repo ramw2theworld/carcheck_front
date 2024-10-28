@@ -110,6 +110,7 @@ async function handleCheckoutClick() {
             billing_details: { name: cardholderName.value },
             plan: plan.getSelectedPlan,
         });
+
         
         if ((response as any).payload.paymentStatus !== 'succeeded') {
             const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment((response as any).payload.clientSecret, {
@@ -143,6 +144,11 @@ async function handleCheckoutClick() {
             }
         }
     } catch (error) {
+
+        if(!error.data?.success){
+            errorMessage.value = error.data.message;
+
+        }
         console.error({ error });
         buttonProcess.value = "PROCESS";
     } finally {

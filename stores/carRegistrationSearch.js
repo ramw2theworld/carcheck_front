@@ -264,11 +264,12 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
         
         // Search and store vehicle registration details
         async searchCarRegNumber(car_reg_number) {
+            debugger
             try {
                 const tokenStore = useTokenStore();
                 const token = tokenStore.getToken;
                 this.reg_number = car_reg_number;
-
+                
                 const response = token
                     ? await apiService.get(`v1/car-check/${car_reg_number}`, token)
                     : await apiService.get(`v1/car-check/${car_reg_number}`);

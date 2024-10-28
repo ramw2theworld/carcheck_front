@@ -83,6 +83,30 @@ export const useAuthStore = defineStore('auth', {
             } catch (error) {
                 throw error;
             }
+            finally{
+                this.removeUser();
+                tokenStore.removeToken();
+                const subscription = useSubscriptionStore();
+                subscription.setHasSubscription({
+                    auth: false,
+                    active: false,
+                    subscription_type: null,
+                    request_count: 0,
+                });
+                localStorage.clear();
+                sessionStorage.clear();
+
+                if ('caches' in window) {
+                    caches.keys().then((names) => {
+                        names.forEach(name => caches.delete(name));
+                    });
+                }
+                // clear pinia storage
+                carRegistrationSearchStore.$reset();
+                this.$reset();
+
+                window.location.reload(true);
+            }
         },
 
         async fetchUserRolesAndPermissions() {

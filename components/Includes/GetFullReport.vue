@@ -46,9 +46,10 @@ const reportDate = () => {
 
 // Main function to handle report download
 const downloadReport = async () => {
+    getFullReportButton.value = "Downloading...";
     carRegistrationSearchStore.setFullReportText('Downloading...');
     const isAuthenticated = tokenStore.getToken && tokenStore.getStatus;
-
+    
     if (!isAuthenticated) {
         carRegistrationSearchStore.setFullReportText('Get full report');
         return navigateTo('/auth/login');
@@ -64,7 +65,7 @@ const downloadReport = async () => {
         await carRegistrationSearchStore.fetchVehicleDimension();
         await carRegistrationSearchStore.fetchVehicleGeneralInfo();
         await carRegistrationSearchStore.fetchPerformance();
-console.log("mot historyy: ", carRegistrationSearchStore.MOTHistory)
+
         let car_data = [
             { vehicleStatus : carRegistrationSearchStore.vehicleStatus },
             { vehicleDetails : carRegistrationSearchStore.vehicleDetails },
@@ -88,7 +89,7 @@ console.log("mot historyy: ", carRegistrationSearchStore.MOTHistory)
         ];
         if (hasSubscription?.active || hasSubscription?.request_count > 0 || user.request_count > 0) {
             let report_type = '';
-            if (subscription?.plan?.plan_code === '48h-expert-subscription') {
+            if (subscription?.plan?.plan_code === '48h-export-subscription') {
                 report_type = 'expert';
             } else if (subscription?.plan?.plan_code === '48h-basic-subscription') {
                 report_type = 'basic';
@@ -97,6 +98,8 @@ console.log("mot historyy: ", carRegistrationSearchStore.MOTHistory)
             } else {
                 report_type = 'single-offer';
             }
+
+            debugger
 
             const response = await apiService.post(
                 'users/download-report',
@@ -118,16 +121,21 @@ console.log("mot historyy: ", carRegistrationSearchStore.MOTHistory)
                 link.click();
                 document.body.removeChild(link);
                 carRegistrationSearchStore.setFullReportText('Downloaded');
+                getFullReportButton.value = "Downloaded";
             } else {
                 throw new Error('Failed to retrieve the report data.');
+                getFullReportButton.value = "Get full report";
             }
         } else {
             carRegistrationSearchStore.setFullReportText('Get full report');
+            getFullReportButton.value = "Get full report";
+
             return navigateTo('/payment/plans');
         }
     } catch (error) {
         carRegistrationSearchStore.setFullReportText('Get full report');
         errorMessage.value = error?.data?.message || 'Error occurred during the subscription check.';
+        getFullReportButton.value = "Get full report";
     }
 };
 
