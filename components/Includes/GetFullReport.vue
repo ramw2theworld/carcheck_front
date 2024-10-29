@@ -88,24 +88,27 @@ const downloadReport = async () => {
             { financeRecords : carRegistrationSearchStore.financeRecords }
         ];
         if (hasSubscription?.active || hasSubscription?.request_count > 0 || user.request_count > 0) {
-            let report_type = '';
-            if (subscription?.plan?.plan_code === '48h-export-subscription') {
-                report_type = 'expert';
-            } else if (subscription?.plan?.plan_code === '48h-basic-subscription') {
-                report_type = 'basic';
-            } else if (subscription?.plan?.plan_code === 'premium-3x') {
-                report_type = subscription.plan.plan_code;
-            } else {
-                report_type = 'single-offer';
-            }
+            // let report_type = '';
+            // if (subscription?.plan?.plan_code === '48h-export-subscription') {
+            //     report_type = '48h-expert-subscription';
+            // } else if (subscription?.plan?.plan_code === '48h-basic-subscription') {
+            //     report_type = '48h-basic-subscription';
+            // } else if (subscription?.plan?.plan_code === 'premium-3x') {
+            //     report_type = subscription.plan.plan_code;
+            // } else {
+            //     report_type = 'single-offer';
+            // }
 
             debugger
+            if(!subscription){
+                errorMessage.value = "You don't have any active subscription. Please buy or upgrade plan.";
+            }
 
             const response = await apiService.post(
                 'users/download-report',
                 {
                     email: authStore.user?.email,
-                    report_type: report_type,
+                    report_type: subscription?.plan?.plan_code,
                     car_data: car_data
                 },
                 { responseType: 'blob' }
@@ -133,6 +136,7 @@ const downloadReport = async () => {
             return navigateTo('/payment/plans');
         }
     } catch (error) {
+        debugger
         carRegistrationSearchStore.setFullReportText('Get full report');
         errorMessage.value = error?.data?.message || 'Error occurred during the subscription check.';
         getFullReportButton.value = "Get full report";

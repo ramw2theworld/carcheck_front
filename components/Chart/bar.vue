@@ -20,7 +20,7 @@ const props = defineProps<{
   };
   hasSubscription: boolean;
 }>();
-
+console.log("data: ", props.data);
 // Computed properties for labels and values
 const labels = computed(() => props.data.map((item) => item.label));
 const values = computed(() => props.data.map((item) => item.value));
@@ -69,6 +69,7 @@ onMounted(() => {
                 if (!props.hasSubscription) {
                   return value.toString().split('').map(() => 'X').join(''); // Obscure the values
                 }
+                console.log("value: ", value);
                 return value;
               },
             },

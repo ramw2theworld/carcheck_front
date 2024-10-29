@@ -31,6 +31,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
             writeOff: null,
             riskRecords: null,
             financeRecords: null,
+            totalNumberOfLooksUp: 0,
         }
     },
     getters: {
@@ -261,10 +262,22 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
             }
             return this.financeRecords;
         },
+        async fetchNumberOfLooksUp() {
+            let code = systematicFourCharCode('numberOfLooksUp');
+            const encryptedData = localStorage.getItem(code);
+            if (encryptedData) {
+                try {
+                    const decrypted = await decryptData(`${code}`, JSON.parse(encryptedData));
+                    this.totalNumberOfLooksUp = JSON.parse(decrypted);
+                } catch (error) {
+                    console.error("Failed to decrypt Vehicle total looks up: ", error);
+                }
+            }
+            return this.totalNumberOfLooksUp;
+        },
         
         // Search and store vehicle registration details
         async searchCarRegNumber(car_reg_number) {
-            debugger
             try {
                 const tokenStore = useTokenStore();
                 const token = tokenStore.getToken;
@@ -295,6 +308,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     await this.setWriteOffRecords(combinedPayload);
                     await this.setFinanceRecords(combinedPayload);
                     await this.setRiskRecords(combinedPayload);
+                    await this.setNumberOfLooksUp(combinedPayload);
                     localStorage.setItem('reg_number', this.reg_number);
                 }
             } catch (error) {
@@ -456,6 +470,14 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                 riskfData['HighRiskRecordCount'] = combinedPayload['HighRiskRecordCount'];
                 riskfData['HighRiskRecordList'] = combinedPayload['HighRiskRecordList'];
                 const data = JSON.stringify(riskfData);
+                const encryptedData = await encryptData(code, data);
+                localStorage.setItem(code, JSON.stringify(encryptedData));
+            }
+        },
+        async setNumberOfLooksUp(combinedPayload){
+            let code = systematicFourCharCode('numberOfLooksUp');
+            if (combinedPayload.total_lookup > 0) {
+                const data = JSON.stringify(combinedPayload.total_lookup);
                 const encryptedData = await encryptData(code, data);
                 localStorage.setItem(code, JSON.stringify(encryptedData));
             }

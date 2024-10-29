@@ -172,7 +172,7 @@ async function createSubscription(selectedPlan) {
         });
 
         let payload = response.payload;
-        
+        debugger
         if (payload?.hasSubscription) {
             await subscriptionStore.setHasSubscription(payload.hasSubscription);
         }

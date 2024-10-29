@@ -14,12 +14,14 @@ export const useSubscriptionStore = defineStore('subscription', {
             subscription: null,
         }
     },
+    persist: true,
     getters: {
         // getHasSubscription: (state) => state.hasSubscription,
     },
     actions: {
         async setHasSubscription(hasSubscription) {
-            let code = systematicFourCharCode('hasSubscription')
+            let code = systematicFourCharCode('hasSubscription');
+            debugger
             if (hasSubscription !=null || hasSubscription !="undefined") {
                 const data = JSON.stringify(hasSubscription);
                 const encryptedData = await encryptData(code, data);

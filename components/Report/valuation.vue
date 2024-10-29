@@ -101,8 +101,9 @@ const chartDatax = [
     </div>
 
     <div v-show="isTableVisible" class="text-black my-10 w-full">
-      <div v-if="isClient && chartData.value && chartData.value.length > 0">
-        <chart-bar v-if="chartData" :data="chartData" :hasSubscription="hasSubscription" :height="getChartHeight()" width="100%" />
+      <div v-if="isClient && chartData">
+        {{ chartData }}
+        <chart-bar v-if="chartData" :data="chartData" :hasSubscription=hasSubscription.active :height="getChartHeight()" width="100%" />
       </div>
       <div v-else>
         <chart-bar v-if="chartLoaded" :data="chartData" :height="getChartHeight()" width="100%" />
