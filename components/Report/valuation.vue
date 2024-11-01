@@ -7,7 +7,7 @@ const toggleTableVisibility = () => {
 
 const carRegistrationSearchStore = useCarRegistrationSearchStore();
 const valuationLists = computed(() => carRegistrationSearchStore.vehicleValuationsList);
-
+console.log("valUU: ", valuationLists.value);
 const subscriptionStore = useSubscriptionStore();
 const hasSubscription = computed(()=> subscriptionStore.hasSubscription);
 
@@ -18,7 +18,6 @@ const chartLoaded = ref(false);
 onMounted(async () => {
   isClient.value = true;
   await carRegistrationSearchStore.fetchValuationList();
-  console.log("valuee: ", valuationLists.value);
   if (valuationLists.value) {
     mapValuationToChart();
     console.log("chartData after mapValuationToChart:", chartData.value);

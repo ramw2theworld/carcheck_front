@@ -1,5 +1,6 @@
 <template>
-  <canvas :class="props.class" ref="chartCanvas" :height="height" :width="width"></canvas>
+  <!-- Apply a conditional class based on hasSubscription -->
+  <canvas :class="{ 'blurred': !props.hasSubscription }" ref="chartCanvas" :height="height" :width="width"></canvas>
 </template>
 
 <script setup lang="ts">
@@ -20,7 +21,7 @@ const props = defineProps<{
   };
   hasSubscription: boolean;
 }>();
-console.log("data: ", props.data);
+
 // Computed properties for labels and values
 const labels = computed(() => props.data.map((item) => item.label));
 const values = computed(() => props.data.map((item) => item.value));
@@ -69,7 +70,6 @@ onMounted(() => {
                 if (!props.hasSubscription) {
                   return value.toString().split('').map(() => 'X').join(''); // Obscure the values
                 }
-                console.log("value: ", value);
                 return value;
               },
             },
@@ -90,12 +90,8 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Adding CSS for blurring the Y-axis labels */
-canvas {
-  filter: blur(2px); /* This applies a slight blur effect to the entire canvas */
-}
-
-canvas.active {
-  filter: none; /* Removes the blur if the user has an active subscription */
+/* Only apply blur if the user lacks a subscription */
+canvas.blurred {
+  filter: blur(2px);
 }
 </style>

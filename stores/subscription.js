@@ -21,7 +21,6 @@ export const useSubscriptionStore = defineStore('subscription', {
     actions: {
         async setHasSubscription(hasSubscription) {
             let code = systematicFourCharCode('hasSubscription');
-            debugger
             if (hasSubscription !=null || hasSubscription !="undefined") {
                 const data = JSON.stringify(hasSubscription);
                 const encryptedData = await encryptData(code, data);
