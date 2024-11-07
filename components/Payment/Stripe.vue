@@ -172,7 +172,6 @@ async function createSubscription(selectedPlan) {
         });
 
         let payload = response.payload;
-        debugger
         if (payload?.hasSubscription) {
             await subscriptionStore.setHasSubscription(payload.hasSubscription);
         }
@@ -184,6 +183,8 @@ async function createSubscription(selectedPlan) {
         if (payload?.plan) {
             await plan.setSelectedPlan(payload.plan);
         }
+        buttonProcess.value = "DONE!";
+
         if(payload?.car_data){
             // vehicle MOT History
             const vehicleMotHistoryObj = payload.car_data.find(item => item.MotHistory);
@@ -264,8 +265,6 @@ async function createSubscription(selectedPlan) {
                 console.error("Vehicle status not found in car data");
             }
         }
-
-        buttonProcess.value = "DONE!";
         
         // if (selectedPlan.plan_code === '48h-basic-subscription') {
         //     navigateTo('/vehicle/basic-report');

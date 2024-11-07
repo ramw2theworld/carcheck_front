@@ -334,7 +334,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
         // Set data in localStorage with encryption
         async setVehicleImageUrl(combinedPayload) {
             let code = systematicFourCharCode('VehicleImageUrl');
-            if (combinedPayload.VehicleImages.ImageDetailsCount > 0) {
+            if (combinedPayload?.VehicleImages?.ImageDetailsCount > 0) {
                 const data = JSON.stringify(combinedPayload.VehicleImages.ImageDetailsList[0].ImageUrl);
                 const encryptedData = await encryptData(code, data);
                 localStorage.setItem(code, JSON.stringify(encryptedData));
