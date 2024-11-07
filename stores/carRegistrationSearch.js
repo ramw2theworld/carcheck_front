@@ -287,8 +287,6 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     ? await apiService.get(`v1/car-check/${car_reg_number}`, token)
                     : await apiService.get(`v1/car-check/${car_reg_number}`);
                 if(response.success){
-                    debugger
-                    // Clear specific keys from localStorage
                     const keysToRemove = [
                         'VehicleImageUrl', 'VehicleLogo', 'SmmtDetails', 'VehicleDimension',
                         'VehicleRegistration', 'VehicleMotVed', 'VehicleGeneralInfo', 'Performance',

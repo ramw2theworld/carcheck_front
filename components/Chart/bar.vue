@@ -45,11 +45,11 @@ onMounted(() => {
     new Chart(chartCanvas.value, {
       type: 'bar',
       data: {
-        labels: labels.value,
+        labels: props.data.map(item => item.label),
         datasets: [
           {
-            label: 'Dataset 1',
-            data: values.value,
+            label: 'Valuation Data',
+            data: props.data.map(item => item.value),
             backgroundColor: '#F94144',
             borderWidth: 1,
             barThickness: 20,
@@ -63,23 +63,15 @@ onMounted(() => {
           y: {
             beginAtZero: true,
             ticks: {
-              display: true,
               callback: function (value) {
-                if (!props.hasSubscription) {
-                  return value.toString().split('').map(() => 'X').join(''); // Obscure the values
-                }
-                return value;
+                return props.hasSubscription ? value : 'X'.repeat(value.toString().length);
               },
             },
           },
         },
         plugins: {
-          legend: {
-            display: false,
-          },
-          tooltip: {
-            enabled: false,
-          },
+          legend: { display: false },
+          tooltip: { enabled: props.hasSubscription },
         },
       },
     });
