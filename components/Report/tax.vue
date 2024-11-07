@@ -160,8 +160,9 @@ onMounted(async () => {
               <td v-if="MOTVed?.VedCo2Emissions || vehicleRegistration?.Co2Emissions">{{ MOTVed?.VedCo2Emissions ||  vehicleRegistration?.Co2Emissions}}</td>
             </tr>
             <tr>
-              <th>CO2 Label</th>
+              <th>CO2 Label </th>
               <td v-if="MOTVed?.VedCo2Band">{{ MOTVed?.VedCo2Band }}</td>
+              <td v-else>N/A</td>
             </tr>
           </tbody>
         </table>

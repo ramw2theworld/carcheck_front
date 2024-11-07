@@ -13,7 +13,7 @@ const errorMessage = ref('');
 
 onMounted(() => {
   if (hasSubscription.value?.active) {
-    navigateTo('/');
+    // navigateTo('/');
   }
 });
 

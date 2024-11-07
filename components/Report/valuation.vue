@@ -7,7 +7,6 @@ const toggleTableVisibility = () => {
 
 const carRegistrationSearchStore = useCarRegistrationSearchStore();
 const valuationLists = computed(() => carRegistrationSearchStore.vehicleValuationsList);
-console.log("valUU: ", valuationLists.value);
 const subscriptionStore = useSubscriptionStore();
 const hasSubscription = computed(()=> subscriptionStore.hasSubscription);
 
@@ -101,7 +100,6 @@ const chartDatax = [
 
     <div v-show="isTableVisible" class="text-black my-10 w-full">
       <div v-if="isClient && chartData">
-        {{ chartData }}
         <chart-bar v-if="chartData" :data="chartData" :hasSubscription=hasSubscription.active :height="getChartHeight()" width="100%" />
       </div>
       <div v-else>

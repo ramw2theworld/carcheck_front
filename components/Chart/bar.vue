@@ -30,10 +30,8 @@ const width = computed(() => convertToNumber(props.width));
 
 // Function to convert string to number
 function convertToNumber(value: any) {
-  if (typeof value === 'string' && value.includes('%')) {
-    return value;
-  }
-  return typeof value === 'string' ? parseFloat(value) : value;
+  if (typeof value === "string" && value.includes("%")) return value;
+  return typeof value === "string" ? parseFloat(value) : value;
 }
 
 // Register Chart.js components

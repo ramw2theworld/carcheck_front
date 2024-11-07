@@ -241,5 +241,9 @@ watch(
             {{ getFullReportY }}
         </button> 
         <p v-if="errorMessage" class="text-red-500 mt-2">{{ errorMessage }}</p>
+        <NuxtLink to="/payment/plans" v-if="hasSubscription?.active"
+        class="pull-right">
+            Buy More
+        </NuxtLink>
     </div>
 </template>
