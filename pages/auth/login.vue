@@ -18,7 +18,8 @@ definePageMeta({
 
 const form = reactive({
     email: "",
-    password: ""
+    password: "",
+    procedure: "login_form"
 });
 
 const errors = reactive({
@@ -67,7 +68,9 @@ const handleLoginSubmit = async () => {
             throw new Error("Invalid login credentials");
         }
     } catch (error) {
-        errorMessage.value = error?.data?.message || "An unexpected error occurred";
+        debugger
+        errorMessage.value = error?.data?.message || error?.response?.message || "An unexpected error occurred while trying to log in.";
+        console.log("error:", errorMessage.value);
     } finally {
         loginSubmit.value = "Submit";
         isProcessing.value = false;
@@ -86,11 +89,6 @@ const navigateToForgotPassword = () => navigateTo('/auth/forgot-password');
                 <h3 class="text-center text-2xl font-semibold">User Login</h3>
 
                 <form @submit.prevent="handleLoginSubmit">
-                    <div class="row" v-if="errorMessage">
-                        <div class="alert alert-danger">
-                            {{ errorMessage }}
-                        </div>
-                    </div>
                     <div class="mb-6">
                         <FormLabel for="email">Email</FormLabel>
                         <FormInputText id="email" v-model="form.email" placeholder="Enter your email address"
@@ -103,6 +101,13 @@ const navigateToForgotPassword = () => navigateTo('/auth/forgot-password');
                         <FormInputText id="password" v-model="form.password" placeholder="Enter password"
                             type="password" />
                         <span v-if="errors.password" class="text-red-500">{{ errors.password }}</span>
+                    </div>
+
+                    <div class="row mb-2" v-if="errorMessage">
+                        <div class="alert alert-danger">
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">Oops!</span> {{ errorMessage }}</p>
+                        </div>
+
                     </div>
 
                     <div class="flex justify-between items-center">
@@ -118,6 +123,7 @@ const navigateToForgotPassword = () => navigateTo('/auth/forgot-password');
                             Forgot Password
                         </span>
                     </div>
+                    
                 </form>
             </div>
         </div>

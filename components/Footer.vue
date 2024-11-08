@@ -29,7 +29,7 @@
                                 <a href="#" class="hover:underline text-[#0F1829] text-sm font-thin">Our resources</a>
                             </li>
                           <li class="mb-2">
-                            <a href="#" class="hover:underline text-[#0F1829] text-sm font-thin">Contact US</a>
+                            <NuxtLink to="/contact-us" class="hover:underline text-[#0F1829] text-sm font-thin">Contact US</NuxtLink>
                           </li>
                         </ul>
                     </div>

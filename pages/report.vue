@@ -12,7 +12,6 @@ onMounted(async () => {
   //     authStore.logout();
   // }
 });
-console.log("hello there: ", authStore.user);
 
 definePageMeta({
   title: 'Report',
