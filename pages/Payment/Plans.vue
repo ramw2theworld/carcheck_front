@@ -126,10 +126,6 @@ onMounted(async () => {
             </div>
             <!-- single offer payment end -->
 
-
-
-
-
             <div v-else v-for="plan in plans" :key="plan.plan_code" @click="selectPlan(plan)" :class="{
             'bg-[#0F1829] text-white': selectedPlan === plan.plan_code,
             'border-2 border-[#0F1829] text-[#0F1829]': selectedPlan !== plan.plan_code

@@ -282,10 +282,11 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                 const tokenStore = useTokenStore();
                 const token = tokenStore.getToken;
                 this.reg_number = car_reg_number;
-                
+                debugger
                 const response = token
                     ? await apiService.get(`v1/car-check/${car_reg_number}`, token)
                     : await apiService.get(`v1/car-check/${car_reg_number}`);
+
                 if(response.success){
                     const keysToRemove = [
                         'VehicleImageUrl', 'VehicleLogo', 'SmmtDetails', 'VehicleDimension',
@@ -326,6 +327,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     localStorage.setItem('reg_number', this.reg_number);
                 }
             } catch (error) {
+                debugger
                 console.log("Error while fetching car details:", error);
                 throw error;
             }

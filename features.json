@@ -33,16 +33,19 @@
             "id": 1, "title": "Damage Check", "icon": "damage-check.svg"
         },
         {
-            "id": 2, "title": "Owners History", "icon": "owner-history.svg"
+            "id": 2, "title": "Mileage History", "icon": "milage-history.svg"
         },
         {
-            "id": 3, "title": "Mileage History", "icon": "milage-history.svg"
+            "id": 3, "title": "Valuation Check", "icon": "theft-check.svg"
         },
         {
-            "id": 4, "title": "Valuation Check", "icon": "theft-check.svg"
+            "id": 4, "title": "MOT Check", "icon": "warning.svg"
         },
         {
-            "id": 5, "title": "MOT Check", "icon": "warning.svg"
+            "id": 5, "title": "Tax Calculation", "icon": "warning.svg"
+        },
+        {
+            "id": 6, "title": "Technical data", "icon": "warning.svg"
         }
     ],
     "standerd_features":[
@@ -56,10 +59,13 @@
             "id": 3, "title": "Finance History", "icon": "outstanding-finances.svg"
         },
         {
-            "id": 4, "title": "Tax Records", "icon": "tax-record-icon.svg"
+            "id": 4, "title": "Tax Calculation", "icon": "tax-record-icon.svg"
         },
         {
             "id": 5, "title": "Technical data", "icon": "technical-data.svg"
+        },
+        {
+            "id": 6, "title": "Written off", "icon": "tax-record-icon.svg"
         }
     ],
     "premium_features":[
@@ -76,7 +82,7 @@
             "id": 4, "title": "Finance History", "icon": "outstanding-finances.svg"
         },
         {
-            "id": 5, "title": "Tax Records", "icon": "tax-record-icon.svg"
+            "id": 5, "title": "Tax Calculation", "icon": "tax-record-icon.svg"
         },
         {
             "id": 6, "title": "Written off", "icon": "tax-record-icon.svg"
