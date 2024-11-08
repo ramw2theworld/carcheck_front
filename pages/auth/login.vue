@@ -68,7 +68,6 @@ const handleLoginSubmit = async () => {
             throw new Error("Invalid login credentials");
         }
     } catch (error) {
-        debugger
         errorMessage.value = error?.data?.message || error?.response?.message || "An unexpected error occurred while trying to log in.";
         console.log("error:", errorMessage.value);
     } finally {
