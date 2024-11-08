@@ -69,6 +69,8 @@ const searchForCarReg = async () => {
     searchTxt.value = null;
     router.push(`/report`);
   } catch (error) {
+    debugger
+    
     searchTxt.value = null;
     console.log("search error: ", error);
 

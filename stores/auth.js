@@ -18,10 +18,18 @@ export const useAuthStore = defineStore('auth', {
             try {
                 const response = await apiService.post('login', form);
                 if(response && response.payload){
-                    debugger
                     let res = response.payload;
                     const tokenStore = useTokenStore();
+                    const subscriptionStore = useSubscriptionStore();
+                    const hasSubscriptionStore = useSubscriptionStore();
+
                     tokenStore.setToken(res.access_token, res.refresh_token);
+                    if(res.subscription && res.subscription.plan){
+                        await subscriptionStore.setCurrentSubscription(res.subscription);
+                    }
+                    if(res.hasSubscription){
+                        await hasSubscriptionStore.setHasSubscription(res.hasSubscription);
+                    }
                     // this.setCommonSetter(res);
                     this.setUser(res.user);
                     return response;
@@ -74,6 +82,30 @@ export const useAuthStore = defineStore('auth', {
                 // navigateTo('/auth/login');
             } catch (error) {
                 throw error;
+            }
+            finally{
+                this.removeUser();
+                tokenStore.removeToken();
+                const subscription = useSubscriptionStore();
+                subscription.setHasSubscription({
+                    auth: false,
+                    active: false,
+                    subscription_type: null,
+                    request_count: 0,
+                });
+                localStorage.clear();
+                sessionStorage.clear();
+
+                if ('caches' in window) {
+                    caches.keys().then((names) => {
+                        names.forEach(name => caches.delete(name));
+                    });
+                }
+                // clear pinia storage
+                carRegistrationSearchStore.$reset();
+                this.$reset();
+
+                window.location.reload(true);
             }
         },
 

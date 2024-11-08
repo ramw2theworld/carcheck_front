@@ -103,7 +103,7 @@ function getFailureType(annotationList) {
     </div>
     <div v-show="isTableVisible" class="flex flex-row w-full pt-4 space-x-8">
       <div class="lg:w-2/3">
-        <template v-for="(test, index) in failedTests" :key="index" v-if="failedTests.length > 0">
+        <template v-for="(test, index) in failedTests" :key="index" v-if="hasSubscription?.active">
           <table class="w-full text-black mt-8">
             <thead>
               <tr class="header-row">
@@ -136,7 +136,62 @@ function getFailureType(annotationList) {
           </table>
         </template>
         <template v-else>
-          <p>No damage history found.</p>
+          <table class="w-full text-black mt-8">
+            <thead>
+              <tr class="header-row">
+                <th colspan="2">DAMAGE 1</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Date</th>
+                <td>
+                  <Hashed />
+                </td>
+              </tr>
+              <tr>
+                <th>Category</th>
+                <td>
+                  <Hashed />
+                </td>
+              </tr>
+              <tr>
+                <th>Type</th>
+                <td>
+                  <Hashed />
+                </td>
+              </tr>
+              
+            </tbody>
+          </table>
+          <table class="w-full text-black mt-8 mb-2" >
+            <thead>
+              <tr class="header-row">
+                <th colspan="2">DAMAGE 1</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Date</th>
+                <td>
+                  <Hashed />
+                </td>
+              </tr>
+              <tr>
+                <th>Category</th>
+                <td>
+                  <Hashed />
+                </td>
+              </tr>
+              <tr>
+                <th>Type</th>
+                <td>
+                  <Hashed />
+                </td>
+              </tr>
+              
+            </tbody>
+          </table>
         </template>
         <div class="bg-[#EF343A] w-full flex items-center justify-center py-2">
           <h3 class="text-xl font-semibold">Lorem ipsum dolor sit amet.

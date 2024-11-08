@@ -4,10 +4,12 @@ import type { StripeCardCvcElement, StripeCardExpiryElement, StripeCardNumberEle
 import { loadStripe } from '@stripe/stripe-js';
 import ApiService from '~/services/apiService';
 import { useSubscriptionStore } from '@/stores/subscription';
+import { useCarRegistrationSearchStore } from '@/stores/carRegistrationSearch';
 
 const auth = useAuthStore();
 const plan = usePlanStore();
 const subscriptionStore = useSubscriptionStore();
+const registrationSearchStore = useCarRegistrationSearchStore();
 
 interface BillingDetails {
     name: string;
@@ -108,6 +110,7 @@ async function handleCheckoutClick() {
             billing_details: { name: cardholderName.value },
             plan: plan.getSelectedPlan,
         });
+
         
         if ((response as any).payload.paymentStatus !== 'succeeded') {
             const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment((response as any).payload.clientSecret, {
@@ -141,6 +144,11 @@ async function handleCheckoutClick() {
             }
         }
     } catch (error) {
+
+        if(!error.data?.success){
+            errorMessage.value = error.data.message;
+
+        }
         console.error({ error });
         buttonProcess.value = "PROCESS";
     } finally {
@@ -164,7 +172,6 @@ async function createSubscription(selectedPlan) {
         });
 
         let payload = response.payload;
-        
         if (payload?.hasSubscription) {
             await subscriptionStore.setHasSubscription(payload.hasSubscription);
         }
@@ -173,6 +180,92 @@ async function createSubscription(selectedPlan) {
             await subscriptionStore.setCurrentSubscription(payload.subscription);
         }
 
+        if (payload?.plan) {
+            await plan.setSelectedPlan(payload.plan);
+        }
+        buttonProcess.value = "DONE!";
+
+        if(payload?.car_data){
+            // vehicle MOT History
+            const vehicleMotHistoryObj = payload.car_data.find(item => item.MotHistory);
+
+            if (vehicleMotHistoryObj && vehicleMotHistoryObj.setMOTHistory) {
+                await registrationSearchStore.setMOTHistory(vehicleMotHistoryObj.MotHistory.RecordList);
+            } else {
+                console.error("Vehicle MOT History not found in car data");
+            }
+            // vehicle History
+            const vehicleHistoryObj = payload.car_data.find(item => item.VehicleHistory);
+
+            if (vehicleHistoryObj && vehicleHistoryObj.VehicleHistory) {
+                await registrationSearchStore.setVehicleHistory(vehicleHistoryObj.VehicleHistory);
+            } else {
+                console.error("Vehicle History not found in car data");
+            }
+
+            // vehicle General
+            const vehicleTechDetailsObj = payload.car_data.find(item => item.TechnicalDetails);
+
+            if (vehicleTechDetailsObj && vehicleTechDetailsObj.vehicleTechnicalDetailsObj) {
+                await registrationSearchStore.setVehicleGeneralInfo(vehicleTechDetailsObj.vehicleTechnicalDetailsObj.General);
+            } else {
+                console.error("Vehicle General not found in car data");
+            }
+
+            // vehicle Performance
+            const technicalDetailsObj = payload.car_data.find(item => item.TechnicalDetails);
+
+            if (technicalDetailsObj && technicalDetailsObj.vehicleTechnicalDetailsObj) {
+                await registrationSearchStore.setPerformance(technicalDetailsObj.vehicleTechnicalDetailsObj.Performance);
+            } else {
+                console.error("Vehicle Performance not found in car data");
+            }
+
+            // vehicle Dimesion
+            const vehicleTechnicalDetailsObj = payload.car_data.find(item => item.TechnicalDetails);
+
+            if (vehicleTechnicalDetailsObj && vehicleTechnicalDetailsObj.vehicleTechnicalDetailsObj) {
+                await registrationSearchStore.setVehicleDimension(vehicleTechnicalDetailsObj.vehicleTechnicalDetailsObj.Dimensions);
+            } else {
+                console.error("Vehicle Dimension not found in car_data");
+            }
+            // vehicle SmmtDetails
+            const vehicleSetSmmtDetailsObj = payload.car_data.find(item => item.SmmtDetails);
+
+            if (vehicleSetSmmtDetailsObj && vehicleSetSmmtDetailsObj.SmmtDetails) {
+                await registrationSearchStore.setSmmtDetails(vehicleSetSmmtDetailsObj.SmmtDetails);
+            } else {
+                console.error("SmmtDetails not found in car data");
+            }
+
+            // vehicle ClassificationDetails
+            const vehicleClassificationDetailsObj = payload.car_data.find(item => item.ClassificationDetails);
+
+            if (vehicleClassificationDetailsObj && vehicleClassificationDetailsObj.ClassificationDetails) {
+                await registrationSearchStore.setClassificationDetails(vehicleClassificationDetailsObj.ClassificationDetails);
+            } else {
+                console.error("ClassificationDetails not found in car data");
+            }
+
+            // vehicle registration
+            const vehicleRegistrationObj = payload.car_data.find(item => item.VehicleRegistration);
+
+            if (vehicleRegistrationObj && vehicleRegistrationObj.VehicleRegistration) {
+                await registrationSearchStore.setVehicleRegistration(vehicleRegistrationObj.VehicleRegistration);
+            } else {
+                console.error("VehicleRegistration not found in car_data");
+            }
+
+            // vehicle status
+            const vehicleStatusObj = payload.car_data.find(item => item.VehicleStatus);
+
+            if (vehicleStatusObj && vehicleStatusObj.VehicleStatus && vehicleStatusObj.VehicleStatus.MotVed) {
+                await registrationSearchStore.setMotVed(vehicleStatusObj.VehicleStatus.MotVed);
+            } else {
+                console.error("Vehicle status not found in car data");
+            }
+        }
+        
         // if (selectedPlan.plan_code === '48h-basic-subscription') {
         //     navigateTo('/vehicle/basic-report');
         // } else if (selectedPlan.plan_code === '48h-export-subscription') {
@@ -181,7 +274,7 @@ async function createSubscription(selectedPlan) {
         //     navigateTo('/vehicle/single-offer-report');
         // }
         setTimeout(() => {
-            buttonProcess.value = "DONE!";
+            buttonProcess.value = "REDIRECTING!";
             successMessage.value = "Payment done successfully.";
             navigateTo('/report');
         }, 3000);

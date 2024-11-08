@@ -1,6 +1,6 @@
 import ApiService from '../services/apiService';
 
-import { defineStore } from 'pinia';
+// import { defineStore } from 'pinia';
 import { decryptData, encryptData } from '~/composables/useCrypto';
 import { systematicFourCharCode } from '~/composables/useGenerateLocalstorageCode';
 import { useTokenStore } from '~/stores/token';
@@ -31,6 +31,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
             writeOff: null,
             riskRecords: null,
             financeRecords: null,
+            totalNumberOfLooksUp: 0,
         }
     },
     getters: {
@@ -95,6 +96,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     console.error("Failed to decrypt Vehicle Dimensions:", error);
                 }
             }
+            return this.dimensions;
         },
         async fetchVehicleRegistration() {
             let code = systematicFourCharCode('VehicleRegistration');
@@ -146,6 +148,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     console.error("Failed to decrypt Vehicle Technical Performance: ", error);
                 }
             }
+            return this.performance;
         },
         async fetchClassificationDetails() {
             let code = systematicFourCharCode('VehicleClassificationDetails');
@@ -259,6 +262,19 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
             }
             return this.financeRecords;
         },
+        async fetchNumberOfLooksUp() {
+            let code = systematicFourCharCode('numberOfLooksUp');
+            const encryptedData = localStorage.getItem(code);
+            if (encryptedData) {
+                try {
+                    const decrypted = await decryptData(`${code}`, JSON.parse(encryptedData));
+                    this.totalNumberOfLooksUp = JSON.parse(decrypted);
+                } catch (error) {
+                    console.error("Failed to decrypt Vehicle total looks up: ", error);
+                }
+            }
+            return this.totalNumberOfLooksUp;
+        },
         
         // Search and store vehicle registration details
         async searchCarRegNumber(car_reg_number) {
@@ -266,10 +282,25 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                 const tokenStore = useTokenStore();
                 const token = tokenStore.getToken;
                 this.reg_number = car_reg_number;
-
+                debugger
                 const response = token
                     ? await apiService.get(`v1/car-check/${car_reg_number}`, token)
                     : await apiService.get(`v1/car-check/${car_reg_number}`);
+
+                if(response.success){
+                    const keysToRemove = [
+                        'VehicleImageUrl', 'VehicleLogo', 'SmmtDetails', 'VehicleDimension',
+                        'VehicleRegistration', 'VehicleMotVed', 'VehicleGeneralInfo', 'Performance',
+                        'VehicleClassificationDetails', 'VehicleHistory', 'MOTHistory', 'VehicleValuationsList',
+                        'vehicleStolenRecords', 'vehicleWriteOffRecords', 'vehicleRiskRecords', 
+                        'vehicleFinanceRecords'
+                    ];
+
+                    keysToRemove.forEach(key => {
+                        const storageKey = systematicFourCharCode(key);
+                        localStorage.removeItem(storageKey);
+                    });
+                }
 
                 if (response.payload && Array.isArray(response.payload)) {
                     let combinedPayload = response.payload.reduce((acc, item) => {
@@ -292,9 +323,11 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     await this.setWriteOffRecords(combinedPayload);
                     await this.setFinanceRecords(combinedPayload);
                     await this.setRiskRecords(combinedPayload);
+                    await this.setNumberOfLooksUp(combinedPayload);
                     localStorage.setItem('reg_number', this.reg_number);
                 }
             } catch (error) {
+                debugger
                 console.log("Error while fetching car details:", error);
                 throw error;
             }
@@ -303,7 +336,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
         // Set data in localStorage with encryption
         async setVehicleImageUrl(combinedPayload) {
             let code = systematicFourCharCode('VehicleImageUrl');
-            if (combinedPayload.VehicleImages.ImageDetailsCount > 0) {
+            if (combinedPayload?.VehicleImages?.ImageDetailsCount > 0) {
                 const data = JSON.stringify(combinedPayload.VehicleImages.ImageDetailsList[0].ImageUrl);
                 const encryptedData = await encryptData(code, data);
                 localStorage.setItem(code, JSON.stringify(encryptedData));
@@ -453,6 +486,14 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                 riskfData['HighRiskRecordCount'] = combinedPayload['HighRiskRecordCount'];
                 riskfData['HighRiskRecordList'] = combinedPayload['HighRiskRecordList'];
                 const data = JSON.stringify(riskfData);
+                const encryptedData = await encryptData(code, data);
+                localStorage.setItem(code, JSON.stringify(encryptedData));
+            }
+        },
+        async setNumberOfLooksUp(combinedPayload){
+            let code = systematicFourCharCode('numberOfLooksUp');
+            if (combinedPayload.total_lookup > 0) {
+                const data = JSON.stringify(combinedPayload.total_lookup);
                 const encryptedData = await encryptData(code, data);
                 localStorage.setItem(code, JSON.stringify(encryptedData));
             }

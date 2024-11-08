@@ -4,10 +4,11 @@ const apiService = new ApiService();
 export const usePlanStore = defineStore('plan', {
     state: () => ({ 
         selectedPlan: null,
+        userPlan: null,
         plans: [],
     }),
     persist: {
-        paths: ["selectedPlan"]
+        paths: ["selectedPlan", "userPlan"]
     },
     getters: {
         getSelectedPlan: (state) => state.selectedPlan,

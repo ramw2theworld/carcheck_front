@@ -7,7 +7,6 @@ const subscriptionStore = useSubscriptionStore();
 import Hashed from '@/components/Includes/Hashed.vue';
 
 const reg_number = ref(null);
-const numberOfLooksUp = ref(null);
 
 import ApiService from '~/services/apiService';
 const apiService = new ApiService();
@@ -17,11 +16,14 @@ const carRegistrationSearchStore = useCarRegistrationSearchStore();
 const vbrand_logo = computed(() => carRegistrationSearchStore.vbrand_logo);
 const vehicle_image = computed(() => carRegistrationSearchStore.vehicleImageUrl);
 const smmtDetail = computed(() => carRegistrationSearchStore.smmtDetails);
+const totalNumberOfLooksUp = computed(() => carRegistrationSearchStore.totalNumberOfLooksUp);
+const hasSubscription = computed(() => subscriptionStore.hasSubscription);
 
 onMounted(async () => {
   await carRegistrationSearchStore.fetchVehicleLogo();
   await carRegistrationSearchStore.fetchVehicleImageUrl();
   await carRegistrationSearchStore.fetchSmmtDetails();
+  await carRegistrationSearchStore.fetchNumberOfLooksUp();
 
   if (typeof window !== 'undefined') {
     const regNumber = localStorage.getItem('reg_number');
@@ -37,7 +39,7 @@ const downloadReport = async () => {
     reportText.value = "Downloading...";
     if (tokenStore.getToken && tokenStore.getStatus) {
         let subscription = await subscriptionStore.getUserSubscription();
-        let hasSubscription = await subscriptionStore.getHasSubscription();
+        let hasSubscription = subscriptionStore.hasSubscription;
 
         if ((hasSubscription.request_count > 0) && hasSubscription.active) {
             try {
@@ -110,17 +112,17 @@ const currentDateTime = () => {
           <H4 class="text-xl w-1/2 rounded border py-[2px] text-center font-bold">{{ reg_number??"XXXX XXX" }}</H4>
         </div>
         <div class="flex items-center justify-center">
-          <label class="font-extralight" for="">
+          <label class="font-extralight">
             Report date: &nbsp;
           </label>
           <p class="font-bold">{{ currentDateTime() }}</p>
         </div>
         <div class="flex items-center justify-center">
-          <label class="font-extralight" for="">
+          <label class="font-extralight">
             Number of look ups: &nbsp;
           </label>
-          <p class="font-bold" v-if="hasSubscription?.active && numberOfLooksUp">{{ numberOfLooksUp }}</p>
-          <Hashed />
+          <p class="font-bold" v-if="hasSubscription?.active">{{ totalNumberOfLooksUp }}</p>
+          <Hashed v-else/>
         </div>
       </div>
 

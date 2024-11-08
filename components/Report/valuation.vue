@@ -1,14 +1,15 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted, watch } from "vue";
+const carRegistrationSearchStore = useCarRegistrationSearchStore();
+const subscriptionStore = useSubscriptionStore();
+
+
 const isTableVisible = ref(true);
 const toggleTableVisibility = () => {
   isTableVisible.value = !isTableVisible.value;
 };
 
-const carRegistrationSearchStore = useCarRegistrationSearchStore();
 const valuationLists = computed(() => carRegistrationSearchStore.vehicleValuationsList);
-
-const subscriptionStore = useSubscriptionStore();
 const hasSubscription = computed(()=> subscriptionStore.hasSubscription);
 
 const chartData = ref([]); 
@@ -18,10 +19,11 @@ const chartLoaded = ref(false);
 onMounted(async () => {
   isClient.value = true;
   await carRegistrationSearchStore.fetchValuationList();
-  console.log("valuee: ", valuationLists.value);
-  if (valuationLists.value) {
+  if (valuationLists.value && Array.isArray(valuationLists.value)) {
     mapValuationToChart();
     console.log("chartData after mapValuationToChart:", chartData.value);
+  }else{
+    console.warn("Valuation data is not available or invalid format.");
   }
 });
 
@@ -32,47 +34,21 @@ watch(chartData, (newValue) => {
 });
 
 function mapValuationToChart() {
-  const valuations = valuationLists.value || {};
-  chartData.value = [
-    { label: "OTR (On The Road)", value: Number(valuations.OTR) || 0 },
-    { label: "Dealer Forecourt", value: Number(valuations.DealerForecourt) || 0 },
-    { label: "Trade Retail", value: Number(valuations.TradeRetail) || 0 },
-    { label: "Private Clean", value: Number(valuations.PrivateClean) || 0 },
-    { label: "Private Average", value: Number(valuations.PrivateAverage) || 0 },
-    { label: "Part Exchange", value: Number(valuations.PartExchange) || 0 },
-    { label: "Auction", value: Number(valuations.Auction) || 0 },
-    { label: "Trade Average", value: Number(valuations.TradeAverage) || 0 },
-    { label: "Trade Poor", value: Number(valuations.TradePoor) || 0 },
-  ];
-
+  console.log("hello there chor: ", valuationLists.value);
+  if (valuationLists.value) {
+    chartData.value = valuationLists.value.map((item) => ({
+      label: item.label,
+      value: item.value || 0,
+    }));
+  }
 }
 
 function getChartHeight() {
-  if (typeof window === 'undefined') {
-    return 50; // Fallback height for SSR
-  }
-
   const screenWidth = window.innerWidth;
-  if (screenWidth >= 1024) {
-    return 25;
-  } else if (screenWidth >= 768) {
-    return 40;
-  } else {
-    return 50;
-  }
+  if (screenWidth >= 1024) return 25;
+  if (screenWidth >= 768) return 40;
+  return 50;
 }
-
-const chartDatax = [
-  { label: "OTR (On The Road)", value: 30000 },
-  { label: "Dealer Forecourt", value: 12371 },
-  { label: "Trade Retail", value: 23444 },
-  { label: "Private Clean", value: 30000 },
-  { label: "Private Average", value: 23523 },
-  { label: "Part Exchange", value: 64645 },
-  { label: "Auction", value: 34555 },
-  { label: "Trade Average", value: 34543 },
-  { label: "Trade Poor", value: 52335 },
-];
 </script>
 
 
@@ -100,12 +76,14 @@ const chartDatax = [
       <button class="bg-[#FF7400] text-white text-xl w-72 rounded-lg py-2">Get full report</button>
     </div>
 
+    {{ chartData }}
     <div v-show="isTableVisible" class="text-black my-10 w-full">
-      <div v-if="isClient && chartData.value && chartData.value.length > 0">
-        <chart-bar v-if="chartData" :data="chartData" :hasSubscription="hasSubscription" :height="getChartHeight()" width="100%" />
+      <div v-if="isClient && chartData.length > 0">
+        {{ chartData }} {{hasSubscription.active}}
+        <chart-bar v-if="chartData.length > 0" :data="chartData" :hasSubscription="hasSubscription.active" :height="getChartHeight()" width="100%" />
       </div>
       <div v-else>
-        <chart-bar v-if="chartLoaded" :data="chartData" :height="getChartHeight()" width="100%" />
+        <p>Loading data...</p>
       </div>
     </div>
   </report-wrapper>

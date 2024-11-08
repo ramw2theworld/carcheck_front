@@ -97,8 +97,6 @@ watch(vehicleRegistration, (newValue) => {
               <th>First registered</th>
               <td>
                 <span v-if="dateFirstRegistered" >{{ dateFirstRegistered }}</span>
-                <span>{{ '2002-12-09' }}</span>
-
               </td>
             </tr>
           </tbody>

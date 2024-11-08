@@ -1,5 +1,6 @@
 <template>
-  <canvas :class="props.class" ref="chartCanvas" :height="height" :width="width"></canvas>
+  <!-- Apply a conditional class based on hasSubscription -->
+  <canvas :class="{ 'blurred': !props.hasSubscription }" ref="chartCanvas" :height="height" :width="width"></canvas>
 </template>
 
 <script setup lang="ts">
@@ -29,10 +30,8 @@ const width = computed(() => convertToNumber(props.width));
 
 // Function to convert string to number
 function convertToNumber(value: any) {
-  if (typeof value === 'string' && value.includes('%')) {
-    return value;
-  }
-  return typeof value === 'string' ? parseFloat(value) : value;
+  if (typeof value === "string" && value.includes("%")) return value;
+  return typeof value === "string" ? parseFloat(value) : value;
 }
 
 // Register Chart.js components
@@ -46,11 +45,11 @@ onMounted(() => {
     new Chart(chartCanvas.value, {
       type: 'bar',
       data: {
-        labels: labels.value,
+        labels: props.data.map(item => item.label),
         datasets: [
           {
-            label: 'Dataset 1',
-            data: values.value,
+            label: 'Valuation Data',
+            data: props.data.map(item => item.value),
             backgroundColor: '#F94144',
             borderWidth: 1,
             barThickness: 20,
@@ -64,23 +63,15 @@ onMounted(() => {
           y: {
             beginAtZero: true,
             ticks: {
-              display: true,
               callback: function (value) {
-                if (!props.hasSubscription) {
-                  return value.toString().split('').map(() => 'X').join(''); // Obscure the values
-                }
-                return value;
+                return props.hasSubscription ? value : 'X'.repeat(value.toString().length);
               },
             },
           },
         },
         plugins: {
-          legend: {
-            display: false,
-          },
-          tooltip: {
-            enabled: false,
-          },
+          legend: { display: false },
+          tooltip: { enabled: props.hasSubscription },
         },
       },
     });
@@ -89,12 +80,8 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Adding CSS for blurring the Y-axis labels */
-canvas {
-  filter: blur(2px); /* This applies a slight blur effect to the entire canvas */
-}
-
-canvas.active {
-  filter: none; /* Removes the blur if the user has an active subscription */
+/* Only apply blur if the user lacks a subscription */
+canvas.blurred {
+  filter: blur(2px);
 }
 </style>

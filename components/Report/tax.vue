@@ -47,11 +47,10 @@ function setco2label(value: number) {
 onMounted(async () => {
   await carRegistrationSearchStore.fetchVehicleMotVed();
   await carRegistrationSearchStore.fetchVehicleRegistration();
-  const emissions = (hasSubscription.value?.active && MOTVed.value?.VedCo2Emissions) 
+  const emissions = (MOTVed.value?.VedCo2Emissions) 
                     ? MOTVed.value.VedCo2Emissions 
                     : 227;
   
-  console.log("emissions: ", emissions)
   setco2label(emissions);
 });
 
@@ -92,15 +91,24 @@ onMounted(async () => {
             </tr>
             <tr>
               <th>Single payment (12 months)</th>
-              <td>{{ MOTVed?.VedRate?.Standard?.TwelveMonth || 'N/A' }}</td>
+              <td v-if="hasSubscription?.active">{{ MOTVed?.VedRate?.Standard?.TwelveMonth || 'N/A' }}</td>
+              <td v-else>
+                <Hashed/>
+              </td>
             </tr>
             <tr>
               <th>Single six-month payment</th>
-              <td>{{ MOTVed?.VedRate?.Standard?.SixMonth || 'N/A' }}</td>
+              <td v-if="hasSubscription?.active">{{ MOTVed?.VedRate?.Standard?.SixMonth || 'N/A' }}</td>
+              <td v-else>
+                <Hashed/>
+              </td>
             </tr>
             <tr>
               <th>Total payable by 12 monthly instalments</th>
-              <td>{{ MOTVed?.VedRate?.Standard?.SixMonth || 'N/A' }}</td>
+              <td v-if="hasSubscription?.active">{{ MOTVed?.VedRate?.Standard?.SixMonth || 'N/A' }}</td>
+              <td v-else>
+                <Hashed/>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -149,13 +157,12 @@ onMounted(async () => {
           <tbody>
             <tr>
               <th>CO2 Emissions</th>
-              <td v-if="hasSubscription?.active && MOTVed?.VedCo2Emissions">{{ MOTVed?.VedCo2Emissions }}</td>
-              <td v-else><Hashed /></td>
+              <td v-if="MOTVed?.VedCo2Emissions || vehicleRegistration?.Co2Emissions">{{ MOTVed?.VedCo2Emissions ||  vehicleRegistration?.Co2Emissions}}</td>
             </tr>
             <tr>
-              <th>CO2 Label</th>
-              <td v-if="hasSubscription?.active && MOTVed?.VedCo2Band">{{ MOTVed?.VedCo2Band }}</td>
-              <td v-else><Hashed /></td>
+              <th>CO2 Label </th>
+              <td v-if="MOTVed?.VedCo2Band">{{ MOTVed?.VedCo2Band }}</td>
+              <td v-else>N/A</td>
             </tr>
           </tbody>
         </table>
