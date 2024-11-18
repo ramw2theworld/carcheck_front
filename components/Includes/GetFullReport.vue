@@ -137,7 +137,6 @@ const downloadReport = async () => {
             return navigateTo('/payment/plans');
         }
     } catch (error) {
-        debugger
         getFullReportY.value = "Get full report";
         errorMessage.value = error?.data?.message || 'Error occurred during the subscription check.';
         getFullReportButton.value = "Get full report";
@@ -163,6 +162,7 @@ const handleGetFullReport = async () => {
                 navigateTo('payment/plans');
             }else{
                 showPasswordField.value = true;
+                getFullReportY.value = "Submit";
             }
         } else {
             getFullReportY.value = "Get full report";

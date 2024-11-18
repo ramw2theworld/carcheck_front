@@ -64,7 +64,6 @@ onMounted(async () => {
 
 <template>
     <div class="bg-[#D9D9D9] py-20">
-        {{ planUnactive }}
         <UtilitiesLoadingSpinner v-if="showLoader" />
         <div class="flex flex-row items-center justify-between md:px-40 px-10" v-else>
             <div>

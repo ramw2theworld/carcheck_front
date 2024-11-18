@@ -4,6 +4,11 @@ import { onMounted } from 'vue';
 const tokenStore = useTokenStore();
 const authStore = useAuthStore();
 
+import { useSubscriptionStore } from '@/stores/subscription';
+const subscriptionStore = useSubscriptionStore();
+const subscription = computed(()=> subscriptionStore.subscription);
+const hasSubscription = computed(() => subscriptionStore.hasSubscription);
+
 const refreshToken = computed(() => tokenStore.refreshToken);
 
 onMounted(async () => {
@@ -40,7 +45,6 @@ definePageMeta({
 
     <!-- Section 4 -->
     <ReportDamage />
-
     <!-- Section 5 -->
     <ReportMot />
 

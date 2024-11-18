@@ -12,6 +12,7 @@ const toggleTableVisibility = () => {
 // Subscription check
 const subscriptionStore = useSubscriptionStore();
 const hasSubscription = computed(() => subscriptionStore.hasSubscription);
+const subscription = computed(()=> subscriptionStore.subscription);
 
 // Car registration store
 const carRegistrationSearchStore = useCarRegistrationSearchStore();
@@ -103,8 +104,68 @@ function getFailureType(annotationList) {
     </div>
     <div v-show="isTableVisible" class="flex flex-row w-full pt-4 space-x-8">
       <div class="lg:w-2/3">
-        <template v-for="(test, index) in failedTests" :key="index" v-if="hasSubscription?.active">
+        
+        <template v-if="subscription.plan?.plan_code ==='48h-basic-subscription' && hasSubscription?.onTrial">
           <table class="w-full text-black mt-8">
+            <thead>
+              <tr class="header-row">
+                <th colspan="2">DAMAGE 1</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Date</th>
+                <td>
+                  <Hashed />
+                </td>
+              </tr>
+              <tr>
+                <th>Category</th>
+                <td>
+                  <Hashed />
+                </td>
+              </tr>
+              <tr>
+                <th>Type</th>
+                <td>
+                  <Hashed />
+                </td>
+              </tr>
+              
+            </tbody>
+          </table>
+          <table class="w-full text-black mt-8 mb-2" >
+            <thead>
+              <tr class="header-row">
+                <th colspan="2">DAMAGE 1</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Date</th>
+                <td>
+                  <Hashed />
+                </td>
+              </tr>
+              <tr>
+                <th>Category</th>
+                <td>
+                  <Hashed />
+                </td>
+              </tr>
+              <tr>
+                <th>Type</th>
+                <td>
+                  <Hashed />
+                </td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </template>
+
+        <template v-for="(test, index) in failedTests" :key="index" v-else-if="hasSubscription?.active">
+          <table class="w-full text-black mt-8" >
             <thead>
               <tr class="header-row">
                 <th colspan="2">DAMAGE {{ index + 1 }}</th>
@@ -135,6 +196,7 @@ function getFailureType(annotationList) {
             </tbody>
           </table>
         </template>
+
         <template v-else>
           <table class="w-full text-black mt-8">
             <thead>
@@ -193,6 +255,7 @@ function getFailureType(annotationList) {
             </tbody>
           </table>
         </template>
+
         <div class="bg-[#EF343A] w-full flex items-center justify-center py-2">
           <h3 class="text-xl font-semibold">Lorem ipsum dolor sit amet.
             <Includes-get-full-report get-full-report="check the full
