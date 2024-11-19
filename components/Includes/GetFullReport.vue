@@ -3,6 +3,7 @@ import { defineProps, ref, onMounted, computed, reactive, watch } from 'vue';
 import carDefaultImage from '/images/car-icon.png';
 import ApiService from '~/services/apiService';
 import { navigateTo } from 'nuxt/app';
+import { extractIdentifiers } from 'vue/compiler-sfc';
 
 // Store initialization
 const carRegistrationSearchStore = useCarRegistrationSearchStore();
@@ -58,6 +59,10 @@ const downloadReport = async () => {
     try {
         const hasSubscription = await subscriptionStore.getHasSubscription();
         const subscription = await subscriptionStore.getUserSubscription();
+        if(hasSubscription && hasSubscription.onTrial && subscription.plan?.plan_code ==='48h-basic-subscription'){
+            errorMessage.value = "Your are on basic trial plan. Please buy single offer.";
+            return;
+        }
         const user = authStore.user;
         let email = user?.email;
         const userSubscription = await subscriptionStore.fetchUserSubscription(email);
@@ -243,7 +248,7 @@ watch(
         <p v-if="errorMessage" class="text-red-500 mt-2">{{ errorMessage }}</p>
         <NuxtLink to="/payment/plans" v-if="hasSubscription?.active"
         class="pull-right">
-            Buy More
+            Buy Single offer
         </NuxtLink>
     </div>
 </template>

@@ -306,6 +306,9 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     let combinedPayload = response.payload.reduce((acc, item) => {
                         return { ...acc, ...item };
                     }, {});
+                    // clean localStorage data 
+                    await this.cleanupLocalStorage();
+                    // end 
                     // Update store state with fetched data
                     await this.setVehicleImageUrl(combinedPayload);
                     await this.setVehicleLogo(combinedPayload);
@@ -327,7 +330,6 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     localStorage.setItem('reg_number', this.reg_number);
                 }
             } catch (error) {
-                debugger
                 console.log("Error while fetching car details:", error);
                 throw error;
             }
@@ -498,7 +500,23 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                 localStorage.setItem(code, JSON.stringify(encryptedData));
             }
         },
+
+        async cleanupLocalStorage() {
+            const keysToRemove = [
+                'VehicleImageUrl', 'VehicleLogo', 'SmmtDetails', 'VehicleDimension',
+                'VehicleRegistration', 'VehicleMotVed', 'VehicleGeneralInfo', 'Performance',
+                'VehicleClassificationDetails', 'VehicleHistory', 'MOTHistory', 'VehicleValuationsList',
+                'vehicleStolenRecords', 'vehicleWriteOffRecords', 'vehicleRiskRecords', 
+                'vehicleFinanceRecords', 'numberOfLooksUp', 'reg_number'
+            ];
         
+            keysToRemove.forEach(key => {
+                const storageKey = systematicFourCharCode(key);
+                localStorage.removeItem(storageKey);
+            });
+        
+            console.log('Local storage cleaned.');
+        }
     },
     persist: {
         paths: ["reg_number", "getFullReportText"],

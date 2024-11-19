@@ -140,6 +140,7 @@ async function handleCheckoutClick() {
                     navigateTo('/report');
                 }, 3000);
             }else{
+                debugger
                 await createSubscription(selectedPlan);
             }
         }
@@ -170,7 +171,9 @@ async function createSubscription(selectedPlan) {
             },
             plan_id: selectedPlan.id,
         });
-
+        if(response.success){
+            buttonProcess.value = "DONE!";
+        }
         let payload = response.payload;
         if (payload?.hasSubscription) {
             await subscriptionStore.setHasSubscription(payload.hasSubscription);
@@ -183,7 +186,6 @@ async function createSubscription(selectedPlan) {
         if (payload?.plan) {
             await plan.setSelectedPlan(payload.plan);
         }
-        buttonProcess.value = "DONE!";
 
         if(payload?.car_data){
             // vehicle MOT History
@@ -274,10 +276,10 @@ async function createSubscription(selectedPlan) {
         //     navigateTo('/vehicle/single-offer-report');
         // }
         setTimeout(() => {
-            buttonProcess.value = "REDIRECTING!";
             successMessage.value = "Payment done successfully.";
             navigateTo('/report');
         }, 3000);
+        buttonProcess.value = "REDIRECTING!";
         
     } catch (error) {
         buttonProcess.value = "FAILED!";
