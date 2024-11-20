@@ -444,15 +444,4 @@ input:focus {
     outline: none;
     border: none;
 }
-
-/* Optional: you might want to keep some minimal styling */
-/* input {
-  padding: 8px;
-  width: 100%;
-} */
-
-/* Hide images inside the input containers */
-/* img {
-  display: none;
-} */
 </style>

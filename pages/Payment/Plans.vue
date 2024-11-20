@@ -16,7 +16,7 @@ const premium_features = reactive(featureData.features.premium_features);
 const showLoader = ref(false);
 
 const isMonthlyActive = ref(true);
-const selectedPlan = ref("premium-3x");
+const selectedPlan = ref("48h-expert-subscription");
 const plans = ref([]);
 const planUnactive = ref(null);
 
@@ -89,7 +89,7 @@ onMounted(async () => {
                 <div class="flex flex-row items-center justify-between">
                     <h1 class="text-lg font-bold px-2">{{ plan.name }}</h1>
                     <span class="text-[#0F1829] text-xs rounded bg-[#FF7400] px-2 py-0.5"
-                        v-if="plan.plan_code === '48h-export-subscription'">Most Popular</span>
+                        v-if="plan.plan_code === '48h-expert-subscription'">Most Popular</span>
                 </div>
 
                 <div class="flex flex-row items-center justify-start mt-6">
@@ -132,7 +132,7 @@ onMounted(async () => {
                 <div class="flex flex-row items-center justify-between">
                     <h1 class="text-lg font-bold px-2">{{ plan.name }}</h1>
                     <span class="text-[#0F1829] text-xs rounded bg-[#FF7400] px-2 py-0.5"
-                        v-if="plan.plan_code === '48h-export-subscription'">Most Popular</span>
+                        v-if="plan.plan_code === '48h-expert-subscription'">Most Popular</span>
                 </div>
 
                 <div class="flex flex-row items-center justify-start mt-6">
@@ -168,7 +168,7 @@ onMounted(async () => {
 
                 <!-- standard plan  -->
                 <div class="flex flex-col items-start justify-start mt-2 gap-2"
-                    v-if="plan.plan_code == '48h-export-subscription'">
+                    v-if="plan.plan_code == '48h-expert-subscription'">
                     <div v-for="b_feature in standard_features" :key="b_feature.id"
                         class="flex flex-row items-center justify-start">
                         <img :src="getFeatureIcon(b_feature.icon)" :alt="b_feature.title" class="w-6 orange-filter" />
@@ -179,7 +179,7 @@ onMounted(async () => {
                     </div>
                 </div>
                 <!-- premium plan  -->
-                <div class="flex flex-col items-start justify-start mt-2 gap-2" v-if="plan.plan_code == 'premium-3x'">
+                <div class="flex flex-col items-start justify-start mt-2 gap-2" v-if="plan.plan_code == 'premium'">
                     <div v-for="premium_feature in premium_features" :key="premium_feature.id"
                         class="flex flex-row items-center justify-start">
                         <img :src="getFeatureIcon(premium_feature.icon)" :alt="premium_feature.title"
