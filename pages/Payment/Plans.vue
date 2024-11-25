@@ -3,7 +3,7 @@ import { ref, reactive, onMounted } from 'vue';
 import featureData from '@/features.json';
 import { usePlanStore } from '@/stores/plan';
 import { useRouter } from 'vue-router';
-import ApiService from '../../services/apiService';
+import ApiService from '~/services/apiService';
 
 const router = useRouter();
 const planStore = usePlanStore();
@@ -19,8 +19,6 @@ const isMonthlyActive = ref(true);
 const selectedPlan = ref("48h-expert-subscription");
 const plans = ref([]);
 const planUnactive = ref(null);
-
-const apiService = new ApiService();
 
 const toggleBilling = (type) => {
     isMonthlyActive.value = (type === 'monthly');

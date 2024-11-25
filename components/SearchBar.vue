@@ -1,10 +1,8 @@
 <script setup>
 import { reactive } from "vue";
 const router = useRouter();
-
-import { useSubscriptionStore } from '@/stores/subscription';
-const subscriptionStore = useSubscriptionStore();
-const hasSubscription = computed(() => subscriptionStore.hasSubscription);
+import { useCarRegistrationSearchStore } from "@/stores/carRegistrationSearch";
+const carRegistrationSearch = useCarRegistrationSearchStore();
 
 definePageMeta({
   title: 'SearchBar',
@@ -69,7 +67,7 @@ const searchForCarReg = async () => {
     searchTxt.value = null;
     router.push(`/report`);
   } catch (error) {
-    debugger
+    
     if(!error?.data?.success){
       // let sub = subscription.value;
       // if(hasSubscription.active==true){
@@ -108,10 +106,6 @@ const searchForCarReg = async () => {
         <img src="assets/svg/search-icon.svg" v-else class="h-6 w-6" alt="Search car registration">
       </button>
     </div>
-    <NuxtLink to="/payment/plans" v-if="hasSubscription?.active"
-        class="pull-right">
-            Buy Single offer
-    </NuxtLink>
     <div v-if="errors && errors.length && Array.isArray(errors)" class="alert alert-danger">
       <ul v-if="Array.isArray(errors)">
         <li v-for="error in errors" :key="error">{{ error }}</li>

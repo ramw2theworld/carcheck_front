@@ -1,11 +1,11 @@
-import ApiService from '../services/apiService';
+import ApiService from "@/services/apiService";
+
+import { defineStore } from 'pinia';
 
 // import { defineStore } from 'pinia';
 import { decryptData, encryptData } from '~/composables/useCrypto';
 import { systematicFourCharCode } from '~/composables/useGenerateLocalstorageCode';
 import { useTokenStore } from '~/stores/token';
-
-const apiService = new ApiService();
 
 export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch', {
     state: () => {
@@ -282,10 +282,10 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                 const tokenStore = useTokenStore();
                 const token = tokenStore.getToken;
                 this.reg_number = car_reg_number;
-                debugger
+                
                 const response = token
-                    ? await apiService.get(`v1/car-check/${car_reg_number}`, token)
-                    : await apiService.get(`v1/car-check/${car_reg_number}`);
+                    ? await ApiService.get(`v1/car-check/${car_reg_number}`, token)
+                    : await ApiService.get(`v1/car-check/${car_reg_number}`);
 
                 if(response.success){
                     const keysToRemove = [

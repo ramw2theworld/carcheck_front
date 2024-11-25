@@ -1,9 +1,14 @@
 <script setup>
+import { useCarStore } from '@/stores/car';
 const carStore = useCarStore();
 
 onMounted(async () => {
-  await carStore.fetchRequestCounts();
-  await carStore.fetchCarsUserList();
+  try {
+        await carStore.fetchRequestCounts();
+        await carStore.fetchCarsUserList();
+    } catch (error) {
+        console.error("Failed to fetch data on mounted:", error);
+    }
 });
 
 definePageMeta({
@@ -22,7 +27,11 @@ const userCarsList = computed(() => carStore.userCarsList);
 <template>
     <div>
         <p>Admin Page</p>
-        <p>Total requests count: {{ userRequestCountLeft }}</p>
+        <hr>
+        <p>Request count(s): {{ userRequestCountLeft.request_count }}</p>
+        <p>Trial Request count(s): {{ userRequestCountLeft.request_count_trial }}</p>
+        <p>One off Request count(s): {{ userRequestCountLeft.one_off_request_count }}</p>
+
         <div v-for="(car, index) in userCarsList" :key="index" class="p-4 mb-4 text-sm 
           text-blue-800 rounded-lg 
             bg-blue-50 dark:bg-gray-800 

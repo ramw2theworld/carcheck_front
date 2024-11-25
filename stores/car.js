@@ -1,9 +1,10 @@
-import ApiService from '@/services/apiService';
-const apiService = new ApiService();
+import ApiService from "~/services/apiService";
 
 export const useCarStore = defineStore('car', {
     state: () => ({ 
         requestCounts: 0,
+        request_count_trial: 0,
+        one_off_request_count: 0,
         userCarsList: null,
         userReports: null,
         custom_plans: null,
@@ -16,9 +17,9 @@ export const useCarStore = defineStore('car', {
     actions: {
        async fetchRequestCounts(){
             try {
-                const response = await apiService.get(`fetch-user-request-counts`);
-                if(response.data){
-                    this.requestCounts = response.data;
+                const response = await ApiService.get(`fetch-user-request-counts`);
+                if(response.payload){
+                    this.requestCounts = response.payload;
                 }
                 return this.requestCounts;
             } catch (error) {
@@ -29,7 +30,7 @@ export const useCarStore = defineStore('car', {
 
         async fetchCarsUserList(){
             try {
-                const response = await apiService.get(`v1/fetch-users-car-detail`);
+                const response = await ApiService.get(`v1/fetch-users-car-detail`);
                 let res = response.data;
                 if(res){
                     this.userCarsList = res;
@@ -43,7 +44,7 @@ export const useCarStore = defineStore('car', {
 
         async fetchCarsUserReports(){
             try {
-                const response = await apiService.get(`v1/fetch-all-user-car-reports`);
+                const response = await ApiService.get(`v1/fetch-all-user-car-reports`);
                 let res = response.data;
                 if(res){
                     this.userReports = res;
@@ -57,7 +58,7 @@ export const useCarStore = defineStore('car', {
 
         async fetchAllCustomPlans(){
             try {
-                const response = await apiService.get(`custom-plans`);
+                const response = await ApiService.get(`custom-plans`);
                 let res = response.data;
                 
                 if(res){
@@ -72,8 +73,7 @@ export const useCarStore = defineStore('car', {
 
         async buyCustomPlan(custom_plan){
             try {
-                debugger
-                const response = await apiService.post(`buy-custom-plan`,{
+                const response = await ApiService.post(`buy-custom-plan`,{
                     plan_code: custom_plan.plan_code
                 });
                 let res = response.data;

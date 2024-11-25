@@ -32,6 +32,7 @@ if (selectedPlan) {
                 <div class="w-full p-5">
                     <div class="w-full p-4">
                         <ul role="list" class="space-y-4 text-gray-500 dark:text-gray-400">
+                            4000 0000 0000 3220
                             <li class="flex space-x-2 rtl:space-x-reverse items-center"
                                 v-for="(feature, index) in planFeatures" :key="index">
                                 <svg class="flex-shrink-0 w-3.5 h-3.5 text-blue-600 dark:text-blue-500"
