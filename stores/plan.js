@@ -1,5 +1,5 @@
-import ApiService from '@/services/apiService';
-const apiService = new ApiService();
+import ApiService from "@/services/apiService";
+import { defineStore } from "pinia";
 
 export const usePlanStore = defineStore('plan', {
     state: () => ({ 
@@ -20,7 +20,7 @@ export const usePlanStore = defineStore('plan', {
 
         async fetchPlans(){
             try {
-                const response = await apiService.get(`plans`);
+                const response = await ApiService.get(`plans`);
                 if(response.data){
                     this.plans = response.data;
                 }

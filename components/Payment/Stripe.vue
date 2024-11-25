@@ -5,9 +5,11 @@ import { loadStripe } from '@stripe/stripe-js';
 import ApiService from '~/services/apiService';
 import { useSubscriptionStore } from '@/stores/subscription';
 import { useCarRegistrationSearchStore } from '@/stores/carRegistrationSearch';
+import { usePlanStore } from '@/stores/plan';
 
 const auth = useAuthStore();
 const plan = usePlanStore();
+
 const subscriptionStore = useSubscriptionStore();
 const registrationSearchStore = useCarRegistrationSearchStore();
 
@@ -17,7 +19,6 @@ interface BillingDetails {
 
 const envConfig = useRuntimeConfig();
 
-const apiService = new ApiService();
 const stripePromise = loadStripe(envConfig.public.stripe_public_key as string);
 const loading = ref(false);
 const cardComplete = ref(false);
@@ -105,7 +106,14 @@ async function handleCheckoutClick() {
             buttonProcess.value = "PROCESS";
             return;
         }
-        const response = await apiService.post('payment/token/create', {
+        
+        if(plan.getSelectedPlan == null){
+            console.error(error);
+            (errorMessage.value as any) = "User don't have any plan";
+            buttonProcess.value = "PROCESS";
+            return;
+        }
+        const response = await ApiService.post('payment/token/create', {
             payment_method_id: paymentMethod.id,
             billing_details: { name: cardholderName.value },
             plan: plan.getSelectedPlan,
@@ -161,7 +169,7 @@ async function createSubscription(selectedPlan) {
     const user = auth.getCurrentUser;
     buttonProcess.value = "ALMOST THERE!";
     try {
-        const response = await apiService.post("payment/process", {
+        const response = await ApiService.post("payment/process", {
             customer_id: customerId.value,
             payment_method_id: paymentMethodId.value,
             email: user.email,
@@ -170,7 +178,9 @@ async function createSubscription(selectedPlan) {
             },
             plan_id: selectedPlan.id,
         });
-
+        if(response.success){
+            buttonProcess.value = "DONE!";
+        }
         let payload = response.payload;
         if (payload?.hasSubscription) {
             await subscriptionStore.setHasSubscription(payload.hasSubscription);
@@ -183,7 +193,6 @@ async function createSubscription(selectedPlan) {
         if (payload?.plan) {
             await plan.setSelectedPlan(payload.plan);
         }
-        buttonProcess.value = "DONE!";
 
         if(payload?.car_data){
             // vehicle MOT History
@@ -274,10 +283,10 @@ async function createSubscription(selectedPlan) {
         //     navigateTo('/vehicle/single-offer-report');
         // }
         setTimeout(() => {
-            buttonProcess.value = "REDIRECTING!";
             successMessage.value = "Payment done successfully.";
             navigateTo('/report');
         }, 3000);
+        buttonProcess.value = "REDIRECTING!";
         
     } catch (error) {
         buttonProcess.value = "FAILED!";
@@ -442,15 +451,4 @@ input:focus {
     outline: none;
     border: none;
 }
-
-/* Optional: you might want to keep some minimal styling */
-/* input {
-  padding: 8px;
-  width: 100%;
-} */
-
-/* Hide images inside the input containers */
-/* img {
-  display: none;
-} */
 </style>

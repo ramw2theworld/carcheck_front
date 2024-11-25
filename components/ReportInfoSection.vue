@@ -84,4 +84,3 @@
   background-position: center;
 }
 </style>
-```

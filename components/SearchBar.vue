@@ -1,8 +1,7 @@
 <script setup>
 import { reactive } from "vue";
 const router = useRouter();
-
-const auth = useAuthStore();
+import { useCarRegistrationSearchStore } from "@/stores/carRegistrationSearch";
 const carRegistrationSearch = useCarRegistrationSearchStore();
 
 definePageMeta({
@@ -26,7 +25,6 @@ const searchTxt = ref(null);
 const MIN_LENGTH = 5;
 const MAX_LENGTH = 10;
 const validReportTypes = ['basic', 'export', 'single-offer'];
-
 
 const processedCarNumber = computed({
   get() {
@@ -69,11 +67,15 @@ const searchForCarReg = async () => {
     searchTxt.value = null;
     router.push(`/report`);
   } catch (error) {
-    debugger
+    
+    if(!error?.data?.success){
+      // let sub = subscription.value;
+      // if(hasSubscription.active==true){
+
+      // }
+    }
     
     searchTxt.value = null;
-    console.log("search error: ", error);
-
     if(error?.data?.message){
       errorMessage.value = error.data.message;
     }
@@ -103,7 +105,6 @@ const searchForCarReg = async () => {
         <span class="text-white" v-if="searchTxt">{{ searchTxt }}</span>
         <img src="assets/svg/search-icon.svg" v-else class="h-6 w-6" alt="Search car registration">
       </button>
-
     </div>
     <div v-if="errors && errors.length && Array.isArray(errors)" class="alert alert-danger">
       <ul v-if="Array.isArray(errors)">

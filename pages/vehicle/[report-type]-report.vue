@@ -8,8 +8,6 @@ const planStore = usePlanStore();
 const authStore = useAuthStore();
 
 const vbrand_logo = computed(() => carRegistrationSearchStore.vbrand_logo);
-const apiService = new ApiService();
-
 const errorMessage = ref(null);
 const reportText = ref("Download Report")
 
@@ -37,7 +35,7 @@ const downloadReport = async () => {
                 }else{
                     report_type = "";
                 }
-                const response = await apiService.post('users/download-report', {
+                const response = await ApiService.post('users/download-report', {
                     email: authStore.user?.email,
                     report_type: report_type
                 }, { responseType: 'blob' });

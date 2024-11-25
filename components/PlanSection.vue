@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue';
+import { usePlanStore } from "@/stores/plan";
 const planStore = usePlanStore();
 const isMonthlyActive = ref(true);
 const plans = ref([]);

@@ -1,5 +1,5 @@
-import ApiService from '@/services/apiService';
-const apiService = new ApiService();
+import { defineStore } from "pinia";
+import ApiService from "~/services/apiService";
 
 export const useSubscriptionStore = defineStore('subscription', {
     state: () => {
@@ -74,7 +74,7 @@ export const useSubscriptionStore = defineStore('subscription', {
         // fetch subscription 
         async fetchUserSubscription(email) {
             try {
-                const response = await apiService.post('payment/subscription', {
+                const response = await ApiService.post('payment/subscription', {
                     email: email
                 });
                 let subscription = response.payload;
@@ -95,7 +95,7 @@ export const useSubscriptionStore = defineStore('subscription', {
         // cancel subscription 
         async cancelSubscription(original_id) {
             try {
-                const response = await apiService.post('payment/subscription/cancel', {
+                const response = await ApiService.post('payment/subscription/cancel', {
                     original_id: original_id
                 });
                 console.log(response);

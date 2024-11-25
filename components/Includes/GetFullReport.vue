@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { defineProps, ref, onMounted, computed, reactive, watch } from 'vue';
 import carDefaultImage from '/images/car-icon.png';
-import ApiService from '~/services/apiService';
 import { navigateTo } from 'nuxt/app';
+import ApiService from '~/services/apiService';
 
 // Store initialization
 const carRegistrationSearchStore = useCarRegistrationSearchStore();
@@ -14,7 +14,7 @@ const planStore = usePlanStore();
 // Computed properties and refs
 const vbrand_logo = computed(() => carRegistrationSearchStore.vbrand_logo);
 const vehicleImageUrl = computed(() => carRegistrationSearchStore.vehicleImageUrl);
-const apiService = new ApiService();
+
 const errorMessage = ref<string | null>(null);
 const showPasswordField = ref(false);
 const reportText = ref<string>('');
@@ -58,6 +58,10 @@ const downloadReport = async () => {
     try {
         const hasSubscription = await subscriptionStore.getHasSubscription();
         const subscription = await subscriptionStore.getUserSubscription();
+        if(hasSubscription && hasSubscription.onTrial && subscription.plan?.plan_code ==='48h-basic-subscription'){
+            errorMessage.value = "Your are on basic trial plan. Please buy single offer.";
+            return;
+        }
         const user = authStore.user;
         let email = user?.email;
         const userSubscription = await subscriptionStore.fetchUserSubscription(email);
@@ -89,6 +93,7 @@ const downloadReport = async () => {
             { financeRecords : carRegistrationSearchStore.financeRecords }
         ];
         if (hasSubscription?.active || hasSubscription?.request_count > 0 || user.request_count > 0) {
+            console.log("HasSub: ", hasSubscription);
             // let report_type = '';
             // if (subscription?.plan?.plan_code === '48h-export-subscription') {
             //     report_type = '48h-expert-subscription';
@@ -104,14 +109,16 @@ const downloadReport = async () => {
                 errorMessage.value = "You don't have any active subscription. Please buy or upgrade plan.";
             }
 
-            const response = await apiService.post(
+            const token = tokenStore.getToken;
+            const response = await ApiService.post(
                 'users/download-report',
                 {
                     email: authStore.user?.email,
                     report_type: subscription?.plan?.plan_code,
                     car_data: car_data
                 },
-                { responseType: 'blob' }
+                token
+                // { responseType: 'blob' }
             );
             if (response.success && response.payload) {
                 const payload = response.payload;
@@ -137,7 +144,6 @@ const downloadReport = async () => {
             return navigateTo('/payment/plans');
         }
     } catch (error) {
-        debugger
         getFullReportY.value = "Get full report";
         errorMessage.value = error?.data?.message || 'Error occurred during the subscription check.';
         getFullReportButton.value = "Get full report";
@@ -153,7 +159,7 @@ const downloadReport = async () => {
 const handleGetFullReport = async () => {
     getFullReportY.value = "Processing...";
     try {
-        const response = await apiService.post('users/check-email-exist', { email: form.email });
+        const response = await ApiService.post('users/check-email-exist', { email: form.email });
         if (response.success && response.payload) {
             let payload = response.payload;
             if(payload.user_type && payload.user_type=="newlyCreatedUser"){
@@ -163,6 +169,7 @@ const handleGetFullReport = async () => {
                 navigateTo('payment/plans');
             }else{
                 showPasswordField.value = true;
+                getFullReportY.value = "Submit";
             }
         } else {
             getFullReportY.value = "Get full report";
@@ -184,6 +191,9 @@ const handleLoginSubmit = async () => {
             getFullReportY.value = "Get full report";
         }else{
             let payload = response.payload;
+            if(response.success){
+                showPasswordField.value = false;
+            }
             //make frontend log in
             const tokenStore = useTokenStore();
             tokenStore.setToken(payload.access_token, payload.access_token);
@@ -241,9 +251,11 @@ watch(
             {{ getFullReportY }}
         </button> 
         <p v-if="errorMessage" class="text-red-500 mt-2">{{ errorMessage }}</p>
-        <NuxtLink to="/payment/plans" v-if="hasSubscription?.active"
-        class="pull-right">
-            Buy More
+        <NuxtLink 
+            to="/payment/plans" 
+            v-if="hasSubscription?.active" 
+            class="ml-auto block text-right text-blue-500 hover:underline">
+            Buy Single Offer
         </NuxtLink>
     </div>
 </template>

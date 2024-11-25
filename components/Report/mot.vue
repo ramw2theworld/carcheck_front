@@ -228,27 +228,41 @@ function calculateDaysSinceLastTest(currentMOT) {
         <div class="w-[90%]">
           <swiper :centeredSlides="false" :slidesPerView="slidesPerView" :autoplay="false" @swiper="onSwiper"
             :navigation="navigationOptions" :modules="modules" class="mySwiper selection:py-6">
-            <swiper-slide v-for="(_, index) in totalMotChecks" :key="index" @click.prevent="handleSliderIndexClick(index)" class="cursor-pointer">
-              <span v-if="isMOThistoryLocked(index)"
-                class="h-8 w-8 items-center justify-center flex rounded bg-[#FFA500]">
+            <swiper-slide
+              v-for="(_, index) in totalMotChecks"
+              :key="index"
+              @click.prevent="handleSliderIndexClick(index)"
+              class="cursor-pointer"
+            >
+              <span
+                v-if="isMOThistoryLocked(index)"
+                class="h-8 w-8 items-center justify-center flex rounded bg-[#FFA500]"
+              >
                 <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M7.54785 9.47011V6.63976C7.54785 4.55554 9.23744 2.86595 11.3217 2.86595C13.4059 2.86595 15.0955 4.55554 15.0955 6.63976V9.47011"
-                    stroke="white" stroke-width="1.5" stroke-linecap="round" />
+                    stroke="white"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  />
                   <path
                     d="M4.71777 9.4702H17.9261V18.3482C17.9261 19.1766 17.2545 19.8482 16.4261 19.8482H6.21777C5.38935 19.8482 4.71777 19.1766 4.71777 18.3482V9.4702Z"
-                    stroke="white" stroke-width="1.5" stroke-linejoin="round" />
-                  <rect x="13.6807" y="14.6592" width="0.00985118" height="0.00985118" stroke="white"
-                    stroke-width="2.25" stroke-linejoin="round" />
+                    stroke="white"
+                    stroke-width="1.5"
+                    stroke-linejoin="round"
+                  />
+                  <rect x="13.6807" y="14.6592" width="0.00985118" height="0.00985118" stroke="white" stroke-width="2.25"
+                    stroke-linejoin="round" />
                 </svg>
               </span>
-              <span v-else
-                class="h-8 w-8 border items-center justify-center flex rounded border-[#FF7400] text-[#FF7400] hover:bg-[#FF7400] hover:text-white">
-                <small>
-                  #{{ index + 1 }}
-                </small>
+              <span
+                v-else
+                class="h-8 w-8 border items-center justify-center flex rounded border-[#FF7400] text-[#FF7400] hover:bg-[#FF7400] hover:text-white"
+              >
+                <small>#{{ index + 1 }}</small>
               </span>
             </swiper-slide>
+
           </swiper>
         </div>
         <div class="w-fit">
