@@ -22,6 +22,7 @@ const mostRecentMOT = ref(null);
 const clickedMotHistory = ref(0);
 const longestPeriodBetTests = ref(0);
 const slidesPerView = ref(0);
+const errorMessage = ref(null);
 
 const isTableVisible = ref(true);
 const toggleTableVisibility = () => {
@@ -54,7 +55,7 @@ const displayedMOTHistory = computed(() => {
 });
 
 function isMOThistoryLocked(index: number) {
-  const unlockThreshold = 5;
+  const unlockThreshold = 4;
   return index > unlockThreshold;
 }
 
@@ -91,7 +92,21 @@ const prevSlide = () => {
 
 function handleSliderIndexClick(index: number) {
   clickedMotHistory.value = index;
-  mostRecentMOT.value = motHistory.value[index];
+  let hasSub = hasSubscription.value;
+
+  if(hasSub.active && (hasSub.one_off_request_count > 0 || hasSub.request_count > 0 || hasSub.request_count_trial)){
+    mostRecentMOT.value = motHistory.value[index];
+  }else{
+    errorMessage.value = "You don't have any active subscription. Please buy subscription.";
+    clearErrorMessage();
+    return false;
+  }
+}
+
+function clearErrorMessage() {
+  setTimeout(() => {
+    errorMessage.value = null;
+  }, 5000);
 }
 
 function calculateLongestPeriodBetTests(motHistories) {
@@ -276,6 +291,11 @@ function calculateDaysSinceLastTest(currentMOT) {
           </button>
         </div>
       </div>
+
+      <div v-if="errorMessage" class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+        <span class="font-medium">{{ errorMessage }}</span>
+      </div>
+
       <table class="w-full text-black mt-6">
         <thead>
           <tr class="header-row">
