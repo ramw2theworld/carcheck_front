@@ -49,7 +49,7 @@ const props = defineProps({
             <p class="text-black-600 font-extralight mt-2 text-lg">MOT History</p>
         </div> -->
         <div v-for="feature in addedMoreFeatures" :key="feature.id" class="flex flex-row items-center mt-3">
-            <img :src="`assets/svg/${feature.icon}`" class="h-8 w-8 mr-2" :alt="`Feature Icon ${feature.id}`" />
+            <img :src="`/svg/${feature.icon}`" class="h-8 w-8 mr-2" :alt="`Feature Icon ${feature.id}`" />
             <p class="text-black-600 font-extralight mt-2 text-lg">{{ feature.title }}</p>
         </div>
 

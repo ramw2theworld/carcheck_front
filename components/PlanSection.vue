@@ -127,7 +127,7 @@ const premium_features = reactive(featureData.features.premium_features);
       </div>
 
     </div>
-    <img src="../assets/svg/plan-end-track.svg" alt="Plan End Track" class="w-full mt-20" />
+    <img src="/svg/plan-end-track.svg" alt="Plan End Track" class="w-full mt-20" />
   </div>
 </template>
 <!-- 

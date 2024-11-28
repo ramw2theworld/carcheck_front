@@ -39,7 +39,7 @@ const moreFeatures = async () => {
 /* Add styles here if needed */
 
 .section-1-bg {
-  background-image: url("../assets/png/car-find-section-bg-1.jpeg");
+  background-image: url("/png/car-find-section-bg-1.jpeg");
   background-size: cover;
 
 }

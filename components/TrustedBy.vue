@@ -88,8 +88,7 @@ onBeforeUnmount(() => {
     slider.value.removeEventListener('mouseup', end);
     slider.value.removeEventListener('touchend', end);
   }
-
-  
+  alert("hello there for the tests");
 });
 </script>
 <template>
