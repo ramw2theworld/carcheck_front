@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center justify-center flex-col md:flex-row py-10">
     <div class="flex flex-row">
-      <img src="assets/svg/elegant-male-taxi-driver-costume.svg" class="md:h-40 h-32 mr-2" alt="Feature Icon 1">
+      <img src="/svg/elegant-male-taxi-driver-costume.svg" class="md:h-40 h-32 mr-2" alt="Feature Icon 1">
       <div class="h-40 flex items-center"><span class="md:text-[14rem] text-[10rem] font-bold text-[#FF7400] -ml-16 -mt-6 md:-mt-2"> 1</span></div>
       <div class="flex flex-col w-72">
         <h6 class="md:text-3xl text-xl text-[#0F1829]"><span class="font-bold">Buying</span> a car</h6>
@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="flex flex-row">
-      <img src="assets/svg/elegant-male-taxi-driver-costume (1).svg" class="md:h-40 h-32 mr-2" alt="Feature Icon 1">
+      <img src="/svg/elegant-male-taxi-driver-costume (1).svg" class="md:h-40 h-32 mr-2" alt="Feature Icon 1">
       <div class="h-40 flex items-center"><span class="md:text-[14rem] text-[10rem] font-bold text-[#FF7400] md:-ml-24 -ml-20 -mt-8 md:-mt-2"> 2</span></div>
       <div class="flex flex-col  w-72">
         <h6 class="md:text-3xl text-xl text-[#0F1829]"><span class="font-bold">Selling</span> a car</h6>
