@@ -10,7 +10,7 @@ const companies = ref([
   { src: '/svg/Vauxhall_2019_Logo.svg', alt: 'vauxhall' },
   { src: '/svg/Ford_logo_flat.svg', alt: 'ford' },
   { src: '/svg/volkswagen-logo.svg', alt: 'volkswagen' },
-  { src: '/svg/Mercedes-Benz_logo_2010.svg', alt: 'mercedes' },
+  { src: '/svg/Mercedes-Benz_Logo_2010.svg', alt: 'mercedes' },
   { src: '/svg/Kia-logo.svg', alt: 'kia' },
 ]);
 
@@ -88,7 +88,6 @@ onBeforeUnmount(() => {
     slider.value.removeEventListener('mouseup', end);
     slider.value.removeEventListener('touchend', end);
   }
-  alert("hello there for the tests");
 });
 </script>
 <template>
