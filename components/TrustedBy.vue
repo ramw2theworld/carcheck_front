@@ -2,16 +2,16 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 
 const companies = ref([
-  { src: '/_nuxt/assets/svg/lanndrover.svg', alt: 'landrover' },
-  { src: '/_nuxt/assets/svg/Nissan_2020_logo.svg', alt: 'nissan' },
-  { src: '/_nuxt/assets/svg/Audi-Logo_2016.svg', alt: 'audi' },
-  { src: '/_nuxt/assets/svg/BMW-logo.svg', alt: 'bmw' },
-  { src: '/_nuxt/assets/svg/Logo_Toyota.svg', alt: 'toyota' },
-  { src: '/_nuxt/assets/svg/Vauxhall_2019_Logo.svg', alt: 'vauxhall' },
-  { src: '/_nuxt/assets/svg/Ford_logo_flat.svg', alt: 'ford' },
-  { src: '/_nuxt/assets/svg/volkswagen-logo.svg', alt: 'volkswagen' },
-  { src: '/_nuxt/assets/svg/Mercedes-Benz_logo_2010.svg', alt: 'mercedes' },
-  { src: '/_nuxt/assets/svg/Kia-logo.svg', alt: 'kia' },
+  { src: '/svg/lanndrover.svg', alt: 'landrover' },
+  { src: '/svg/Nissan_2020_logo.svg', alt: 'nissan' },
+  { src: '/svg/Audi-Logo_2016.svg', alt: 'audi' },
+  { src: '/svg/BMW-logo.svg', alt: 'bmw' },
+  { src: '/svg/Logo_Toyota.svg', alt: 'toyota' },
+  { src: '/svg/Vauxhall_2019_Logo.svg', alt: 'vauxhall' },
+  { src: '/svg/Ford_logo_flat.svg', alt: 'ford' },
+  { src: '/svg/volkswagen-logo.svg', alt: 'volkswagen' },
+  { src: '/svg/Mercedes-Benz_logo_2010.svg', alt: 'mercedes' },
+  { src: '/svg/Kia-logo.svg', alt: 'kia' },
 ]);
 
 const currentSlide = ref(0);
