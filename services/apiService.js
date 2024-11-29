@@ -18,7 +18,6 @@ const ApiService = {
   async request(endpoint, method, data = null, token = null) {
     const tokenStore = useTokenStore();
     const tokenToUse = token || tokenStore.getToken;
-    console.log("token to be used: ", tokenToUse);
     const headers = {
       Accept: "application/json",
       "Content-Type": "application/json",
@@ -36,8 +35,6 @@ const ApiService = {
     if (data) {
       options.body = JSON.stringify(data);
     }
-
-    console.log("Request Options:", options);
 
     try {
       const baseURL = setBaseUrl(app_env);
