@@ -1,7 +1,14 @@
 <script setup>
+import { faL } from '@fortawesome/free-solid-svg-icons';
+
 const addedMoreFeatures = reactive([]);
+const isAddMoreBtnHidden = ref(false);
 const moreFeatures = async () => {
+
   addedMoreFeatures.push(
+      {
+        "id": 12, "title": "Write off", "icon": "warning.svg"
+      },
       { 
         "id": 7, "title": "Finance History", "icon": "outstanding-finances.svg"
       },
@@ -10,8 +17,12 @@ const moreFeatures = async () => {
       },
       {
         "id": 9, "title": "Technical data", "icon": "technical-data.svg"
+      },
+      {
+        "id": 10, "title": "Vehicle Valuation", "icon": "mileage-history-1.svg"
       }
     );
+    isAddMoreBtnHidden.value = true;
   }
   const baseURL = import.meta.env.VITE_BASE_URL;
 </script>
@@ -26,7 +37,7 @@ const moreFeatures = async () => {
           report for <span class="font-bold">any car</span></p>
       <!--  features      -->
         <Features :addedMoreFeatures="addedMoreFeatures"></Features>
-        <div class="flex flex-row items-center justify-center mt-10 w-ful">
+        <div class="flex flex-row items-center justify-center mt-10 w-ful" v-if="isAddMoreBtnHidden == false">
           <button class="bg-none" @click="moreFeatures">
             <p class="text-[#FF7400] text-lg font-bold">And More ...</p>
           </button>
