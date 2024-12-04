@@ -105,7 +105,7 @@ function getFailureType(annotationList) {
     <div v-show="isTableVisible" class="flex flex-row w-full pt-4 space-x-8">
       <div class="lg:w-2/3">
         
-        <template v-if="subscription.plan?.plan_code ==='48h-basic-subscription' && hasSubscription?.onTrial">
+        <template v-if="subscription?.plan?.plan_code ==='48h-basic-subscription' && hasSubscription?.onTrial">
           <table class="w-full text-black mt-8">
             <thead>
               <tr class="header-row">
