@@ -124,7 +124,6 @@
     </footer>
 </template>
 <script setup lang="ts">
-  alert("hello there for the etest.");
   const startCheckin = () =>{
     navigateTo('/payment/plans');
   };
