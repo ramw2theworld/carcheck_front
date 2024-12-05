@@ -124,7 +124,8 @@
     </footer>
 </template>
 <script setup lang="ts">
-const startCheckin = () =>{
-  navigateTo('/payment/plans');
-};
+  alert("hello there for the etest.");
+  const startCheckin = () =>{
+    navigateTo('/payment/plans');
+  };
 </script>
