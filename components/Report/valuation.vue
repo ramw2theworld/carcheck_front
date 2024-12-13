@@ -19,6 +19,7 @@ const chartLoaded = ref(false);
 onMounted(async () => {
   isClient.value = true;
   await carRegistrationSearchStore.fetchValuationList();
+  console.log("hello there valuations: ", valuationLists.value);
   if (valuationLists.value && Array.isArray(valuationLists.value)) {
     mapValuationToChart();
     console.log("chartData after mapValuationToChart:", chartData.value);
