@@ -291,7 +291,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                     const keysToRemove = [
                         'VehicleImageUrl', 'VehicleLogo', 'SmmtDetails', 'VehicleDimension',
                         'VehicleRegistration', 'VehicleMotVed', 'VehicleGeneralInfo', 'Performance',
-                        'VehicleClassificationDetails', 'VehicleHistory', 'MOTHistory', 'VehicleValuationsList',
+                        'VehicleClassificationDetails', 'VehicleHistory', 'MOTHistory', 'vehicleValuationsList',
                         'vehicleStolenRecords', 'vehicleWriteOffRecords', 'vehicleRiskRecords', 
                         'vehicleFinanceRecords'
                     ];
@@ -429,6 +429,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
             this.getFullReportText = text;
         },
         async setVehicleValuationList(combinedPayload) {
+            console.log("valuation: ", combinedPayload.ValuationList)
             let code = systematicFourCharCode('vehicleValuationsList');
             if (combinedPayload.VehicleStatus && combinedPayload.ValuationList) {
                 const data = JSON.stringify(combinedPayload.ValuationList);

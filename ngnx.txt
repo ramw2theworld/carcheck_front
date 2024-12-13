@@ -1,0 +1,141 @@
+# FORGE CONFIG (DO NOT REMOVE!)
+include forge-conf/dev-back.car-check.info/before/*;
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name dev-back.car-check.info;
+    server_tokens off;
+    root /home/forge/dev-back.car-check.info/public;
+
+    # FORGE SSL (DO NOT REMOVE!)
+    ssl_certificate /etc/nginx/ssl/dev-back.car-check.info/2449358/server.crt;
+    ssl_certificate_key /etc/nginx/ssl/dev-back.car-check.info/2449358/server.key;
+
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;
+    ssl_prefer_server_ciphers off;
+    ssl_dhparam /etc/nginx/dhparams.pem;
+
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-XSS-Protection "1; mode=block";
+    add_header X-Content-Type-Options "nosniff";
+
+    index index.html index.htm index.php;
+
+    charset utf-8;
+
+    # FORGE CONFIG (DO NOT REMOVE!)
+    include forge-conf/dev-back.car-check.info/server/*;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location = /robots.txt  { access_log off; log_not_found off; }
+
+    access_log off;
+    error_log  /var/log/nginx/dev-back.car-check.info-error.log error;
+
+    error_page 404 /index.php;
+
+    location ~ \.php$ {
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
+        fastcgi_index index.php;
+        include fastcgi_params;
+    }
+
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+}
+
+# FORGE CONFIG (DO NOT REMOVE!)
+include forge-conf/dev-back.car-check.info/after/*;
+
+
+
+// kids corner
+
+# FORGE CONFIG (DO NOT REMOVE!)
+include forge-conf/dev.kids-corner.net/before/*;
+
+map $sent_http_content_type $expires {
+    "text/html"                 epoch;
+    "text/html; charset=utf-8"  epoch;
+    default                     off;
+}
+
+# Redirect HTTP to HTTPS
+server {
+    listen 80;
+    listen [::]:80;
+    server_name dev.kids-corner.net www.dev.kids-corner.net;
+    return 301 https://$host$request_uri;
+}
+
+# HTTPS Server Block
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name dev.kids-corner.net www.dev.kids-corner.net;
+    root /home/forge/dev.kids-corner.net/public;
+
+    ssl_certificate /etc/nginx/ssl/dev.kids-corner.net/2230311/server.crt;
+    ssl_certificate_key /etc/nginx/ssl/dev.kids-corner.net/2230311/server.key;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers on;
+
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-XSS-Protection "1; mode=block";
+    add_header X-Content-Type-Options "nosniff";
+
+    charset utf-8;
+
+    # FORGE CONFIG (DO NOT REMOVE!)
+    include forge-conf/dev.kids-corner.net/server/*;
+
+    location / {
+        expires $expires;
+
+        proxy_redirect off;
+        proxy_set_header Host               $host;
+        proxy_set_header X-Real-IP          $remote_addr;
+        proxy_set_header X-Forwarded-For    $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto  $scheme;
+        proxy_read_timeout                  1m;
+        proxy_connect_timeout               1m;
+        proxy_pass                          http://127.0.0.1:3001; # Nuxt app running on port 3001
+    }
+
+    # Proxy requests to the Nuxt.js backend API
+    location /api/game/ {
+        proxy_pass http://127.0.0.1:3001;
+        proxy_set_header Host               $host;
+        proxy_set_header X-Real-IP          $remote_addr;
+        proxy_set_header X-Forwarded-For    $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto  $scheme;
+    }
+
+    # Proxy other /api requests to the other backend API
+    location /api/ {
+        proxy_pass https://api.dev.kids-corner.net;
+        proxy_set_header Host               $host;
+        proxy_set_header X-Real-IP          $remote_addr;
+        proxy_set_header X-Forwarded-For    $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto  $scheme;
+        proxy_ssl_server_name on;
+    }
+
+    access_log /var/log/nginx/dev.kids-corner.net-access.log;
+    error_log  /var/log/nginx/dev.kids-corner.net-error.log error;
+
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+}
+
+# FORGE CONFIG (DO NOT REMOVE!)
+include forge-conf/dev.kids-corner.net/after/*;
