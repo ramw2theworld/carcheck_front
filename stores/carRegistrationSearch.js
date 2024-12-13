@@ -429,7 +429,6 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
             this.getFullReportText = text;
         },
         async setVehicleValuationList(combinedPayload) {
-            debugger
             console.log("valuation: ", combinedPayload.ValuationList)
             let code = systematicFourCharCode('vehicleValuationsList');
             if (combinedPayload.VehicleStatus && combinedPayload.ValuationList) {
