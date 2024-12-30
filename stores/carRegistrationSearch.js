@@ -293,7 +293,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                         'VehicleRegistration', 'VehicleMotVed', 'VehicleGeneralInfo', 'Performance',
                         'VehicleClassificationDetails', 'VehicleHistory', 'MOTHistory', 'vehicleValuationsList',
                         'vehicleStolenRecords', 'vehicleWriteOffRecords', 'vehicleRiskRecords', 
-                        'vehicleFinanceRecords'
+                        'vehicleFinanceRecords', 'vbrand_logo'
                     ];
 
                     keysToRemove.forEach(key => {

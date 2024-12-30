@@ -103,7 +103,7 @@ const currentDateTime = () => {
       <div class="lg:w-[24%] flex flex-col items-center justify-center">
 
         <img :src="vbrand_logo" v-if="vbrand_logo" alt="">
-        <img src="/images/png/report/image 2.png" v-else alt="">
+        <!-- <img src="/images/png/report/image 2.png" v-else alt=""> -->
         <h3 class="font-bold">{{ smmtDetail?.ModelVariant??"HONDA CIVIC TYPE-R GT I-VTEC" }}</h3>
         <div class="bg-[#FFA500] h-[42px] flex items-center justify-center rounded border w-full">
           <H4 class="text-xl w-1/2 rounded border py-[2px] text-center font-bold">{{ reg_number??"XXXX XXX" }}</H4>
@@ -127,7 +127,7 @@ const currentDateTime = () => {
 
       <div class="lg:w-[36.5%] flex items-center justify-center">
         <img :src="vehicle_image" v-if="vehicle_image" alt="" class="w-full rounded-lg">
-        <img src="/images/png/report/demo car 1.png" v-else alt="">
+        <!-- <img src="/images/png/report/demo car 1.png" v-else alt=""> -->
       </div>
 
       <!-- ---------------------------------------------------- -->
