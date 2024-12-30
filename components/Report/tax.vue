@@ -20,6 +20,10 @@ const getClass = (min: number, max: number) => {
   return isActive ? 'border-4 border-black py-6' : 'py-7';
 };
 
+const isClassActive = (min: number, max: number) => {
+  return co2label.value >= min && co2label.value <= max;
+};
+
 const co2Bands = [
   { label: "A", min: 0, max: 100, color: "#31B554", co2Value: 100 },
   { label: "B-C", min: 101, max: 120, color: "#55BB50", co2Value: 120 },
@@ -47,10 +51,10 @@ function setco2label(value: number) {
 onMounted(async () => {
   await carRegistrationSearchStore.fetchVehicleMotVed();
   await carRegistrationSearchStore.fetchVehicleRegistration();
-  const emissions = (MOTVed.value?.VedCo2Emissions) 
-                    ? MOTVed.value.VedCo2Emissions 
-                    : 227;
-  
+  const emissions = (MOTVed.value?.VedCo2Emissions)
+    ? MOTVed.value.VedCo2Emissions
+    : 227;
+
   setco2label(emissions);
 });
 
@@ -64,7 +68,8 @@ onMounted(async () => {
         <!-- Your SVG Icon -->
         <p class="text-2xl font-bold flex items-center justify-center">TAX CALCULATION</p>
         <span>
-          <svg v-if="isTableVisible" width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg v-if="isTableVisible" width="12" height="7" viewBox="0 0 12 7" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
             <path d="M1 1L6 6" stroke="#292929" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
             <path d="M6 6L11 1" stroke="#292929" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
@@ -93,44 +98,47 @@ onMounted(async () => {
               <th>Single payment (12 months)</th>
               <td v-if="hasSubscription?.active">{{ MOTVed?.VedRate?.Standard?.TwelveMonth || 'N/A' }}</td>
               <td v-else>
-                <Hashed/>
+                <Hashed />
               </td>
             </tr>
             <tr>
               <th>Single six-month payment</th>
               <td v-if="hasSubscription?.active">{{ MOTVed?.VedRate?.Standard?.SixMonth || 'N/A' }}</td>
               <td v-else>
-                <Hashed/>
+                <Hashed />
               </td>
             </tr>
             <tr>
               <th>Total payable by 12 monthly instalments</th>
               <td v-if="hasSubscription?.active">{{ MOTVed?.VedRate?.Standard?.SixMonth || 'N/A' }}</td>
               <td v-else>
-                <Hashed/>
+                <Hashed />
               </td>
             </tr>
           </tbody>
         </table>
 
         <div class="bg-[#FF7400] w-full flex items-center justify-center py-2">
-          <h3 class="text-xl font-semibold text-white">Lorem ipsum dolor sit amet. <a href="#" class="underline">check the full report</a></h3>
+          <h3 class="text-xl font-semibold text-white">Lorem ipsum dolor sit amet. <a href="#" class="underline">check
+              the full report</a></h3>
         </div>
       </div>
 
       <!-- CO2 Band Visualization -->
       <div class="flex items-center justify-center relative lg:px-20 mt-20">
-        <div v-if="co2label >= 0"
-          class="hidden lg:block absolute -top-6 bg-black text-white text-sm py-1 w-[8.95rem] text-center"
-          :style="{ left: getLabelPosition() }">
-          YOUR LABEL
-        </div>
+
 
         <div class="grid grid-cols-7 gap-0 relative w-[70rem]">
+
           <!-- Looping through co2Bands -->
           <div v-for="band in co2Bands" :key="band.label" :class="getClass(band.min, band.max)"
-            :style="{ backgroundColor: band.color }" class="flex flex-col items-center text-center space-y-3 text-2xl"
+            :style="{ backgroundColor: band.color }"
+            class="flex flex-col items-center text-center space-y-3 text-2xl relative"
             @click="setco2label(band.co2Value)">
+            <div v-if="isClassActive(band.min, band.max)"
+              class="hidden lg:block absolute -top-6 bg-black scale-[106%] text-white text-sm py-1 w-full text-center">
+              YOUR LABEL
+            </div>
             <div class="text-white font-bold border-b w-full">{{ band.label }}</div>
             <div class="text-white">{{ band.min }}</div>
             <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -157,7 +165,8 @@ onMounted(async () => {
           <tbody>
             <tr>
               <th>CO2 Emissions</th>
-              <td v-if="MOTVed?.VedCo2Emissions || vehicleRegistration?.Co2Emissions">{{ MOTVed?.VedCo2Emissions ||  vehicleRegistration?.Co2Emissions}}</td>
+              <td v-if="MOTVed?.VedCo2Emissions || vehicleRegistration?.Co2Emissions">{{ MOTVed?.VedCo2Emissions ||
+                vehicleRegistration?.Co2Emissions }}</td>
             </tr>
             <tr>
               <th>CO2 Label </th>
