@@ -429,8 +429,9 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
             this.getFullReportText = text;
         },
         async setVehicleValuationList(combinedPayload) {
+            debugger
             console.log("valuation: ", combinedPayload.ValuationList)
-            let code = systematicFourCharCode('vehicleValuationsList');
+            let code = systematicFourCharCode('VehicleValuationsList');
             if (combinedPayload.VehicleStatus && combinedPayload.ValuationList) {
                 const data = JSON.stringify(combinedPayload.ValuationList);
                 const encryptedData = await encryptData(code, data);
