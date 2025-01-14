@@ -36,7 +36,6 @@ definePageMeta({
 
     <!-- Section 1 -->
     <ReportSection1 />
-
     <!-- Section 2 -->
     <ReportInfo />
 
@@ -55,14 +54,14 @@ definePageMeta({
     <ReportFinance />
 
     <!-- Section 8 -->
-    <ReportValuation />
+    <ReportValuation v-if="hasSubscription.active"/>
+    <ReportValuationDemo v-else/>
 
     <!-- Section 9 -->
     <ReportTax />
 
     <!-- Section 10 -->
     <ReportRisk />
-
   </div>
 
 </template>
