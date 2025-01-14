@@ -10,37 +10,37 @@ const toggleTableVisibility = () => {
 };
 
 const valuationLists = computed(() => carRegistrationSearchStore.vehicleValuationsList);
-const hasSubscription = computed(()=> subscriptionStore.hasSubscription);
+const hasSubscription = computed(() => subscriptionStore.hasSubscription);
 
-const chartData = ref([]); 
-const isClient = ref(false); 
+const chartData = ref([]);
+const isClient = ref(false);
 const chartLoaded = ref(false);
 
 onMounted(async () => {
   isClient.value = true;
   await carRegistrationSearchStore.fetchValuationList();
-  console.log("hello there valuations: ", valuationLists.value);
-  if (valuationLists.value && Array.isArray(valuationLists.value)) {
+  if (valuationLists.value && typeof valuationLists.value === "object") {
     mapValuationToChart();
-    console.log("chartData after mapValuationToChart:", chartData.value);
-  }else{
+    console.log("chartData after mapping:", chartData.value);
+  } else {
     console.warn("Valuation data is not available or invalid format.");
   }
 });
 
 watch(chartData, (newValue) => {
   if (newValue.length > 0) {
-    chartLoaded.value = true; 
+    chartLoaded.value = true;
   }
 });
 
 function mapValuationToChart() {
-  console.log("hello there chor: ", valuationLists.value);
-  if (valuationLists.value) {
-    chartData.value = valuationLists.value.map((item) => ({
-      label: item.label,
-      value: item.value || 0,
+  if (valuationLists.value && typeof valuationLists.value === "object") {
+    chartData.value = Object.entries(valuationLists.value).map(([key, value]) => ({
+      label: key,
+      value: parseFloat(value) || 0, // Ensure value is a number
     }));
+  } else {
+    console.warn("Valuation data is not available or invalid format.");
   }
 }
 
@@ -57,11 +57,13 @@ function getChartHeight() {
 <template>
   <report-wrapper>
     <!-- Toggle table visibility -->
-    <div @click="toggleTableVisibility" class="cursor-pointer text-black flex flex-col md:flex-row items-center justify-between">
+    <div @click="toggleTableVisibility"
+      class="cursor-pointer text-black flex flex-col md:flex-row items-center justify-between">
       <div class="flex items-center space-x-4">
         <p class="text-2xl font-bold flex items-center justify-center">VALUATION DETAILS</p>
         <span>
-          <svg v-if="isTableVisible" width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg v-if="isTableVisible" width="12" height="7" viewBox="0 0 12 7" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
             <path d="M1 1L6 6" stroke="#292929" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
             <path d="M6 6L11 1" stroke="#292929" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
@@ -77,11 +79,10 @@ function getChartHeight() {
       <button class="bg-[#FF7400] text-white text-xl w-72 rounded-lg py-2">Get full report</button>
     </div>
 
-    {{ chartData }}
     <div v-show="isTableVisible" class="text-black my-10 w-full">
-      <div v-if="isClient && chartData.length > 0">
-        {{ chartData }} {{hasSubscription.active}}
-        <chart-bar v-if="chartData.length > 0" :data="chartData" :hasSubscription="hasSubscription.active" :height="getChartHeight()" width="100%" />
+      <div v-if="isClient">
+        <chart-bar v-if="chartData.length > 0" :data="chartData" :hasSubscription="hasSubscription.active"
+          :height="getChartHeight()" width="100%" />
       </div>
       <div v-else>
         <p>Loading data...</p>
