@@ -195,6 +195,7 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
                 try {
                     const decrypted = await decryptData(`${code}`, JSON.parse(encryptedData));
                     this.vehicleValuationsList = JSON.parse(decrypted);
+                    console.log("valud: ", this.vehicleValuationsList);
                 } catch (error) {
                     console.error("Failed to decrypt Vehicle MOT History: ", error);
                 }
@@ -429,10 +430,8 @@ export const useCarRegistrationSearchStore = defineStore('carRegistrationSearch'
             this.getFullReportText = text;
         },
         async setVehicleValuationList(combinedPayload) {
-            debugger
-            console.log("valuation: ", combinedPayload.ValuationList)
             let code = systematicFourCharCode('VehicleValuationsList');
-            if (combinedPayload.VehicleStatus && combinedPayload.ValuationList) {
+            if (combinedPayload && combinedPayload.ValuationList) {
                 const data = JSON.stringify(combinedPayload.ValuationList);
                 const encryptedData = await encryptData(code, data);
                 localStorage.setItem(code, JSON.stringify(encryptedData));

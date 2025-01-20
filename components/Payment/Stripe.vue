@@ -195,6 +195,7 @@ async function createSubscription(selectedPlan) {
         }
 
         if(payload?.car_data){
+            debugger
             // vehicle MOT History
             const vehicleMotHistoryObj = payload.car_data.find(item => item.MotHistory);
 
@@ -273,11 +274,13 @@ async function createSubscription(selectedPlan) {
             } else {
                 console.error("Vehicle status not found in car data");
             }
-
             // vehicle valuation
             const vehicleValuationObj = payload.car_data.find(item => item.ValuationList);
-
-            debugger
+            if (vehicleValuationObj && vehicleValuationObj.ValuationList) {
+                await registrationSearchStore.setVehicleValuationList(vehicleValuationObj);
+            } else {
+                console.error("Vehicle status not found in car data");
+            }
             // if (vehicleValuationObj && vehicleValuationObj.VehicleStatus && vehicleValuationObj.VehicleStatus.MotVed) {
             //     await registrationSearchStore.setVehicleValuationList(vehicleValuationObj.setVehicleValuationList);
             // } else {
