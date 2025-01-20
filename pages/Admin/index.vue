@@ -13,14 +13,13 @@ onMounted(async () => {
 
 definePageMeta({
   layout: 'admin',
-  title: 'Admin Dashboard page',
+  title: 'Admin Dashboard',
   meta: [
     { hid: 'User dashboard to fetch all cars searched', name: 'User dashboard to fetch all cars searched', content: 'User dashboard to fetch all cars searched' }
 
   ],
   middleware: ['auth'],
 });
-
 const userRequestCountLeft = computed(() => carStore.requestCounts);
 const userCarsList = computed(() => carStore.userCarsList);
 </script>
