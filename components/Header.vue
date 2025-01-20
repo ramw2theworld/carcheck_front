@@ -23,7 +23,6 @@ const makeLogout = async () => {
     error.value = error.data.errors
   }
 }
-console.log("hello auth: ", auth.getCurrentUser);
 </script>
 
 <template>
