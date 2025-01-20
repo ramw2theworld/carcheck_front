@@ -11,6 +11,17 @@ if (redirectMessage.value) {
     redirectMessage.value = "";
   }, 3000);
 }
+
+definePageMeta({
+  title: 'Welcome to Car check',
+  meta: [
+    {
+      hid: 'Car report generated.', name: 'Download all data of the car', content: 'Download all data of the car'
+    }
+
+  ],
+});
+
 </script>
 
 <template>
