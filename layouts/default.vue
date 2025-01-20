@@ -1,16 +1,28 @@
 <script setup>
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+import { useHead } from '@unhead/vue';
+
+const route = useRoute();
+const pageTitle = computed(() => route.meta?.title || 'Car Check');
+
+// Fallback title in case `meta` is undefined
+useHead({
+  title: pageTitle,
+});
+
 </script>
+
 <template>
-  <div >
-    <Header></Header>
-      <div>
-        <NuxtPage ></NuxtPage>
-      </div>
-    <Footer></Footer>
+  <div>
+    <Header />
+    <main>
+      <NuxtPage />
+    </main>
+    <Footer />
   </div>
 </template>
+
 <style scoped>
-
-
-/* assets/png/car-find-section-bg-1.jpeg */
+/* Styles here */
 </style>

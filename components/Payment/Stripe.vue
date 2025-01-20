@@ -281,11 +281,6 @@ async function createSubscription(selectedPlan) {
             } else {
                 console.error("Vehicle status not found in car data");
             }
-            // if (vehicleValuationObj && vehicleValuationObj.VehicleStatus && vehicleValuationObj.VehicleStatus.MotVed) {
-            //     await registrationSearchStore.setVehicleValuationList(vehicleValuationObj.setVehicleValuationList);
-            // } else {
-            //     console.error("Vehicle status not found in car data");
-            // }
         }
         
         // if (selectedPlan.plan_code === '48h-basic-subscription') {
