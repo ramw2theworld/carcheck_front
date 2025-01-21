@@ -14,8 +14,8 @@ const showModal = ref(false);
 const isOpen = ref(false)
 
 definePageMeta({
-    layout: 'admin',
-    title: 'MyPlan'
+  title: 'My plan',
+  layout: 'admin',
 });
 
 onMounted(async () => {
@@ -36,10 +36,7 @@ onMounted(async () => {
 });
 
 function toggleModal() {
-    console.log('Toggle Modal before:', showModal.value);
     showModal.value = !showModal.value;
-    alert("hello there");
-    console.log('Toggle Modal after:', showModal.value);
 }
 
 async function cancelSubscription(original_id){

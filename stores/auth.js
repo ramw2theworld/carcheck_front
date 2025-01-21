@@ -16,6 +16,7 @@ export const useAuthStore = defineStore('auth', {
         removeUser() {
             this.user = {};
         },
+
         async makeLogin(form) {
             try {
                 const response = await ApiService.post('login', form);
@@ -142,6 +143,50 @@ export const useAuthStore = defineStore('auth', {
             if (payload.access_token && payload.user) {
                 token.setToken(payload.access_token);
                 this.user = payload.user;
+            }
+        },
+
+        async submitEmailForPasswordReset(form) {
+            try {
+                const response = await ApiService.post('users/verify-email', form);
+                debugger
+                if(response && response.data){
+                    debugger
+                    
+                    return response;
+                }
+            } catch (error) {
+                throw error;
+            }
+        },
+
+        async submitTokenForPasswordReset(form) {
+            try {
+                const response = await ApiService.post('users/verify-reset-token', form);
+                debugger
+                if(response && response.data){
+                    debugger
+                    
+                    return response;
+                }
+            } catch (error) {
+                throw error;
+            }
+        },
+
+
+        async handlePasswordResetSubmit(form) {
+            try {
+                debugger
+                const response = await ApiService.post('users/change-password', form);
+                debugger
+                if(response && response.data){
+                    debugger
+                    
+                    return response;
+                }
+            } catch (error) {
+                throw error;
             }
         },
     }
