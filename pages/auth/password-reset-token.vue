@@ -65,7 +65,7 @@ const handleResetPasswordSubmit = async () => {
         <div class="w-full">
             <div
                 class="card bg-white p-8 rounded-lg shadow-xl border-2 border-dark-500 border-solid py-4 md:w-3/4 mx-auto lg:w-1/3">
-                <h3 class="text-center text-2xl font-semibold">Email Verifying</h3>
+                <h3 class="text-center text-2xl font-semibold">Email Verify</h3>
 
                 <form @submit.prevent="handleResetPasswordSubmit">
                     <div class="mb-6">
@@ -84,6 +84,7 @@ const handleResetPasswordSubmit = async () => {
                     
                     <div class="flex justify-between items-center">
                         <ButtonPrimary :disabled="isProcessing">{{ resetToken }}</ButtonPrimary>
+                        <NuxtLink to="/auth/login">Back</NuxtLink>
                     </div>
 
                 </form>
