@@ -149,10 +149,7 @@ export const useAuthStore = defineStore('auth', {
         async submitEmailForPasswordReset(form) {
             try {
                 const response = await ApiService.post('users/verify-email', form);
-                debugger
                 if(response && response.data){
-                    debugger
-                    
                     return response;
                 }
             } catch (error) {
@@ -163,10 +160,7 @@ export const useAuthStore = defineStore('auth', {
         async submitTokenForPasswordReset(form) {
             try {
                 const response = await ApiService.post('users/verify-reset-token', form);
-                debugger
                 if(response && response.data){
-                    debugger
-                    
                     return response;
                 }
             } catch (error) {
@@ -177,12 +171,8 @@ export const useAuthStore = defineStore('auth', {
 
         async handlePasswordResetSubmit(form) {
             try {
-                debugger
                 const response = await ApiService.post('users/change-password', form);
-                debugger
                 if(response && response.data){
-                    debugger
-                    
                     return response;
                 }
             } catch (error) {

@@ -10,7 +10,7 @@ definePageMeta({
     meta: [
         { hid: 'Login for fetching Registration number details', name: 'Login for fetching Registration number details', content: 'Login for fetching Registration number details' }
     ],
-    middleware: ['guest'],
+    middleware: ['check-email'],
 });
 
 const form = reactive({
@@ -45,9 +45,7 @@ const handleTokenForPasswordResetSubmit = async () => {
     try {
         form.email = localStorage.getItem("email-for-token");
         let response = await auth.submitTokenForPasswordReset(form);
-        debugger
         if (response.success && response.data) {
-            debugger
             let eData = response.data;
             navigateTo('/auth/reset-password');
         } else {
