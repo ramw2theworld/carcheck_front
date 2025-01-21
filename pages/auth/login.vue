@@ -117,12 +117,13 @@ const navigateToForgotPassword = () => navigateTo('/auth/password-reset-token');
                     </div>
 
                     <div class="flex justify-center items-center mt-4">
-                        <span @click="navigateToForgotPassword"
-                            class="text-blue-500 hover:text-blue-700 cursor-pointer">
-                            Forgot Password
-                        </span>
+                        <NuxtLink to="/auth/password-reset-token" >
+                            <span
+                                class="text-blue-500 hover:text-blue-700 cursor-pointer">
+                                Forgot Password
+                            </span>
+                        </NuxtLink>    
                     </div>
-                    
                 </form>
             </div>
         </div>
