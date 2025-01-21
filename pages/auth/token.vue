@@ -6,7 +6,7 @@ const isProcessing = ref(false);
 const errorMessage = ref(null);
 
 definePageMeta({
-    title: 'Token for password reset',
+    title: 'Token verify for password reset',
     meta: [
         { hid: 'Login for fetching Registration number details', name: 'Login for fetching Registration number details', content: 'Login for fetching Registration number details' }
     ],
@@ -66,7 +66,7 @@ const handleTokenForPasswordResetSubmit = async () => {
         <div class="w-full">
             <div
                 class="card bg-white p-8 rounded-lg shadow-xl border-2 border-dark-500 border-solid py-4 md:w-3/4 mx-auto lg:w-1/3">
-                <h3 class="text-center text-2xl font-semibold">Token Verifying</h3>
+                <h3 class="text-center text-2xl font-semibold">Token Verify</h3>
 
                 <form @submit.prevent="handleTokenForPasswordResetSubmit">
                     <div class="mb-6">
