@@ -97,6 +97,7 @@ const handleResetPasswordSubmit = async () => {
                     
                     <div class="flex justify-between items-center">
                         <ButtonPrimary :disabled="isProcessing">{{ resetPassword }}</ButtonPrimary>
+                        <NuxtLink to="/auth/token">Back</NuxtLink>
                     </div>
 
                 </form>
