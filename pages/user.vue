@@ -30,10 +30,7 @@ onMounted(async () => {
 });
 
 function toggleModal() {
-    console.log('Toggle Modal before:', showModal.value);
     showModal.value = !showModal.value;
-    alert("hello there");
-    console.log('Toggle Modal after:', showModal.value);
 }
 
 </script>
