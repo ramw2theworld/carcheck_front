@@ -10,7 +10,7 @@ definePageMeta({
     meta: [
         { hid: 'Login for fetching Registration number details', name: 'Login for fetching Registration number details', content: 'Login for fetching Registration number details' }
     ],
-    middleware: ['guest'],
+    middleware: ['check-email'],
 });
 
 const form = reactive({
@@ -53,9 +53,8 @@ const handleResetPasswordSubmit = async () => {
 
     try {
         let response = await auth.handlePasswordResetSubmit(form);
-        debugger
+        
         if (response.success && response.data) {
-            debugger;
             navigateTo('/auth/login');
         } else {
             throw new Error("Invalid Password or Confirm password");

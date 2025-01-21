@@ -43,9 +43,7 @@ const handleResetPasswordSubmit = async () => {
 
     try {
         let response = await auth.submitEmailForPasswordReset(form);
-        debugger
         if (response.success && response.data) {
-            debugger
             let eData = response.data;
             localStorage.setItem("email-for-token", eData.email)
             navigateTo('/auth/token');
