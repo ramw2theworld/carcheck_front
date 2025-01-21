@@ -4,12 +4,12 @@ const auth = useAuthStore();
 const token = useTokenStore();
 const { $event } = useNuxtApp();
 const subscriptionStore = useSubscriptionStore();
-const loginSubmit = ref("Submit");
+const forgotPassword = ref("Submit");
 const isProcessing = ref(false);
 const errorMessage = ref(null);
 
 definePageMeta({
-    title: 'Login',
+    title: 'Forget password',
     meta: [
         { hid: 'Login for fetching Registration number details', name: 'Login for fetching Registration number details', content: 'Login for fetching Registration number details' }
     ],
@@ -19,24 +19,31 @@ definePageMeta({
 const form = reactive({
     email: "",
     password: "",
-    procedure: "login_form"
+    procedure: "login_form",
+    password_confirmation: "",
+
 });
 
 const errors = reactive({
     email: null,
-    password: null
+    password: null,
+    password_confirmation: null
 });
 
 // Validate form
 const validateForm = () => {
     errors.email = null;
     errors.password = null;
+    errors.password_confirmation = null;
 
     if (!form.email) {
         errors.email = "Email is required";
     }
     if (!form.password) {
         errors.password = "Password is required";
+    }
+    if (!form.password_confirmation) {
+        errors.password_confirmation = "Confirm password is required";
     }
 
     return !errors.email && !errors.password;
@@ -48,7 +55,7 @@ const handleLoginSubmit = async () => {
     if (!validateForm()) return;
 
     isProcessing.value = true;
-    loginSubmit.value = "Processing...";
+    forgotPassword.value = "Processing...";
 
     try {
         let response = await auth.makeLogin(form);
@@ -71,21 +78,21 @@ const handleLoginSubmit = async () => {
         errorMessage.value = error?.data?.message || error?.response?.message || "An unexpected error occurred while trying to log in.";
         console.log("error:", errorMessage.value);
     } finally {
-        loginSubmit.value = "Submit";
+        forgotPassword.value = "Submit";
         isProcessing.value = false;
     }
 };
 
 // Navigation helpers
 const navigateToRegister = () => navigateTo('/auth/register');
-const navigateToForgotPassword = () => navigateTo('/auth/password-reset-token');
+const navigateToForgotPassword = () => navigateTo('/auth/forgot-password');
 </script>
 <template>
     <div class="min-h-screen flex items-center">
         <div class="w-full">
             <div
                 class="card bg-white p-8 rounded-lg shadow-xl border-2 border-dark-500 border-solid py-4 md:w-3/4 mx-auto lg:w-1/3">
-                <h3 class="text-center text-2xl font-semibold">User Login</h3>
+                <h3 class="text-center text-2xl font-semibold">Forgot password</h3>
 
                 <form @submit.prevent="handleLoginSubmit">
                     <div class="mb-6">
@@ -110,7 +117,7 @@ const navigateToForgotPassword = () => navigateTo('/auth/password-reset-token');
                     </div>
 
                     <div class="flex justify-between items-center">
-                        <ButtonPrimary :disabled="isProcessing">{{ loginSubmit }}</ButtonPrimary>
+                        <ButtonPrimary :disabled="isProcessing">{{ forgotPassword }}</ButtonPrimary>
                         <span @click="navigateToRegister" class="cursor-pointer">
                             <i class="fa fa-user"></i> Create new user
                         </span>
