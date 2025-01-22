@@ -19,7 +19,7 @@ onMounted(async () => {
 });
 
 definePageMeta({
-  title: 'Report',
+  title: 'Car Check Report',
   meta: [
     {
       hid: 'Car report generated.', name: 'Download all data of the car', content: 'Download all data of the car'
@@ -65,7 +65,5 @@ definePageMeta({
   </div>
 
 </template>
-
-
 
 <style></style>

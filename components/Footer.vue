@@ -1,3 +1,21 @@
+<script setup lang="ts">
+import { useAuthStore } from '@/stores/auth';
+import { computed } from 'vue';
+
+const authStore = useAuthStore();
+
+const currentUser = computed(()=> authStore.getCurrentUser);
+
+const startCheckIn = () => {
+  if (currentUser.value && Object.keys(currentUser.value).length > 0) {
+    navigateTo('/payment/plans');
+  } else {
+    localStorage.setItem('redirect-url', '/payment/plans');
+    navigateTo('/auth/login');
+  }
+};
+</script>
+
 <template>
     <footer class="bg-[#EEEEEE] px-12 md:px-32">
         <div class="mx-auto w-full max-w-screen-xl py-6 lg:py-8">
@@ -67,7 +85,7 @@
                       </button>
                     </div>
                     <p class="mt-2 text-sm font-thin">Subscribe to our newsletter to get our latest news.</p>
-                    <button class="rounded bg-orange-500 text-white px-4 py-2 mt-4" @click.prevent="startCheckin()">Start Checking</button>
+                    <button class="rounded bg-orange-500 text-white px-4 py-2 mt-4" @click.prevent="startCheckIn()">Start Checking</button>
                   </div>
                 </div>
             <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
@@ -123,8 +141,3 @@
         </div>
     </footer>
 </template>
-<script setup lang="ts">
-  const startCheckin = () =>{
-    navigateTo('/payment/plans');
-  };
-</script>
