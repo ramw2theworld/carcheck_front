@@ -1,7 +1,9 @@
 <script setup>
 import { ref, reactive } from 'vue';
+import { useCarStore } from '@/stores/car.js';
 const auth = useAuthStore();
 const token = useTokenStore();
+const carStore = useCarStore();
 const { $event } = useNuxtApp();
 const subscriptionStore = useSubscriptionStore();
 const loginSubmit = ref("Submit");
@@ -58,9 +60,14 @@ const handleLoginSubmit = async () => {
             await subscriptionStore.setCurrentSubscription(subscription);
             await auth.setUser(user);
 
+            if(localStorage.getItem('redirect-url')){
+                navigateTo('/payment/plans');
+            }
+
             if (hasSubscription.active || user.request_count > 0) {
                 const reg_number = localStorage.getItem('reg_number');
                 reg_number ? navigateTo('/report') : navigateTo('/');
+                carStore.setRequestCounts(user.request_count);
             } else {
                 navigateTo('/payment/plans');
             }

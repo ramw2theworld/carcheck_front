@@ -5,6 +5,16 @@ import { usePlanStore } from '@/stores/plan';
 import { useRouter } from 'vue-router';
 import ApiService from '~/services/apiService';
 
+definePageMeta({
+  title: 'Car Check Plans',
+  meta: [
+    {
+      hid: 'Car checkout plans', name: 'watchout all plans and checkout', content: 'watchout all plans and checkout'
+    }
+
+  ],
+});
+
 const router = useRouter();
 const planStore = usePlanStore();
 const subscriptionStore = useSubscriptionStore();
