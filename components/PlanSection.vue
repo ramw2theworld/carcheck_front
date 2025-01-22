@@ -47,9 +47,9 @@ const premium_features = reactive(featureData.features.premium_features);
         </button>
       </div>
     </div>
-    <div class="flex md:flex-row flex-col items-center justify-center mt-10 gap-4 md:gap-8 px-32">
+    <div class="flex md:flex-row flex-col items-stretch justify-center mt-10 gap-4 md:gap-8 px-32" style="min-height: 500px;">
       
-      <div v-for="plan in plans" :key="plan.plan_code" class="items-center border-2 border-[#0F1829] rounded-xl px-8 py-6">
+      <div v-for="plan in plans" :key="plan.plan_code" class="items-center border-2 border-[#0F1829] rounded-xl px-8 py-6 w-full">
         <h1 class="text-lg font-bold text-[#0F1829] px-2">{{ plan.name }}</h1>
         <div class="flex flex-row items-center justify-start mt-6">
           <div class="flex flex-row items-start justify-center">
@@ -73,6 +73,9 @@ const premium_features = reactive(featureData.features.premium_features);
           <div v-for="b_feature in basic_features" :key="b_feature.id"
                         class="flex flex-row items-center justify-start">
                         <!-- <img :src="getFeatureIcon(b_feature.icon)" :alt="b_feature.title" class="w-6 orange-filter" /> -->
+                        <!-- <img src="`../assets/svg/${b_feature.icon}`" alt="Check Mark" class="w-6" /> -->
+                        <img :src="`../assets/svg/${b_feature.icon}`" :alt="b_feature.title || 'Check Mark'" class="w-6" />
+
                         <h3 :class="{
                 'text-white': selectedPlan === plan.plan_code,
                 'text-[#0F1829]': selectedPlan !== plan.plan_code
@@ -105,7 +108,7 @@ const premium_features = reactive(featureData.features.premium_features);
                     v-if="plan.plan_code == '48h-expert-subscription'">
                     <div v-for="b_feature in standard_features" :key="b_feature.id"
                         class="flex flex-row items-center justify-start">
-                        <!-- <img :src="getFeatureIcon(b_feature.icon)" :alt="b_feature.title" class="w-6 orange-filter" /> -->
+                        <img :src="`../assets/svg/${b_feature.icon}`" :alt="b_feature.title || 'Check Mark'" class="w-6" />
                         <h3 :class="{
             'text-white': selectedPlan === plan.plan_code,
             'text-[#0F1829]': selectedPlan !== plan.plan_code
@@ -113,10 +116,10 @@ const premium_features = reactive(featureData.features.premium_features);
                     </div>
                 </div>
                 <!-- premium plan  -->
-                <div class="flex flex-col items-start justify-start mt-2 gap-2" v-if="plan.plan_code == 'premium-3x'">
+                <div class="flex flex-col items-start justify-start mt-2 gap-2" v-if="plan.plan_code == 'premium'">
                     <div v-for="premium_feature in premium_features" :key="premium_feature.id"
                         class="flex flex-row items-center justify-start">
-                        <!-- <img :src="getFeatureIcon(premium_feature.icon)" :alt="premium_feature.title" class="w-6 orange-filter" /> -->
+                        <img :src="`../assets/svg/${premium_feature.icon}`" :alt="premium_feature.title || 'Check Mark'" class="w-6 orange-filter" />
                         <h3 :class="{
             'text-white': selectedPlan === plan.plan_code,
             'text-[#0F1829]': selectedPlan !== plan.plan_code
