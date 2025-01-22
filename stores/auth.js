@@ -4,7 +4,7 @@ import { defineStore } from 'pinia';
 export const useAuthStore = defineStore('auth', {
     state: () => ({ user: {} }),
     getters: {
-        getCurrentUser: (state) => state.user,
+        getCurrentUser: (state) => state.user || {},
     },
     persist: {
         paths: ["user"]
