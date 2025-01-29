@@ -2,8 +2,8 @@
 export default {
   content: [
     "./components/**/*.{js,vue,ts}",
-    "./layouts/**/*.vue",
-    "./pages/**/*.vue",
+    "./layouts/**/*.{vue,js,ts}",
+    "./pages/**/*.{vue,js,ts}",
     "./plugins/**/*.{js,ts}",
     "./nuxt.config.{js,ts}",
     "./node_modules/flowbite/**/*.{js,ts}",
