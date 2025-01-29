@@ -24,7 +24,7 @@ const sideBarData = [
 </script>
 
 <template>
-  <div class="bg-white h-screen w-full px-10 py-5 flex space-x-12 ">
+  <div class="bg-white/90 h-screen w-full px-10 py-5 flex space-x-12 ">
     <!-- sidebar -->
     <div class="bg-[#0F1829] w-[4.25rem] flex-shrink-0 rounded-lg flex flex-col items-center justify-between">
       <div class="flex flex-col w-full mt-[3.75rem] gap-y-10">
