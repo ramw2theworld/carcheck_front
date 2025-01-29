@@ -10,16 +10,26 @@ const check_colors = ['#60C5FF', '#1EE6A8', '#EF343A'];
 
 <template>
   <div class="h-full w-full flex space-x-7">
-    <div class="flex-1 flex flex-col h-full space-y-5">
+    <div class="flex-1 flex flex-col h-full space-y-5 relative">
       <div class="w-full h-[12rem] rounded-xl bg-dashboard-custom-1">
-        <div></div>
-        <div></div>
+        <div class="pl-11 py-5 flex flex-col justify-between h-full relative">
+          <div class="leading-[1.75rem]">
+            <p class="uppercase font-bold text-[1.15rem]">Checks recap</p>
+            <p class="text-[1.8rem] font-bold">Remaining Checks : 03</p>
+            <p class="text-lg">Total Checks : 24</p>
+          </div>
+          <button class="h-[2.9rem] w-[13rem] bg-[#0F1829] text-white text-xl rounded-lg">
+            Get more checks
+          </button>
+          <img src="/public/images/png/dashboard/car-with-shadow.png" class="absolute w-[34rem] right-0 -top-[4.7rem]"
+            alt="">
+        </div>
       </div>
       <div class="h-[15rem] space-y-1">
         <div class="w-full px-2 flex items-center justify-between">
           <p class="text-lg text-black font-bold">Latest Checks</p>
           <div class="flex items-center space-x-1">
-            <p class="text-[0.65rem] font-bold">See more</p>
+            <p class="text-[0.65rem] font-bold text-[#949494]">See more</p>
             <span>
               <img src="/public/images/svg/icon-chev-right.svg" alt="">
             </span>
@@ -144,7 +154,7 @@ const check_colors = ['#60C5FF', '#1EE6A8', '#EF343A'];
                   </div>
                 </div>
               </div>
-              <div class="flex items-center space-x-1 text-[0.68rem] font-bold w-[30%]">
+              <div class="flex items-center space-x-1 text-[0.68rem] font-bold w-[30%] text-[#C2C2C2]">
                 <p>
                   See more
                 </p>
@@ -201,9 +211,9 @@ const check_colors = ['#60C5FF', '#1EE6A8', '#EF343A'];
 
 <style scoped>
 .bg-dashboard-custom-1 {
-  background: linear-gradient(to bottom, #FF7400, #FFA500), url('/path/to/your/image.jpg');
+  background: linear-gradient(to right, #FF7400, #FFA500), url('/public/images/png/dashboard/skyline.png');
   background-size: cover;
-  background-blend-mode: overlay;
+  /* background-blend-mode: overlay; */
 }
 
 .outlined-text {
