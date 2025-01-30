@@ -1,10 +1,39 @@
 <script lang="ts" setup>
+import SearchBar from '~/components/SearchBar.vue';
+
 
 definePageMeta({
   layout: 'dashboard',
 });
 
 const check_colors = ['#60C5FF', '#1EE6A8', '#EF343A'];
+
+const full_history = [
+  {
+    title: 'Damage Check',
+    icon: '/images/svg/icon-damage-check.svg',
+  },
+  {
+    title: 'Owners History',
+    icon: '/images/svg/icon-owners-history.svg',
+  },
+  {
+    title: 'Mileage History',
+    icon: '/images/svg/icon-mileage-history.svg',
+  },
+  {
+    title: 'Car Features',
+    icon: '/images/svg/icon-car-features.svg',
+  },
+  {
+    title: 'Theft Check',
+    icon: '/images/svg/icon-theft-check.svg',
+  },
+  {
+    title: 'MOT History',
+    icon: '/images/svg/icon-mot-history.svg',
+  },
+];
 
 </script>
 
@@ -36,7 +65,7 @@ const check_colors = ['#60C5FF', '#1EE6A8', '#EF343A'];
           </div>
         </div>
         <div class="grid grid-cols-3 gap-x-5 text-black">
-          <div v-for="(_, index) in 3" :key="index"
+          <div v-for="(_, index) in 3" :key="index * Math.random()"
             class="h-[12.5rem] rounded-xl bg-white flex flex-col items-center justify-between px-[1.7rem] py-[1.25rem]">
             <div class="flex w-full">
               <div class="flex-1 flex items-center space-x-1">
@@ -203,7 +232,41 @@ const check_colors = ['#60C5FF', '#1EE6A8', '#EF343A'];
         </div>
       </div>
     </div>
-    <div class="flex flex-col bg-blue-400 h-full w-[20rem] rounded-lg">d</div>
+    <div class="flex flex-col bg-city bg-white text-black h-full w-[20rem] rounded-lg px-9 py-7 relative">
+      <div>
+        <p class="uppercase text-primary text-[0.85rem] font-bold">
+          make a NEW CHECK
+        </p>
+        <p class="text-3xl leading-8">
+          Check it before
+          <b> you regret it</b>
+        </p>
+      </div>
+      <div class="mt-6">
+        <p class="text-lg">Enter VIN</p>
+        <SearchBar />
+      </div>
+      <div class="mt-[1.5rem] pl-1 space-y-4">
+        <p class="font-extralight leading-4">We can generate a <span class="font-bold">full history</span>
+          report for <span class="font-bold">any car</span></p>
+
+        <div class="grid grid-cols-2 gap-y-1">
+          <div v-for="(his, index) in full_history" :key="his.title || index"
+            class="text-[0.7rem] flex items-center space-x-1 font-extralight">
+            <span class="w-3">
+              <img :src="his.icon" alt="">
+            </span>
+            <p>
+              {{ his.title }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="absolute bottom-0 w-full left-1/2 -translate-x-1/2">
+        <img src="/public/images/png/dashboard/car-right-sidebar.png" class="w-full" alt="">
+      </div>
+    </div>
   </div>
 </template>
 
@@ -214,6 +277,11 @@ const check_colors = ['#60C5FF', '#1EE6A8', '#EF343A'];
   background: linear-gradient(to right, #FF7400, #FFA500), url('/public/images/png/dashboard/skyline.png');
   background-size: cover;
   /* background-blend-mode: overlay; */
+}
+
+.bg-city {
+  background: url('/public/images/png/dashboard/city.png'), white;
+  background-size: cover;
 }
 
 .outlined-text {

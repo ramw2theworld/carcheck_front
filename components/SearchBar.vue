@@ -1,7 +1,6 @@
 <script setup>
-import { reactive } from "vue";
-const router = useRouter();
 import { useCarRegistrationSearchStore } from "@/stores/carRegistrationSearch";
+const router = useRouter();
 const carRegistrationSearch = useCarRegistrationSearchStore();
 
 definePageMeta({
@@ -60,32 +59,32 @@ const searchForCarReg = async () => {
     if (processedCarNumber.value.length < MIN_LENGTH || processedCarNumber.value.length > MAX_LENGTH) {
       errors.value.push(`Vehicle number is not valid.`);
       searchTxt.value = null;
-      errorMessage.value="";
+      errorMessage.value = "";
       return;
     }
     await carRegistrationSearch.searchCarRegNumber(processedCarNumber.value);
     searchTxt.value = null;
     router.push(`/report`);
   } catch (error) {
-    
-    if(!error?.data?.success){
+
+    if (!error?.data?.success) {
       // let sub = subscription.value;
       // if(hasSubscription.active==true){
 
       // }
     }
-    
+
     searchTxt.value = null;
-    if(error?.data?.message){
+    if (error?.data?.message) {
       errorMessage.value = error.data.message;
     }
-    else{
+    else {
       errors.value = error.response?.data?.errors || ["Something went wrong while checking car number. Please verify Registration Number."];
     }
 
     setTimeout(() => {
-      errorMessage.value="";
-      errors.value=[];
+      errorMessage.value = "";
+      errors.value = [];
     }, 5000);
   }
 }
