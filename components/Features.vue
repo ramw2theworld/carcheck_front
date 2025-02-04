@@ -1,76 +1,48 @@
 <script lang="ts" setup>
 import { defineProps } from 'vue';
 import featureData from '../features.json';
-const features = reactive(featureData.features.items);
+const features = featureData.features.index;
 
 const props = defineProps({
     moreFeatures: Array,
     addedMoreFeatures: Array,
-
 });
 </script>
 
 <template>
-    <div class="grid md:grid-cols-2 grid-cols-1 gap-x-6  mt-10">
-        <!-- <div class="grid md:grid-cols-2 grid-cols-1 gap-x-6 mt-10">
-            <div v-for="(feature, index) in features" :key="feature.id" class="flex flex-row items-center mt-3">
-                <img :src="`/_nuxt/assets/svg/${feature.icon}`" class="h-8 w-8 mr-2" :alt="`Feature Icon ${index + 1}`">
-                <p class="text-black-600 font-extralight mt-2 text-lg">{{ feature.title }}</p>
-            </div>
-        </div> -->
-        
-        <div class="flex flex-row items-center  mt-3">
-            <img src="assets/svg/damage-check.svg" class="h-8 w-8 mr-2" alt="Feature Icon 1">
-            <p class="text-black-600 font-extralight mt-2 text-lg">Damage Check</p>
-        </div>
-        <div class="flex flex-row items-center  mt-3">
-            <img src="assets/svg/owner-history.svg" class="h-8 w-8 mr-2" alt="Feature Icon 2">
-            <p class="text-black-600 font-extralight mt-2 text-lg">Owners History</p>
-        </div>
-        <div class="flex flex-row items-center  mt-3">
-            <img src="assets/svg/milage-history.svg" class="h-8 w-8 mr-2" alt="Feature Icon 3">
-            <p class="text-black-600 font-extralight mt-2 text-lg">Mileage History</p>
-        </div>
-        <div class="flex flex-row items-center  mt-3">
-            <img src="assets/svg/car-features.svg" class="h-8 w-8 mr-2" alt="Feature Icon 4">
-            <p class="text-black-600 font-extralight mt-2 text-lg">Car Features</p>
-        </div>
-        <div class="flex flex-row items-center  mt-3">
-            <img src="assets/svg/theft-check.svg" class="h-8 w-8 mr-2" alt="Feature Icon 4">
-            <p class="text-black-600 font-extralight mt-2 text-lg">Theft Check</p>
-        </div>
-        <div class="flex flex-row items-center  mt-3">
-            <img src="assets/svg/warning.svg" class="h-8 w-8 mr-2" alt="Feature Icon 4">
-            <p class="text-black-600 font-extralight mt-2 text-lg">MOT History</p>
-        </div>
-        <!-- {{ addedMoreFeatures.length }}
-        <div class="flex flex-row items-center  mt-3" v-if="addedMoreFeatures">
-            <img src="assets/svg/warning.svg" class="h-8 w-8 mr-2" alt="Feature Icon 4">
-            <p class="text-black-600 font-extralight mt-2 text-lg">MOT History</p>
-        </div> -->
-        <div v-for="feature in addedMoreFeatures" :key="feature.id" class="flex flex-row items-center mt-3">
-            <img :src="`/svg/${feature.icon}`" class="h-8 w-8 mr-2" :alt="`Feature Icon ${feature.id}`" />
-            <p class="text-black-600 font-extralight mt-2 text-lg">{{ feature.title }}</p>
+    <div class="grid md:grid-cols-2 grid-cols-1 gap-x-[2.1rem] gap-y-[0.35rem] mt-[1.9rem] text-black pl-1">
+        <div v-for="(feature, index) in features" :key="feature.id" class="flex items-center space-x-4">
+            <img :src="`/_nuxt/assets/svg/${feature.icon}`" class="w-5" :alt="`Feature Icon ${index + 1}`">
+            <p class="font-extralight text-xl tracking-wider">{{ feature.title }}</p>
         </div>
 
-        <!-- <div class="flex flex-row items-center  mt-3">
-            <img src="assets/svg/outstanding-finances.svg" class="h-8 w-8 mr-2" alt="Feature Icon 4">
-            <p class="text-black-600 font-extralight mt-2 text-lg">Finance History</p>
+        <!-- <div class="flex items-center space-x-2">
+            <img src="assets/svg/damage-check.svg" class="w-6" alt="Feature Icon 1">
+            <p class="font-extralight">Damage Check</p>
         </div>
-        <div class="flex flex-row items-center  mt-3">
-            <img src="assets/svg/tax-record-icon.svg" class="h-8 w-8 mr-2" alt="Feature Icon 4">
-            <p class="text-black-600 font-extralight mt-2 text-lg">Tax Records</p>
+        <div class="flex items-center space-x-2">
+            <img src="assets/svg/owner-history.svg" class="w-6" alt="Feature Icon 2">
+            <p class="font-extralight">Owners History</p>
         </div>
-        <div class="flex flex-row items-center  mt-3">
-            <img src="assets/svg/technical-data.svg" class="h-8 w-8 mr-2" alt="Feature Icon 4">
-            <p class="text-black-600 font-extralight mt-2 text-lg">Technical data</p>
+        <div class="flex items-center space-x-2">
+            <img src="assets/svg/milage-history.svg" class="w-6" alt="Feature Icon 3">
+            <p class="font-extralight">Mileage History</p>
+        </div>
+        <div class="flex items-center space-x-2">
+            <img src="assets/svg/car-features.svg" class="w-6" alt="Feature Icon 4">
+            <p class="font-extralight">Car Features</p>
+        </div>
+        <div class="flex items-center space-x-2">
+            <img src="assets/svg/theft-check.svg" class="w-6" alt="Feature Icon 4">
+            <p class="font-extralight">Theft Check</p>
+        </div>
+        <div class="flex items-center space-x-2">
+            <img src="assets/svg/warning.svg" class="w-6" alt="Feature Icon 4">
+            <p class="font-extralight">MOT History</p>
         </div> -->
-
-        <!-- <div v-for="(feature, index) in features" :key="index" class="flex flex-row items-center mt-3">
-            <img :src="`../assets/svg/${feature.icon}`" class="h-8 w-8 mr-2" :alt="`Feature Icon ${index + 1}`">
-            <p class="text-black-600 font-extralight mt-2 text-lg">{{ feature.title }}</p>
-        </div>  -->
-   
-
+        <div v-for="feature in addedMoreFeatures" :key="feature.id" class="flex items-center space-x-4">
+            <img :src="`/svg/${feature.icon}`" class="w-5" :alt="`Feature Icon ${feature.id}`" />
+            <p class="font-extralight text-xl tracking-wider">{{ feature.title }}</p>
+        </div>
     </div>
 </template>

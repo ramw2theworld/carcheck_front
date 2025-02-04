@@ -16,6 +16,10 @@ export default {
       backgroundColor: {
         primary: "#FF7400",
       },
+
+      fontFamily: {
+        roboto: ["Roboto", "sans-serif"],
+      },
     },
   },
   plugins: [require("flowbite/plugin")],

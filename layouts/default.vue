@@ -14,7 +14,7 @@ useHead({
 </script>
 
 <template>
-  <div>
+  <div class="bg-[#EEEEEE]">
     <Header />
     <main>
       <NuxtPage />

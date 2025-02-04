@@ -1,15 +1,18 @@
 <script setup>
+import { width } from '@fortawesome/free-solid-svg-icons/fa0';
+
+
 
 const props = defineProps({
     class: {
         type: String,
-        default: 'h-8'
+        default: 'w-8'
     },
 })
 </script>
 
 <template>
-    <NuxtLink to="/" class="flex items-center space-x-3 rtl:space-x-reverse">
+    <NuxtLink to="/">
         <img src="/svg/logo.svg" :class="props.class" alt="Car check logo" />
     </NuxtLink>
 </template>

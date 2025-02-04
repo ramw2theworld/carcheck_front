@@ -242,9 +242,9 @@ const full_history = [
           <b> you regret it</b>
         </p>
       </div>
-      <div class="mt-6">
+      <div class="mt-6 space-y-2">
         <p class="text-lg">Enter VIN</p>
-        <SearchBar />
+        <SearchBar width="w-full" />
       </div>
       <div class="mt-[1.5rem] pl-1 space-y-4">
         <p class="font-extralight leading-4">We can generate a <span class="font-bold">full history</span>

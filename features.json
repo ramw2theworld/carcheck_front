@@ -1,89 +1,174 @@
-{"features": {
-    "items": [
-        {
-            "id": 1, "title": "Damage Check", "icon": "damage-check-icon.svg"
-        },
-        {
-            "id": 2, "title": "Owners History", "icon": "history-owner.svg"
-        },
-        {
-            "id": 3, "title": "Mileage History", "icon": "milage-history.svg"
-        },
-        {
-            "id": 4, "title": "Car Features", "icon": "car-features.svg"
-        },
-        {
-            "id": 5, "title": "Theft Check", "icon": "theft-check.svg"
-        },
-        {
-            "id": 6, "title": "MOT History", "icon": "check-Mot.svg"
-        },
-        {
-            "id": 7, "title": "Finance History", "icon": "outstanding-finances.svg"
-        },
-        {
-            "id": 8, "title": "Tax Records", "icon": "tax-record-icon.svg"
-        },
-        {
-            "id": 9, "title": "Technical data", "icon": "technical-data.svg"
-        }
-    ],
-
-    "basic_features":[
-        {
-            "id": 1, "title": "Damage Check", "icon": "damage-check.svg"
-        },
-        {
-            "id": 2, "title": "Mileage History", "icon": "milage-history.svg"
-        },
-        {
-            "id": 4, "title": "MOT Check", "icon": "Mot-history.svg"
-        },
-        {
-            "id": 5, "title": "Tax Calculation", "icon": "warning.svg"
-        },
-        {
-            "id": 6, "title": "Technical data", "icon": "warning.svg"
-        }
-    ],
-    "standerd_features":[
-        {
-            "id": 1, "title": "Theft Check", "icon": "theft-check.svg"
-        },
-        {
-            "id": 2, "title": "MOT History", "icon": "Mot-history.svg"
-        },
-        {
-            "id": 3, "title": "Finance History", "icon": "outstanding-finances.svg"
-        },
-        {
-            "id": 4, "title": "Tax Calculation", "icon": "tax-record-icon.svg"
-        },
-        {
-            "id": 5, "title": "Technical data", "icon": "technical-data.svg"
-        },
-        {
-            "id": 6, "title": "Written off", "icon": "tax-record-icon.svg"
-        }
-    ],
-    "premium_features":[
-        {
-            "id": 1, "title": "Owners History", "icon": "owner-history.svg"
-        },
-        {
-            "id": 2, "title": "Mileage History", "icon": "milage-history.svg"
-        },
-        {
-            "id": 3, "title": "Theft Check", "icon": "theft-check.svg"
-        },
-        {
-            "id": 4, "title": "Finance History", "icon": "outstanding-finances.svg"
-        },
-        {
-            "id": 5, "title": "Tax Calculation", "icon": "tax-record-icon.svg"
-        },
-        {
-            "id": 6, "title": "Written off", "icon": "tax-record-icon.svg"
-        }
-    ]
-}}
+{
+    "features": {
+        "index": [
+            {
+                "id": 1,
+                "title": "Damage Check",
+                "icon": "damage-check-icon.svg"
+            },
+            {
+                "id": 2,
+                "title": "Owners History",
+                "icon": "history-owner.svg"
+            },
+            {
+                "id": 3,
+                "title": "Mileage History",
+                "icon": "milage-history.svg"
+            },
+            {
+                "id": 4,
+                "title": "Car Features",
+                "icon": "car-features.svg"
+            },
+            {
+                "id": 5,
+                "title": "Theft Check",
+                "icon": "theft-check.svg"
+            },
+            {
+                "id": 6,
+                "title": "MOT History",
+                "icon": "check-Mot.svg"
+            }
+        ],
+        "items": [
+            {
+                "id": 1,
+                "title": "Damage Check",
+                "icon": "damage-check-icon.svg"
+            },
+            {
+                "id": 2,
+                "title": "Owners History",
+                "icon": "history-owner.svg"
+            },
+            {
+                "id": 3,
+                "title": "Mileage History",
+                "icon": "milage-history.svg"
+            },
+            {
+                "id": 4,
+                "title": "Car Features",
+                "icon": "car-features.svg"
+            },
+            {
+                "id": 5,
+                "title": "Theft Check",
+                "icon": "theft-check.svg"
+            },
+            {
+                "id": 6,
+                "title": "MOT History",
+                "icon": "check-Mot.svg"
+            },
+            {
+                "id": 7,
+                "title": "Finance History",
+                "icon": "outstanding-finances.svg"
+            },
+            {
+                "id": 8,
+                "title": "Tax Records",
+                "icon": "tax-record-icon.svg"
+            },
+            {
+                "id": 9,
+                "title": "Technical data",
+                "icon": "technical-data.svg"
+            }
+        ],
+        "basic_features": [
+            {
+                "id": 1,
+                "title": "Damage Check",
+                "icon": "damage-check.svg"
+            },
+            {
+                "id": 2,
+                "title": "Mileage History",
+                "icon": "milage-history.svg"
+            },
+            {
+                "id": 4,
+                "title": "MOT Check",
+                "icon": "Mot-history.svg"
+            },
+            {
+                "id": 5,
+                "title": "Tax Calculation",
+                "icon": "warning.svg"
+            },
+            {
+                "id": 6,
+                "title": "Technical data",
+                "icon": "warning.svg"
+            }
+        ],
+        "standerd_features": [
+            {
+                "id": 1,
+                "title": "Theft Check",
+                "icon": "theft-check.svg"
+            },
+            {
+                "id": 2,
+                "title": "MOT History",
+                "icon": "Mot-history.svg"
+            },
+            {
+                "id": 3,
+                "title": "Finance History",
+                "icon": "outstanding-finances.svg"
+            },
+            {
+                "id": 4,
+                "title": "Tax Calculation",
+                "icon": "tax-record-icon.svg"
+            },
+            {
+                "id": 5,
+                "title": "Technical data",
+                "icon": "technical-data.svg"
+            },
+            {
+                "id": 6,
+                "title": "Written off",
+                "icon": "tax-record-icon.svg"
+            }
+        ],
+        "premium_features": [
+            {
+                "id": 1,
+                "title": "Owners History",
+                "icon": "owner-history.svg"
+            },
+            {
+                "id": 2,
+                "title": "Mileage History",
+                "icon": "milage-history.svg"
+            },
+            {
+                "id": 3,
+                "title": "Theft Check",
+                "icon": "theft-check.svg"
+            },
+            {
+                "id": 4,
+                "title": "Finance History",
+                "icon": "outstanding-finances.svg"
+            },
+            {
+                "id": 5,
+                "title": "Tax Calculation",
+                "icon": "tax-record-icon.svg"
+            },
+            {
+                "id": 6,
+                "title": "Written off",
+                "icon": "tax-record-icon.svg"
+            }
+        ]
+    }
+}
